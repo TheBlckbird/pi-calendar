@@ -61,5 +61,5 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.lifecycle.viewmodel)
-    implementation(libs.androidx.compose.material.icons.extended)  // Full set
+    implementation(libs.material)
 }
