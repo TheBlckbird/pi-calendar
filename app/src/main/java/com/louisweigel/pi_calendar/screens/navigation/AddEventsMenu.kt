@@ -27,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.louisweigel.pi_calendar.R
 
 @Composable
 fun AddEventsMenu(
@@ -53,21 +55,21 @@ fun AddEventsMenu(
         ) {
             FabMenuEntry(0, isExpanded, "Geburtstag", { onClose() }) {
                 Icon(
-                    imageVector = Icons.Default.DateRange,
+                    painter = painterResource(R.drawable.cake_24px),
                     contentDescription = null
                 )
             }
 
             FabMenuEntry(1, isExpanded, "Erinnerung", { onClose() }) {
                 Icon(
-                    imageVector = Icons.Default.DateRange,
+                    painter = painterResource(R.drawable.task_alt_24px),
                     contentDescription = null
                 )
             }
 
             FabMenuEntry(2, isExpanded, "Termin", { onClose() }) {
                 Icon(
-                    imageVector = Icons.Default.Menu,
+                    painter = painterResource(R.drawable.event_24px),
                     contentDescription = null
                 )
             }

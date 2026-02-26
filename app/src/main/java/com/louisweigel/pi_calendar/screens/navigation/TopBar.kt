@@ -18,7 +18,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.louisweigel.pi_calendar.R
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +31,7 @@ fun TopBar(
         navigationIcon = {
             IconButton(onDrawerOpen) {
                 Icon(
-                    imageVector = Icons.Filled.Menu,
+                    painter = painterResource(R.drawable.menu_24px),
                     contentDescription = "Menu"
                 )
             }
@@ -60,14 +62,14 @@ fun TopBar(
         actions = {
             IconButton({}) {
                 Icon(
-                    imageVector = Icons.Filled.Search,
+                    painter = painterResource(R.drawable.search_24px),
                     contentDescription = "Suche",
                 )
             }
 
             IconButton({}) {
                 Icon(
-                    imageVector = Icons.Filled.DateRange,
+                    painter = painterResource(R.drawable.today_24px),
                     contentDescription = "Heute fokussieren"
                 )
             }
