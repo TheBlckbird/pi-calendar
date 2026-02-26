@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.screens
+package com.louisweigel.pi_calendar.screens.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState

@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.screens
+package com.louisweigel.pi_calendar.screens.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,10 +22,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun TopBar() {
+fun TopBar(
+    onDrawerOpen: () -> Unit
+) {
     TopAppBar(
         navigationIcon = {
-            IconButton({}) {
+            IconButton(onDrawerOpen) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Menu"
