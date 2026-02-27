@@ -2,6 +2,7 @@ package com.louisweigel.pi_calendar.screens.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -27,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
@@ -43,6 +45,13 @@ fun AddEventsMenu(
         16.dp // makes it a circle, its size is 56dp
     }
     val fabCornerRadius = animateDpAsState(targetValue = fabRadius)
+
+    val fabRotation = if (isExpanded) {
+        45f
+    } else {
+        0f
+    }
+    val fabIconRotation = animateFloatAsState(fabRotation)
 
     Column(
         horizontalAlignment = Alignment.End,
@@ -87,9 +96,9 @@ fun AddEventsMenu(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Icon(
-                    imageVector = if (isExpanded) Icons.Default.Close else Icons.Default.Add,
+                    imageVector = Icons.Default.Add,
                     contentDescription = "Write or Reflect Today's Reflection",
-                    modifier = if (isExpanded) Modifier.size(20.dp) else Modifier // Makes things look more natural
+                    modifier = Modifier.rotate(fabIconRotation.value)
                 )
             }
         }
