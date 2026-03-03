@@ -2,26 +2,26 @@ package com.louisweigel.pi_calendar.core
 
 import androidx.compose.ui.graphics.Color
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
-import com.louisweigel.pi_calendar.core.calendarentry.CalenderEntryTypes
+import com.louisweigel.pi_calendar.core.calendarentry.CalenderEntryType
 import java.util.Date
 
 class CalendarManager(private val dbPath: String) {
-    private var calendars = mutableListOf<Calendar>()
-    private var allPersons = listOf<Person>()
+    private val calendars = mutableListOf<Calendar>()
+    private var allPersons = mutableListOf<Person>()
     private var defaultCalendar: Calendar? = null
 
     /**
      * Returns all known calendars
      */
     fun getAllCalenders(): List<Calendar> {
-        TODO()
+        return calendars
     }
 
     /**
      * Returns the current default calendar
      */
-    fun getDefaultCalendar(): Calendar {
-        TODO()
+    fun getDefaultCalendar(): Calendar? {
+        return defaultCalendar
     }
 
     /**
@@ -30,7 +30,13 @@ class CalendarManager(private val dbPath: String) {
      * Returns `null` if the name is already taken else the newly created Calendar
      */
     fun addCalendar(name: String, description: String, color: Color): Calendar? {
-        TODO()
+        val calendar = Calendar(name, description, color, false)
+        if (findCalendar(name) != null) {
+            return null
+        }
+
+        calendars.add(calendar)
+        return calendar
     }
 
     /**
@@ -39,7 +45,7 @@ class CalendarManager(private val dbPath: String) {
      * This is the calendar that's selected by default when adding a new entry
      */
     fun setDefaultCalendar(calendar: Calendar) {
-        TODO()
+        defaultCalendar = calendar
     }
 
     /**
@@ -48,23 +54,37 @@ class CalendarManager(private val dbPath: String) {
      * There can't be more than one calendar with the same name
      */
     fun findCalendar(name: String): Calendar? {
-        TODO()
+        for (calendar in calendars) {
+            if (calendar.name == name) {
+                return calendar
+            }
+        }
+
+        return null
     }
 
     /**
      * Removes the given calendar from the list of all calendars
      *
-     * Returns `null` if it doesn't exist or `false` iti is currently set as the default calendar
+     * Returns `null` if it doesn't exist or `false` if ti is currently set as the default calendar
      */
     fun removeCalendar(calendar: Calendar): Boolean? {
-        TODO()
+        if (defaultCalendar == calendar) {
+            return false
+        }
+
+        if (calendars.remove(calendar)) {
+            return true
+        }
+
+        return null
     }
 
     /**
      * Gets a list of all existing persons in the application
      */
     fun getAllPersons(): List<Person> {
-        TODO()
+        return allPersons
     }
 
     /**
@@ -73,26 +93,40 @@ class CalendarManager(private val dbPath: String) {
      * Returns the newly created Person
      */
     fun addPerson(name: String): Person {
-        TODO()
+        val person = Person(name)
+        allPersons.add(person)
+        return person
     }
 
     /**
      * Removes the given person if it exists
      */
-    fun removePerson(person: Person) {
-        TODO()
+    fun removePerson(person: Person): Boolean {
+        return allPersons.remove(person)
     }
 
     /**
      * Find a calendar entry that matches all the given properties
      */
-    fun findCalendarEntry(
-        calendarEntryTypes: CalenderEntryTypes,
+    fun findCalendarEntries(
+        calendarEntryTypes: List<CalenderEntryType>,
         title: String?,
         description: String?,
         date: Date?,
-    ): Pair<Calendar, CalendarEntry> {
-        TODO()
+    ): List<Pair<Calendar, CalendarEntry>> {
+        val foundEntries = mutableListOf<Pair<Calendar, CalendarEntry>>()
+
+        for (calendar in calendars) {
+            foundEntries +=
+                calendar.findCalendarEntries(
+                    calendarEntryTypes,
+                    title,
+                    description,
+                    date
+                ).map { entry -> Pair(calendar, entry) }
+        }
+
+        return foundEntries
     }
 
     /**
@@ -101,6 +135,6 @@ class CalendarManager(private val dbPath: String) {
      * Returns `false` if it doesn't succeed
      */
     fun saveToDb(): Boolean {
-        TODO()
+        TODO("needs more planning")
     }
 }

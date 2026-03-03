@@ -7,7 +7,7 @@ abstract class CalendarEntry(val title: String, val description: String, val dat
     val uuid = UUID.randomUUID()
 }
 
-enum class CalenderEntryTypes {
+enum class CalenderEntryType {
     Birthday,
     Event,
     Reminder,

@@ -2,6 +2,7 @@ package com.louisweigel.pi_calendar.core
 
 import androidx.compose.ui.graphics.Color
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
+import com.louisweigel.pi_calendar.core.calendarentry.CalenderEntryType
 import java.util.Date
 
 class Calendar(val name: String, val description: String, val color: Color, val isSystem: Boolean) {
@@ -26,6 +27,7 @@ class Calendar(val name: String, val description: String, val color: Color, val 
      * Find a list of calendar entries that match the given
      */
     fun findCalendarEntries(
+        calendarEntryTypes: List<CalenderEntryType>,
         title: String?,
         description: String?,
         date: Date?
