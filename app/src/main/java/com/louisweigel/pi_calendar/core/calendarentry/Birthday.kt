@@ -1,7 +1,7 @@
 package com.louisweigel.pi_calendar.core.calendarentry
 
-import java.util.Date
+import kotlin.time.Instant
 
-class Birthday(title: String, description: String, date: Date) : CalendarEntry(
+class Birthday(title: String, description: String, date: Instant) : CalendarEntry(
     title, description, date
 )

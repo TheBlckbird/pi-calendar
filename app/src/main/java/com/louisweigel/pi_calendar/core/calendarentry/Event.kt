@@ -1,12 +1,12 @@
 package com.louisweigel.pi_calendar.core.calendarentry
 
-import java.util.Date
+import kotlin.time.Instant
 
 class Event(
     title: String,
     description: String,
-    date: Date,
-    val until: Date,
+    date: Instant,
+    val until: Instant,
     val isAllDay: Boolean
 ) : CalendarEntry(
     title, description, date
