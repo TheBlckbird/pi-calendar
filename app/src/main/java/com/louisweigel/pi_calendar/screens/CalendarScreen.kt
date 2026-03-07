@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -24,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,32 +37,47 @@ import com.louisweigel.pi_calendar.R
 
 @Composable
 fun CalendarScreen() {
-    CalendarGrid(Modifier.fillMaxSize(), listOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")) {
-        repeat(42) { index ->
-            val borderRadius = if (index == 0) {
-                RoundedCornerShape(12.dp, 4.dp, 4.dp, 4.dp)
-            } else if (index == 6) {
-                RoundedCornerShape(4.dp, 12.dp, 4.dp, 4.dp)
-            } else if (index == 35) {
-                RoundedCornerShape(4.dp, 4.dp, 4.dp, 12.dp)
-            } else if (index == 41) {
-                RoundedCornerShape(4.dp, 4.dp, 12.dp, 4.dp)
-            } else {
-                RoundedCornerShape(4.dp)
-            }
+    val pagerState = rememberPagerState(pageCount = { 100 }, initialPage = 50)
 
-            val entries = if (index == 25) {
-                listOf(Triple(R.drawable.cake_24px, "Andreas Geburtstag", Color.Blue))
-            } else {
-                listOf<Triple<Int?, String, Color>>()
-            }
 
-            CalendarCell(
-                (index + 1).toString(),
-                borderRadius,
-                index == 10,
-                entries
-            )
+    HorizontalPager(pagerState) { page ->
+        CalendarGrid(
+            Modifier.fillMaxSize(),
+            listOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"),
+        ) {
+            repeat(42) { index ->
+                val borderRadius = if (index == 0) {
+                    RoundedCornerShape(12.dp, 4.dp, 4.dp, 4.dp)
+                } else if (index == 6) {
+                    RoundedCornerShape(4.dp, 12.dp, 4.dp, 4.dp)
+                } else if (index == 35) {
+                    RoundedCornerShape(4.dp, 4.dp, 4.dp, 12.dp)
+                } else if (index == 41) {
+                    RoundedCornerShape(4.dp, 4.dp, 12.dp, 4.dp)
+                } else {
+                    RoundedCornerShape(4.dp)
+                }
+
+                val entries = if (index == 25) {
+                    listOf(Triple(R.drawable.cake_24px, "Andreas Geburtstag", Color.Blue))
+                } else {
+                    listOf<Triple<Int?, String, Color>>()
+                }
+
+                CalendarCell(
+                    (index + 1).toString(),
+                    borderRadius,
+                    index == 10,
+                    entries,
+                    modifier = if (index % 7 == 0) {
+                        Modifier.padding(start = 2.dp)
+                    } else if (index % 7 == 6) {
+                        Modifier.padding(end = 2.dp)
+                    } else {
+                        Modifier
+                    }
+                )
+            }
         }
     }
 
@@ -137,11 +153,12 @@ private fun CalendarCell(
     text: String,
     shape: Shape,
     isToday: Boolean,
-    entries: List<Triple<Int?, String, Color>>
+    entries: List<Triple<Int?, String, Color>>,
+    modifier: Modifier = Modifier
 ) {
     Button(
         {},
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(2.dp),
 
