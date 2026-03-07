@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import com.louisweigel.pi_calendar.screens.CalendarScreen
 import com.louisweigel.pi_calendar.screens.navigation.AddEventsMenu
 import com.louisweigel.pi_calendar.screens.CounterView
 import com.louisweigel.pi_calendar.screens.navigation.NavigationDrawerScreen
@@ -47,10 +50,11 @@ class MainActivity : ComponentActivity() {
             PicalendarTheme {
                 ModalNavigationDrawer(
                     drawerContent = { NavigationDrawerScreen() },
-                    drawerState = drawerState
+                    drawerState = drawerState,
                 ) {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
+
                         topBar = {
                             TopBar({
                                 scope.launch {
@@ -58,6 +62,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             })
                         },
+
                         floatingActionButton = {
                             AddEventsMenu(
                                 isExpanded,
@@ -65,6 +70,10 @@ class MainActivity : ComponentActivity() {
                                 { isExpanded = false },
                             )
                         },
+
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+
+
                     ) { innerPadding ->
                         Box(
                             modifier = Modifier
@@ -73,8 +82,10 @@ class MainActivity : ComponentActivity() {
                                 .pointerInput(Unit) {
                                     detectTapGestures(onTap = { isExpanded = false })
                                 }
+                                .background(MaterialTheme.colorScheme.surfaceContainer),
+
                         ) {
-                            MainContent()
+                            CalendarScreen()
                         }
                     }
                 }
