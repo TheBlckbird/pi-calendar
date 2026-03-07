@@ -69,13 +69,14 @@ fun CalendarScreen() {
                     borderRadius,
                     index == 10,
                     entries,
+                    index in 5..<39,
                     modifier = if (index % 7 == 0) {
                         Modifier.padding(start = 2.dp)
                     } else if (index % 7 == 6) {
                         Modifier.padding(end = 2.dp)
                     } else {
                         Modifier
-                    }
+                    },
                 )
             }
         }
@@ -154,6 +155,7 @@ private fun CalendarCell(
     shape: Shape,
     isToday: Boolean,
     entries: List<Triple<Int?, String, Color>>,
+    isThisMonth: Boolean,
     modifier: Modifier = Modifier
 ) {
     Button(
@@ -171,7 +173,6 @@ private fun CalendarCell(
 
         contentPadding = PaddingValues(0.dp, 8.dp, 0.dp, 0.dp),
     ) {
-
         Column(modifier = Modifier.align(Alignment.Top)) {
             val textModifier = if (isToday) {
                 Modifier
@@ -184,6 +185,8 @@ private fun CalendarCell(
 
             val textColor = if (isToday) {
                 MaterialTheme.colorScheme.onPrimary
+            } else if (!isThisMonth) {
+                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
             } else {
                 MaterialTheme.colorScheme.onBackground
             }
