@@ -186,7 +186,7 @@ private fun CalendarCell(
             val textColor = if (isToday) {
                 MaterialTheme.colorScheme.onPrimary
             } else if (!isThisMonth) {
-                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
             } else {
                 MaterialTheme.colorScheme.onBackground
             }
