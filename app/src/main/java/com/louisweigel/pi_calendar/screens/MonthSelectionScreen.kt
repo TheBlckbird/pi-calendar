@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -24,8 +23,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.core.Month
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
-data class MonthSelection(val month: Month, val year: Int)
+data class MonthSelection(val month: Month, val year: Int) {
+    override fun toString(): String {
+        val yearPart = if (year != LocalDate.now().year) {
+            " $year"
+        } else {
+            ""
+        }
+
+        return month.toString() + yearPart
+    }
+}
 
 @Composable
 fun MonthSelectionScreen(

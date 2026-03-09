@@ -68,10 +68,10 @@ class MainActivity : ComponentActivity() {
                                         drawerState.open()
                                     }
                                 },
-
                                 {
                                     isBottomSheetExpanded = true
-                                }
+                                },
+                                currentSelectedMonth
                             )
                         },
 

@@ -23,12 +23,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
+import com.louisweigel.pi_calendar.screens.MonthSelection
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopBar(
     onDrawerOpen: () -> Unit,
-    onMonthSelectionOpen: () -> Unit
+    onMonthSelectionOpen: () -> Unit,
+    selectedMonth: MonthSelection
 ) {
     TopAppBar(
         navigationIcon = {
@@ -56,7 +58,7 @@ fun TopBar(
                 )
             ) {
                 Text(
-                    "Februar",
+                    selectedMonth.toString(),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Icon(
