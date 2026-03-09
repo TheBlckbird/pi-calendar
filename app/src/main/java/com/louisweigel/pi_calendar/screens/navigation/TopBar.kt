@@ -27,7 +27,8 @@ import com.louisweigel.pi_calendar.R
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopBar(
-    onDrawerOpen: () -> Unit
+    onDrawerOpen: () -> Unit,
+    onMonthSelectionOpen: () -> Unit
 ) {
     TopAppBar(
         navigationIcon = {
@@ -45,7 +46,7 @@ fun TopBar(
 
         title = {
             TextButton(
-                {},
+                onMonthSelectionOpen,
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .fillMaxSize()
