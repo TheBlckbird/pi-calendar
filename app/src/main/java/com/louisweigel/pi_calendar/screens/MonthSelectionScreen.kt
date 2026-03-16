@@ -26,6 +26,14 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 data class MonthSelection(val month: Month, val year: Int) {
+    fun getToday(): MonthSelection {
+        val today = LocalDate.now()
+
+        val month = Month.from(today.month)
+        val year = today.year
+        return MonthSelection(month, year)
+    }
+
     override fun toString(): String {
         val yearPart = if (year != LocalDate.now().year) {
             " $year"

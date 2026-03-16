@@ -30,7 +30,8 @@ import com.louisweigel.pi_calendar.screens.MonthSelection
 fun TopBar(
     onDrawerOpen: () -> Unit,
     onMonthSelectionOpen: () -> Unit,
-    selectedMonth: MonthSelection
+    selectedMonth: MonthSelection,
+    onTodayClicked: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
@@ -76,7 +77,7 @@ fun TopBar(
                 )
             }
 
-            IconButton({}) {
+            IconButton(onTodayClicked) {
                 Icon(
                     painter = painterResource(R.drawable.today_24px),
                     contentDescription = "Heute fokussieren"

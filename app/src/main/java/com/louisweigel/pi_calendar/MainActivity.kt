@@ -71,7 +71,10 @@ class MainActivity : ComponentActivity() {
                                 {
                                     isBottomSheetExpanded = true
                                 },
-                                currentSelectedMonth
+                                currentSelectedMonth,
+                                {
+                                    currentSelectedMonth = currentSelectedMonth.getToday()
+                                }
                             )
                         },
 
