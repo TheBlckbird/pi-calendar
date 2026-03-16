@@ -94,7 +94,7 @@ fun MonthSelectionScreen(
             }
         }
 
-        LazyVerticalGrid(GridCells.Fixed(4)) {
+        LazyVerticalGrid(GridCells.Fixed(3)) {
             items(Month.entries.count()) { monthIndex ->
                 val month = Month.entries[monthIndex]
                 val isCurrentlySelected = month == currentSelection.month
@@ -106,16 +106,47 @@ fun MonthSelectionScreen(
                 }
                 val cornerShapeRadius = animateDpAsState(targetValue = cornerRadius)
 
-                val shape = if (monthIndex == 0) {
-                    RoundedCornerShape(topStart = 20.dp, topEnd = cornerShapeRadius.value, bottomEnd = cornerShapeRadius.value, bottomStart = cornerShapeRadius.value)
-                } else if (monthIndex == 3) {
-                    RoundedCornerShape(topStart = cornerShapeRadius.value, topEnd = 20.dp, bottomEnd = cornerShapeRadius.value, bottomStart = cornerShapeRadius.value)
-                } else if (monthIndex == 8) {
-                    RoundedCornerShape(topStart = cornerShapeRadius.value, topEnd = cornerShapeRadius.value, bottomEnd = cornerShapeRadius.value, bottomStart = 20.dp)
-                } else if (monthIndex == 11) {
-                    RoundedCornerShape(topStart = cornerShapeRadius.value, topEnd = cornerShapeRadius.value, bottomEnd = 20.dp, bottomStart = cornerShapeRadius.value)
-                } else {
-                    RoundedCornerShape(topStart = cornerShapeRadius.value, topEnd = cornerShapeRadius.value, bottomEnd = cornerShapeRadius.value, bottomStart = cornerShapeRadius.value)
+                val shape = when (monthIndex) {
+                    0 -> {
+                        RoundedCornerShape(
+                            topStart = 20.dp,
+                            topEnd = cornerShapeRadius.value,
+                            bottomEnd = cornerShapeRadius.value,
+                            bottomStart = cornerShapeRadius.value
+                        )
+                    }
+                    2 -> {
+                        RoundedCornerShape(
+                            topStart = cornerShapeRadius.value,
+                            topEnd = 20.dp,
+                            bottomEnd = cornerShapeRadius.value,
+                            bottomStart = cornerShapeRadius.value
+                        )
+                    }
+                    9 -> {
+                        RoundedCornerShape(
+                            topStart = cornerShapeRadius.value,
+                            topEnd = cornerShapeRadius.value,
+                            bottomEnd = cornerShapeRadius.value,
+                            bottomStart = 20.dp
+                        )
+                    }
+                    11 -> {
+                        RoundedCornerShape(
+                            topStart = cornerShapeRadius.value,
+                            topEnd = cornerShapeRadius.value,
+                            bottomEnd = 20.dp,
+                            bottomStart = cornerShapeRadius.value
+                        )
+                    }
+                    else -> {
+                        RoundedCornerShape(
+                            topStart = cornerShapeRadius.value,
+                            topEnd = cornerShapeRadius.value,
+                            bottomEnd = cornerShapeRadius.value,
+                            bottomStart = cornerShapeRadius.value
+                        )
+                    }
                 }
 
                 Button(
