@@ -23,11 +23,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
+import com.louisweigel.pi_calendar.screens.MonthSelection
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopBar(
-    onDrawerOpen: () -> Unit
+    onDrawerOpen: () -> Unit,
+    onMonthSelectionOpen: () -> Unit,
+    selectedMonth: MonthSelection,
+    onTodayClicked: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
@@ -45,7 +49,7 @@ fun TopBar(
 
         title = {
             TextButton(
-                {},
+                onMonthSelectionOpen,
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
                     .fillMaxSize()
@@ -55,7 +59,7 @@ fun TopBar(
                 )
             ) {
                 Text(
-                    "Februar",
+                    selectedMonth.toString(),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Icon(
@@ -73,7 +77,7 @@ fun TopBar(
                 )
             }
 
-            IconButton({}) {
+            IconButton(onTodayClicked) {
                 Icon(
                     painter = painterResource(R.drawable.today_24px),
                     contentDescription = "Heute fokussieren"
