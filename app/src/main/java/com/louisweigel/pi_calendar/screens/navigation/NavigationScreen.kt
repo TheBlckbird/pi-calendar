@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
@@ -36,6 +37,8 @@ import com.louisweigel.pi_calendar.R
 fun NavigationDrawerScreen() {
     var checked1 by remember { mutableStateOf(true) }
     var checked2 by remember { mutableStateOf(true) }
+
+    val uriHandler = LocalUriHandler.current
 
     ModalDrawerSheet {
         Column(
@@ -104,7 +107,9 @@ fun NavigationDrawerScreen() {
                         contentDescription = null
                     )
                 },
-                onClick = { /* Handle click */ },
+                onClick = {
+                    uriHandler.openUri("https://github.com/TheBlckbird/softwareengineering/issues/new")
+                },
             )
             Spacer(Modifier.height(12.dp))
         }
