@@ -12,13 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -38,6 +34,9 @@ fun AddEventsMenu(
     isExpanded: Boolean,
     onToggleExpanded: () -> Unit,
     onClose: () -> Unit,
+    onNewEvent: () -> Unit,
+    onNewBirthday: () -> Unit,
+    onNewReminder: () -> Unit,
 ) {
     val fabRadius = if (isExpanded) {
         28.dp
@@ -62,21 +61,30 @@ fun AddEventsMenu(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            FabMenuEntry(0, isExpanded, "Geburtstag", { onClose() }) {
+            FabMenuEntry(0, isExpanded, "Geburtstag", {
+                onNewBirthday()
+                onClose()
+            }) {
                 Icon(
                     painter = painterResource(R.drawable.cake_24px),
                     contentDescription = null
                 )
             }
 
-            FabMenuEntry(1, isExpanded, "Erinnerung", { onClose() }) {
+            FabMenuEntry(1, isExpanded, "Erinnerung", {
+                onNewReminder()
+                onClose()
+            }) {
                 Icon(
                     painter = painterResource(R.drawable.task_alt_24px),
                     contentDescription = null
                 )
             }
 
-            FabMenuEntry(2, isExpanded, "Termin", { onClose() }) {
+            FabMenuEntry(2, isExpanded, "Termin", {
+                onNewEvent()
+                onClose()
+            }) {
                 Icon(
                     painter = painterResource(R.drawable.event_24px),
                     contentDescription = null
