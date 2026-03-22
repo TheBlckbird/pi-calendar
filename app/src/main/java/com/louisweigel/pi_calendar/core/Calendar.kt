@@ -10,19 +10,8 @@ import java.util.Date
 import kotlin.time.Instant
 
 class Calendar(val name: String, val description: String, val color: Color, val isSystem: Boolean) {
-    private val entries = mutableListOf<CalendarEntry>()
+    val entries = mutableListOf<CalendarEntry>()
     private val sharedWith = mutableListOf<Person>()
-
-    /**
-     * Adds a new calendar entry
-     */
-    fun addCalendarEntry(calendarEntry: CalendarEntry) {
-        entries.add(calendarEntry)
-    }
-
-    fun getCalendarEntries(): List<CalendarEntry> {
-        return entries
-    }
 
     /**
      * Removes the given calendar entry if it exists
