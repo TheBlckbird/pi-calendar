@@ -14,7 +14,7 @@ class Calendar(
     val description: String,
     val color: Color,
     val isSystem: Boolean,
-    val owner: Person?
+    val owner: Person? = null,
 ) {
     val entries = mutableListOf<CalendarEntry>()
     private val sharedWith = mutableListOf<Person>()
