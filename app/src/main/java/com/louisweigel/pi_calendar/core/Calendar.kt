@@ -11,6 +11,7 @@ import kotlin.time.Instant
 
 class Calendar(val name: String, val description: String, val color: Color, val isSystem: Boolean) {
     val entries = mutableListOf<CalendarEntry>()
+    val owner: Person? = null
     private val sharedWith = mutableListOf<Person>()
 
     /**
