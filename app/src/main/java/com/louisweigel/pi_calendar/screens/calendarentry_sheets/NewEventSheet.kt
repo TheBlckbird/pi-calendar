@@ -3,11 +3,16 @@ package com.louisweigel.pi_calendar.screens.calendarentry_sheets
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -22,7 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Event
+import com.louisweigel.pi_calendar.screens.components.ClickableSwitchRow
 import com.louisweigel.pi_calendar.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.screens.components.TimePickerRow
 import java.time.LocalTime
@@ -33,6 +40,7 @@ fun NewEventSheet(
     onDismissRequest: () -> Unit,
     onSave: (Event) -> Unit,
     modifier: Modifier = Modifier,
+    calendars: List<Calendar>,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -60,6 +68,29 @@ fun NewEventSheet(
 
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var isAllDay by remember { mutableStateOf(true) }
+
+    var showErrorAlert by remember { mutableStateOf(false) }
+
+    val onSaveClick = {
+        val title = if (title == "") "(Kein Name)" else title
+        val dateFrom = Instant.fromEpochMilliseconds(dateFromState.selectedDateMillis!!)
+        val dateUntil = Instant.fromEpochMilliseconds(dateUntilState.selectedDateMillis!!)
+
+        if (!isAllDay) {
+            // TODO: Add time
+        }
+
+        if (dateFrom > dateUntil) {
+            showErrorAlert = true
+        } else {
+            onSave(
+                Event(
+                    title, description, dateFrom, dateUntil, true
+                )
+            )
+        }
+    }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -77,21 +108,7 @@ fun NewEventSheet(
                     Text("Abbrechen")
                 }
 
-                Button(onClick = {
-                    val title = if (title == "") "(Kein Name)" else title
-                    val dateFrom = Instant.fromEpochMilliseconds(dateFromState.selectedDateMillis!!)
-                    val dateUntil = Instant.fromEpochMilliseconds(dateUntilState.selectedDateMillis!!)
-
-                    onSave(
-                        Event(
-                            title,
-                            description,
-                            dateFrom,
-                            dateUntil,
-                            true
-                        )
-                    )
-                }) {
+                Button(onClick = onSaveClick) {
                     Text("Speichern")
                 }
             }
@@ -110,43 +127,94 @@ fun NewEventSheet(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                DatePickerRow(
-                    isDatePickerFromOpen,
-                    dateFromState,
-                    { isDatePickerFromOpen = false },
-                    { isDatePickerFromOpen = true },
-                )
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
 
-                TimePickerRow(
-                    isTimePickerFromOpen,
-                    timeFromState,
-                    { isTimePickerFromOpen = false },
-                    { isTimePickerFromOpen = true },
-                )
+            ClickableSwitchRow(
+                isAllDay,
+                { isAllDay = it },
+                "Ganztägiger Termin",
+            )
+
+            Spacer(modifier = Modifier.padding(bottom = 4.dp))
+
+            Column {
+                Column(verticalArrangement = Arrangement.spacedBy((-10).dp)) {
+                    Text(
+                        "Von",
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        DatePickerRow(
+                            isDatePickerFromOpen,
+                            dateFromState,
+                            { isDatePickerFromOpen = false },
+                            { isDatePickerFromOpen = true },
+                        )
+
+                        if (!isAllDay) {
+                            TimePickerRow(
+                                isTimePickerFromOpen,
+                                timeFromState,
+                                { isTimePickerFromOpen = false },
+                                { isTimePickerFromOpen = true },
+                            )
+                        }
+                    }
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy((-10).dp)) {
+                    Text(
+                        "Bis",
+                        color = MaterialTheme.colorScheme.secondary,
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        DatePickerRow(
+                            isDatePickerUntilOpen,
+                            dateUntilState,
+                            { isDatePickerUntilOpen = false },
+                            { isDatePickerUntilOpen = true },
+                        )
+
+                        if (!isAllDay) {
+                            TimePickerRow(
+                                isTimePickerUntilOpen,
+                                timeUntilState,
+                                { isTimePickerUntilOpen = false },
+                                { isTimePickerUntilOpen = true },
+                            )
+                        }
+                    }
+                }
+
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                DatePickerRow(
-                    isDatePickerUntilOpen,
-                    dateUntilState,
-                    { isDatePickerUntilOpen = false },
-                    { isDatePickerUntilOpen = true },
-                )
-
-                TimePickerRow(
-                    isTimePickerUntilOpen,
-                    timeUntilState,
-                    { isTimePickerUntilOpen = false },
-                    { isTimePickerUntilOpen = true },
-                )
-            }
         }
+    }
+
+    if (showErrorAlert) {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            dismissButton = null,
+            confirmButton = {
+                TextButton(onClick = { showErrorAlert = false }) {
+                    Text("OK")
+                }
+            },
+            text = {
+                Text("Das Startdatum darf nicht vor dem Enddatum liegen")
+            },
+        )
     }
 }

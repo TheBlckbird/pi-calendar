@@ -21,6 +21,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import com.louisweigel.pi_calendar.core.Calendar
+import com.louisweigel.pi_calendar.core.CalendarManager
 import com.louisweigel.pi_calendar.core.Month
 import com.louisweigel.pi_calendar.screens.CalendarScreen
 import com.louisweigel.pi_calendar.screens.MonthSelection
@@ -116,6 +118,8 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
+                        val stubManager = CalendarManager("/tmp/pi-calendar.db")
+
                         if (isNewEventExpanded) {
                             NewEventSheet(
                                 { isNewEventExpanded = false },
@@ -124,6 +128,11 @@ class MainActivity : ComponentActivity() {
                                     // TODO: save new event
                                 },
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                                listOf(
+                                    stubManager.defaultEventsCalendar,
+                                    stubManager.defaultBirthdaysCalendar,
+                                    stubManager.defaultRemindersCalendar,
+                                ),
                             )
                         }
                     }
