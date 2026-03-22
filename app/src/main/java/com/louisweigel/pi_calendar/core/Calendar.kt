@@ -9,9 +9,14 @@ import com.louisweigel.pi_calendar.core.calendarentry.Reminder
 import java.util.Date
 import kotlin.time.Instant
 
-class Calendar(val name: String, val description: String, val color: Color, val isSystem: Boolean) {
+class Calendar(
+    val name: String,
+    val description: String,
+    val color: Color,
+    val isSystem: Boolean,
+    val owner: Person?
+) {
     val entries = mutableListOf<CalendarEntry>()
-    val owner: Person? = null
     private val sharedWith = mutableListOf<Person>()
 
     /**
@@ -33,8 +38,8 @@ class Calendar(val name: String, val description: String, val color: Color, val 
         return entries
             .filter { entry ->
                 entry is Birthday && calendarEntryTypes.contains(CalendarEntryType.Birthday) ||
-                entry is Event && calendarEntryTypes.contains(CalendarEntryType.Event) ||
-                entry is Reminder && calendarEntryTypes.contains(CalendarEntryType.Reminder)
+                        entry is Event && calendarEntryTypes.contains(CalendarEntryType.Event) ||
+                        entry is Reminder && calendarEntryTypes.contains(CalendarEntryType.Reminder)
             }
             .filter { entry -> if (title != null) entry.title.contains(title) else true }
             .filter { entry -> if (description != null) entry.description.contains(description) else true }
