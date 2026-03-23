@@ -38,6 +38,7 @@ import com.louisweigel.pi_calendar.screens.components.ClickableSwitchRow
 import com.louisweigel.pi_calendar.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.screens.components.TimePickerRow
 import java.time.LocalTime
+import kotlin.time.Duration
 import kotlin.time.Instant
 
 @Composable
@@ -82,12 +83,17 @@ fun NewEventSheet(
 
     val onSaveClick = {
         val title = if (title == "") "(Kein Name)" else title
-        val dateFrom = Instant.fromEpochMilliseconds(dateFromState.selectedDateMillis!!)
-        val dateUntil = Instant.fromEpochMilliseconds(dateUntilState.selectedDateMillis!!)
+
+        var timeFromMillis = 0
+        var timeUntilMillis = 0
 
         if (!isAllDay) {
-            // TODO: Add time
+            timeFromMillis += timeFromState.minute * 60 * 1000 + timeFromState.hour * 60 * 60 * 1000
+            timeUntilMillis += timeUntilState.minute * 60 * 1000 + timeUntilState.hour * 60 * 60 * 1000
         }
+
+        val dateFrom = Instant.fromEpochMilliseconds(dateFromState.selectedDateMillis!! + timeFromMillis)
+        val dateUntil = Instant.fromEpochMilliseconds(dateUntilState.selectedDateMillis!! + timeUntilMillis)
 
         if (dateFrom > dateUntil) {
             showErrorAlert = true
