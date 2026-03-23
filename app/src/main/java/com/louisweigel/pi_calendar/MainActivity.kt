@@ -123,16 +123,14 @@ class MainActivity : ComponentActivity() {
                         if (isNewEventExpanded) {
                             NewEventSheet(
                                 { isNewEventExpanded = false },
-                                {
+                                { _, _ ->
                                     isNewEventExpanded = false
                                     // TODO: save new event
                                 },
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                                 listOf(
                                     stubManager.defaultEventsCalendar,
-                                    stubManager.defaultBirthdaysCalendar,
-                                    stubManager.defaultRemindersCalendar,
-                                ),
+                                ) + stubManager.getAllCalenders(),
                             )
                         }
                     }
