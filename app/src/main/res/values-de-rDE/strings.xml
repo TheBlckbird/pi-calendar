@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">π Kalender</string>
+    <string name="mein_kalender">Mein Kalender</string>
+    <string name="geburtstage">Geburtstage</string>
+    <string name="settings">Einstellungen</string>
+    <string name="help_feedback"><![CDATA[Hilfe & feedback]]></string>
+    <string name="kalender">Kalender</string>
+
+    <string name="addEventsMenu_geburtstag">Geburtstag</string>
+    <string name="addEventsMenu_erinnerung">Erinnerung</string>
+    <string name="addEventsMenu_termin">Termin</string>
+    <string name="calendarScreen_mo">Mo</string>
+
+    <string name="calendarScreen_di">Di</string>
+    <string name="calendarScreen_mi">Mi</string>
+    <string name="calendarScreen_do">Do</string>
+    <string name="calendarScreen_fr">Fr</string>
+    <string name="calendarScreen_sa">Sa</string>
+    <string name="calendarScreen_so">So</string>
+</resources>

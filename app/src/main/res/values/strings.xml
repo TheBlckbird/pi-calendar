@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">pi-calendar</string>
+    <string name="app_name">π calendar</string>
+    <string name="mein_kalender">My calendar</string>
+    <string name="geburtstage">Birthdays</string>
+    <string name="settings">Settings</string>
+    <string name="help_feedback"><![CDATA[Help & feedback]]></string>
+    <string name="kalender">Calendar</string>
+
+    <string name="addEventsMenu_geburtstag">Birthday</string>
+    <string name="addEventsMenu_erinnerung">Reminder</string>
+    <string name="addEventsMenu_termin">Appointment </string>
+
+    <string name="calendarScreen_mo">Mon</string>
+    <string name="calendarScreen_di">Tue</string>
+    <string name="calendarScreen_mi">Wed</string>
+    <string name="calendarScreen_do">Thu</string>
+    <string name="calendarScreen_fr">Fri</string>
+    <string name="calendarScreen_sa">Sat</string>
+    <string name="calendarScreen_so">Sun</string>
 </resources>

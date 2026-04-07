@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
@@ -43,7 +44,14 @@ fun CalendarScreen() {
     HorizontalPager(pagerState) { page ->
         CalendarGrid(
             Modifier.fillMaxSize(),
-            listOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"),
+            listOf(stringResource(R.string.calendarScreen_mo),
+                stringResource(R.string.calendarScreen_di),
+                stringResource(R.string.calendarScreen_mi),
+                stringResource(R.string.calendarScreen_do),
+                stringResource(R.string.calendarScreen_fr),
+                stringResource(R.string.calendarScreen_sa),
+                stringResource(R.string.calendarScreen_so)
+            ),
         ) {
             repeat(42) { index ->
                 val borderRadius = if (index == 0) {
