@@ -1,5 +1,6 @@
 package com.louisweigel.pi_calendar.core
 
+import com.louisweigel.pi_calendar.R
 import java.time.Month
 
 enum class Month {
@@ -30,6 +31,23 @@ enum class Month {
             OCTOBER -> "Oktober"
             NOVEMBER -> "November"
             DECEMBER -> "Dezember"
+        }
+    }
+
+    fun getTranslationKey(): Int {
+        return when (this) {
+            JANUARY -> R.string.month_januar
+            FEBRUARY -> R.string.month_februar
+            MARCH -> R.string.month_mearz
+            APRIL -> R.string.month_april
+            MAY -> R.string.month_mai
+            JUNE -> R.string.month_juni
+            JULY -> R.string.month_juli
+            AUGUST -> R.string.month_august
+            SEPTEMBER -> R.string.month_september
+            OCTOBER -> R.string.month_oktober
+            NOVEMBER -> R.string.month_november
+            DECEMBER -> R.string.month_dezember
         }
     }
 

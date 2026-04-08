@@ -17,4 +17,17 @@
     <string name="calendarScreen_fr">Fri</string>
     <string name="calendarScreen_sa">Sat</string>
     <string name="calendarScreen_so">Sun</string>
+
+    <string name="month_januar">January</string>
+    <string name="month_februar">February</string>
+    <string name="month_mearz">March</string>
+    <string name="month_april">April</string>
+    <string name="month_mai">Mai</string>
+    <string name="month_juni">June</string>
+    <string name="month_juli">Juli</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_oktober">October</string>
+    <string name="month_november">November</string>
+    <string name="month_dezember">December</string>
 </resources>
