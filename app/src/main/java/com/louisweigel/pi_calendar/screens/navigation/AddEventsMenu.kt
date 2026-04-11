@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
 
@@ -62,21 +63,23 @@ fun AddEventsMenu(
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            FabMenuEntry(0, isExpanded, "Geburtstag", { onClose() }) {
+            FabMenuEntry(0, isExpanded,
+                stringResource(R.string.addEventsMenu_geburtstag), { onClose() }) {
                 Icon(
                     painter = painterResource(R.drawable.cake_24px),
                     contentDescription = null
                 )
             }
 
-            FabMenuEntry(1, isExpanded, "Erinnerung", { onClose() }) {
+            FabMenuEntry(1, isExpanded,
+                stringResource(R.string.addEventsMenu_erinnerung), { onClose() }) {
                 Icon(
                     painter = painterResource(R.drawable.task_alt_24px),
                     contentDescription = null
                 )
             }
 
-            FabMenuEntry(2, isExpanded, "Termin", { onClose() }) {
+            FabMenuEntry(2, isExpanded, stringResource(R.string.addEventsMenu_termin), { onClose() }) {
                 Icon(
                     painter = painterResource(R.drawable.event_24px),
                     contentDescription = null

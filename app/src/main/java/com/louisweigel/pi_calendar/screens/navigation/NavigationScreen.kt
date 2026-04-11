@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
 
@@ -48,7 +49,7 @@ fun NavigationDrawerScreen() {
         ) {
             Spacer(Modifier.height(12.dp))
             Text(
-                "π Kalender",
+                stringResource(R.string.app_name),
                 modifier = Modifier.padding(16.dp),
                 style = MaterialTheme.typography.titleLarge
             )
@@ -58,7 +59,7 @@ fun NavigationDrawerScreen() {
             NavigationDrawerItem(
                 label = {
                     CalendarMenuItem(
-                        "Mein Kalender",
+                        stringResource(R.string.mein_kalender),
                         MaterialTheme.colorScheme.secondary,
                         checked1
                     ) { newState -> checked1 = newState }
@@ -71,7 +72,7 @@ fun NavigationDrawerScreen() {
             NavigationDrawerItem(
                 label = {
                     CalendarMenuItem(
-                        "Geburtstage",
+                        stringResource(R.string.geburtstage),
                         MaterialTheme.colorScheme.tertiary,
                         checked2
                     ) { newState ->
@@ -87,7 +88,7 @@ fun NavigationDrawerScreen() {
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
             NavigationDrawerItem(
-                label = { Text("Settings") },
+                label = { Text(stringResource(R.string.settings)) },
                 selected = false,
                 icon = {
                     Icon(
@@ -99,7 +100,7 @@ fun NavigationDrawerScreen() {
                 onClick = { /* Handle click */ }
             )
             NavigationDrawerItem(
-                label = { Text("Help & feedback") },
+                label = { Text(stringResource(R.string.help_feedback)) },
                 selected = false,
                 icon = {
                     Icon(
@@ -119,7 +120,7 @@ fun NavigationDrawerScreen() {
 @Composable
 private fun CalendarSectionTitle() {
     Text(
-        "Kalender",
+        stringResource(R.string.kalender),
         modifier = Modifier.padding(16.dp),
         style = MaterialTheme.typography.titleMedium
     )

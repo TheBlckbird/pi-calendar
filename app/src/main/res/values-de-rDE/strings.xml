@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">π Kalender</string>
+    <string name="mein_kalender">Mein Kalender</string>
+    <string name="geburtstage">Geburtstage</string>
+    <string name="settings">Einstellungen</string>
+    <string name="help_feedback"><![CDATA[Hilfe & Feedback]]></string>
+    <string name="kalender">Kalender</string>
+
+    <string name="addEventsMenu_geburtstag">Geburtstag</string>
+    <string name="addEventsMenu_erinnerung">Erinnerung</string>
+    <string name="addEventsMenu_termin">Termin</string>
+    <string name="calendarScreen_mo">Mo</string>
+
+    <string name="calendarScreen_di">Di</string>
+    <string name="calendarScreen_mi">Mi</string>
+    <string name="calendarScreen_do">Do</string>
+    <string name="calendarScreen_fr">Fr</string>
+    <string name="calendarScreen_sa">Sa</string>
+    <string name="calendarScreen_so">So</string>
+
+    <string name="month_januar">Januar</string>
+    <string name="month_februar">Februar</string>
+    <string name="month_mearz">März</string>
+    <string name="month_april">April</string>
+    <string name="month_mai">Mai</string>
+    <string name="month_juni">Juni</string>
+    <string name="month_juli">Juli</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_oktober">Oktober</string>
+    <string name="month_november">November</string>
+    <string name="month_dezember">Dezember</string>
+</resources>
