@@ -50,7 +50,8 @@ data class MonthSelection(val month: Month, val year: Int) {
 fun MonthSelectionScreen(
     currentSelection: MonthSelection,
     onSelectionChanged: (MonthSelection) -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
@@ -62,7 +63,7 @@ fun MonthSelectionScreen(
     }
 
     ModalBottomSheet(onDismissRequest = onDismissRequest) {
-        LazyRow(state = listState) {
+        LazyRow(state = listState, modifier = modifier) {
             items(
                 count = currentSelection.year + 1000,
                 key = { year -> year }
@@ -116,6 +117,7 @@ fun MonthSelectionScreen(
                             bottomStart = cornerShapeRadius.value
                         )
                     }
+
                     2 -> {
                         RoundedCornerShape(
                             topStart = cornerShapeRadius.value,
@@ -124,6 +126,7 @@ fun MonthSelectionScreen(
                             bottomStart = cornerShapeRadius.value
                         )
                     }
+
                     9 -> {
                         RoundedCornerShape(
                             topStart = cornerShapeRadius.value,
@@ -132,6 +135,7 @@ fun MonthSelectionScreen(
                             bottomStart = 20.dp
                         )
                     }
+
                     11 -> {
                         RoundedCornerShape(
                             topStart = cornerShapeRadius.value,
@@ -140,6 +144,7 @@ fun MonthSelectionScreen(
                             bottomStart = cornerShapeRadius.value
                         )
                     }
+
                     else -> {
                         RoundedCornerShape(
                             topStart = cornerShapeRadius.value,

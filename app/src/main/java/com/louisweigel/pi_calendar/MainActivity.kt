@@ -21,17 +21,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import com.louisweigel.pi_calendar.core.Calendar
+import com.louisweigel.pi_calendar.core.CalendarManager
 import com.louisweigel.pi_calendar.core.Month
 import com.louisweigel.pi_calendar.screens.CalendarScreen
 import com.louisweigel.pi_calendar.screens.MonthSelection
 import com.louisweigel.pi_calendar.screens.MonthSelectionScreen
+import com.louisweigel.pi_calendar.screens.calendarentry_sheets.NewEventSheet
 import com.louisweigel.pi_calendar.screens.navigation.AddEventsMenu
 import com.louisweigel.pi_calendar.screens.navigation.NavigationDrawerScreen
 import com.louisweigel.pi_calendar.screens.navigation.TopBar
 import com.louisweigel.pi_calendar.ui.theme.PicalendarTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import kotlin.time.Instant
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +41,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             var isFabExpanded by remember { mutableStateOf(false) }
-            var isBottomSheetExpanded by remember { mutableStateOf(false) }
+            var isMonthSelectionExpanded by remember { mutableStateOf(false) }
+            var isNewEventExpanded by remember { mutableStateOf(false) }
 
             var currentSelectedMonth by remember {
                 mutableStateOf(
@@ -69,7 +72,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 {
-                                    isBottomSheetExpanded = true
+                                    isMonthSelectionExpanded = true
                                 },
                                 currentSelectedMonth,
                                 {
@@ -83,6 +86,9 @@ class MainActivity : ComponentActivity() {
                                 isFabExpanded,
                                 { isFabExpanded = !isFabExpanded },
                                 { isFabExpanded = false },
+                                { isNewEventExpanded = true },
+                                {},
+                                {},
                             )
                         },
 
@@ -101,13 +107,30 @@ class MainActivity : ComponentActivity() {
                             CalendarScreen()
                         }
 
-                        if (isBottomSheetExpanded) {
+                        if (isMonthSelectionExpanded) {
                             MonthSelectionScreen(
                                 currentSelectedMonth,
                                 { newSelection ->
                                     currentSelectedMonth = newSelection
                                 },
-                                { isBottomSheetExpanded = false }
+                                { isMonthSelectionExpanded = false },
+                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                            )
+                        }
+
+                        val stubManager = CalendarManager("/tmp/pi-calendar.db")
+
+                        if (isNewEventExpanded) {
+                            NewEventSheet(
+                                { isNewEventExpanded = false },
+                                { event, calendar ->
+                                    isNewEventExpanded = false
+                                    calendar.entries.add(event)
+                                },
+                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                                listOf(
+                                    stubManager.defaultEventsCalendar,
+                                ) + stubManager.getAllCalenders(),
                             )
                         }
                     }

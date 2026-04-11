@@ -30,4 +30,13 @@
     <string name="month_oktober">October</string>
     <string name="month_november">November</string>
     <string name="month_dezember">December</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="addEntryMenu_titleField">Title</string>
+    <string name="addEntryMenu_descriptionField">Description</string>
+    <string name="addEventMenu_allDayEvent">All-day</string>
+    <string name="addEventMenu_from">From</string>
+    <string name="addEventMenu_until">Until</string>
+    <string name="okay">Ok</string>
+    <string name="addEventMenu_startdateAfterEnddate">The start date can\'t be after the end date</string>
 </resources>

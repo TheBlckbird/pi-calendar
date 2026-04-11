@@ -12,13 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -39,6 +35,9 @@ fun AddEventsMenu(
     isExpanded: Boolean,
     onToggleExpanded: () -> Unit,
     onClose: () -> Unit,
+    onNewEvent: () -> Unit,
+    onNewBirthday: () -> Unit,
+    onNewReminder: () -> Unit,
 ) {
     val fabRadius = if (isExpanded) {
         28.dp
@@ -64,7 +63,10 @@ fun AddEventsMenu(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             FabMenuEntry(0, isExpanded,
-                stringResource(R.string.addEventsMenu_geburtstag), { onClose() }) {
+                stringResource(R.string.addEventsMenu_geburtstag), {
+                onNewBirthday()
+                onClose()
+            }) {
                 Icon(
                     painter = painterResource(R.drawable.cake_24px),
                     contentDescription = null
@@ -72,14 +74,20 @@ fun AddEventsMenu(
             }
 
             FabMenuEntry(1, isExpanded,
-                stringResource(R.string.addEventsMenu_erinnerung), { onClose() }) {
+                stringResource(R.string.addEventsMenu_erinnerung), {
+                onNewReminder()
+                onClose()
+            }) {
                 Icon(
                     painter = painterResource(R.drawable.task_alt_24px),
                     contentDescription = null
                 )
             }
 
-            FabMenuEntry(2, isExpanded, stringResource(R.string.addEventsMenu_termin), { onClose() }) {
+            FabMenuEntry(2, isExpanded, stringResource(R.string.addEventsMenu_termin), {
+                onNewEvent()
+                onClose()
+            }) {
                 Icon(
                     painter = painterResource(R.drawable.event_24px),
                     contentDescription = null

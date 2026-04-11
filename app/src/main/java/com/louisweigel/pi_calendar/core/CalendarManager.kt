@@ -23,12 +23,6 @@ class CalendarManager(private val dbPath: String) {
     var defaultBirthdaysCalendar: Calendar =
         Calendar("Geburtstage", "Alle gespeicherten Geburtstage", Color.Blue, true)
 
-    init {
-        calendars.add(defaultBirthdaysCalendar)
-        calendars.add(defaultRemindersCalendar)
-        calendars.add(defaultEventsCalendar)
-    }
-
     /**
      * Returns all known calendars
      */
