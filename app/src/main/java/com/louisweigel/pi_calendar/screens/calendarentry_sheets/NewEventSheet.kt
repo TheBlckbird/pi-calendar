@@ -39,7 +39,6 @@ import com.louisweigel.pi_calendar.screens.components.ClickableSwitchRow
 import com.louisweigel.pi_calendar.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.screens.components.TimePickerRow
 import java.time.LocalTime
-import kotlin.time.Duration
 import kotlin.time.Instant
 
 @Composable
@@ -81,8 +80,6 @@ fun NewEventSheet(
     var isAllDay by remember { mutableStateOf(true) }
 
     var showErrorAlert by remember { mutableStateOf(false) }
-
-    val isInputValid by remember { derivedStateOf { title != "" } }
 
     val onSaveClick = {
         val title = if (title == "") "(Kein Name)" else title
@@ -128,7 +125,6 @@ fun NewEventSheet(
 
                 Button(
                     onClick = onSaveClick,
-                    enabled = isInputValid,
                 ) {
                     Text("Speichern")
                 }
