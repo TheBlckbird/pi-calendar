@@ -44,13 +44,13 @@ fun CalendarScreen() {
     HorizontalPager(pagerState) { page ->
         CalendarGrid(
             Modifier.fillMaxSize(),
-            listOf(stringResource(R.string.calendarScreen_mo),
-                stringResource(R.string.calendarScreen_di),
-                stringResource(R.string.calendarScreen_mi),
-                stringResource(R.string.calendarScreen_do),
-                stringResource(R.string.calendarScreen_fr),
-                stringResource(R.string.calendarScreen_sa),
-                stringResource(R.string.calendarScreen_so)
+            listOf(stringResource(R.string.calendarScreen_monday),
+                stringResource(R.string.calendarScreen_tuesday),
+                stringResource(R.string.calendarScreen_wednesday),
+                stringResource(R.string.calendarScreen_thursday),
+                stringResource(R.string.calendarScreen_friday),
+                stringResource(R.string.calendarScreen_saturday),
+                stringResource(R.string.calendarScreen_sunday)
             ),
         ) {
             repeat(42) { index ->

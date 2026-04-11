@@ -63,7 +63,7 @@ fun AddEventsMenu(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             FabMenuEntry(0, isExpanded,
-                stringResource(R.string.addEventsMenu_geburtstag), {
+                stringResource(R.string.addEntriesFab_geburtstag), {
                 onNewBirthday()
                 onClose()
             }) {
@@ -74,7 +74,7 @@ fun AddEventsMenu(
             }
 
             FabMenuEntry(1, isExpanded,
-                stringResource(R.string.addEventsMenu_erinnerung), {
+                stringResource(R.string.addEntriesFab_erinnerung), {
                 onNewReminder()
                 onClose()
             }) {
@@ -84,7 +84,7 @@ fun AddEventsMenu(
                 )
             }
 
-            FabMenuEntry(2, isExpanded, stringResource(R.string.addEventsMenu_termin), {
+            FabMenuEntry(2, isExpanded, stringResource(R.string.addEntriesFab_termin), {
                 onNewEvent()
                 onClose()
             }) {

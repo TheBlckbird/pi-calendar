@@ -6,17 +6,17 @@
     <string name="help_feedback"><![CDATA[Help & feedback]]></string>
     <string name="kalender">Calendar</string>
 
-    <string name="addEventsMenu_geburtstag">Birthday</string>
-    <string name="addEventsMenu_erinnerung">Task</string>
-    <string name="addEventsMenu_termin">Event</string>
+    <string name="addEntriesFab_geburtstag">Birthday</string>
+    <string name="addEntriesFab_erinnerung">Task</string>
+    <string name="addEntriesFab_termin">Event</string>
 
-    <string name="calendarScreen_mo">Mon</string>
-    <string name="calendarScreen_di">Tue</string>
-    <string name="calendarScreen_mi">Wed</string>
-    <string name="calendarScreen_do">Thu</string>
-    <string name="calendarScreen_fr">Fri</string>
-    <string name="calendarScreen_sa">Sat</string>
-    <string name="calendarScreen_so">Sun</string>
+    <string name="calendarScreen_monday">Mon</string>
+    <string name="calendarScreen_tuesday">Tue</string>
+    <string name="calendarScreen_wednesday">Wed</string>
+    <string name="calendarScreen_thursday">Thu</string>
+    <string name="calendarScreen_friday">Fri</string>
+    <string name="calendarScreen_saturday">Sat</string>
+    <string name="calendarScreen_sunday">Sun</string>
 
     <string name="month_januar">January</string>
     <string name="month_februar">February</string>
