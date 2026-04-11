@@ -22,7 +22,6 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
@@ -82,8 +82,6 @@ fun NewEventSheet(
     var showErrorAlert by remember { mutableStateOf(false) }
 
     val onSaveClick = {
-        val title = if (title == "") "(Kein Name)" else title
-
         var timeFromMillis = 0
         var timeUntilMillis = 0
 
@@ -120,13 +118,13 @@ fun NewEventSheet(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 TextButton(onClick = onDismissRequest) {
-                    Text("Abbrechen")
+                    Text(stringResource(R.string.cancel))
                 }
 
                 Button(
                     onClick = onSaveClick,
                 ) {
-                    Text("Speichern")
+                    Text(stringResource(R.string.save))
                 }
             }
 
@@ -160,7 +158,7 @@ fun NewEventSheet(
                                 if (calendar == selectedCalendar) {
                                     Icon(
                                         painter = painterResource(R.drawable.check_24px),
-                                        contentDescription = "Currently selected",
+                                        contentDescription = null,
                                     )
                                 }
                             },
@@ -180,14 +178,14 @@ fun NewEventSheet(
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text("Titel *") },
+                label = { Text(stringResource(R.string.addEntryMenu_titleField) + "*") },
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text("Beschreibung") },
+                label = { Text(stringResource(R.string.addEntryMenu_descriptionField)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -198,7 +196,7 @@ fun NewEventSheet(
             ClickableSwitchRow(
                 isAllDay,
                 { isAllDay = it },
-                "Ganztägiger Termin",
+                stringResource(R.string.addEventMenu_allDayEvent),
             )
 
             Spacer(modifier = Modifier.padding(bottom = 4.dp))
@@ -206,7 +204,7 @@ fun NewEventSheet(
             Column {
                 Column(verticalArrangement = Arrangement.spacedBy((-10).dp)) {
                     Text(
-                        "Von",
+                        stringResource(R.string.addEventMenu_from),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.labelMedium,
                     )
@@ -235,7 +233,7 @@ fun NewEventSheet(
 
                 Column(verticalArrangement = Arrangement.spacedBy((-10).dp)) {
                     Text(
-                        "Bis",
+                        stringResource(R.string.addEventMenu_until),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.labelMedium,
                     )
@@ -273,11 +271,11 @@ fun NewEventSheet(
             dismissButton = null,
             confirmButton = {
                 TextButton(onClick = { showErrorAlert = false }) {
-                    Text("OK")
+                    Text(stringResource(R.string.okay))
                 }
             },
             text = {
-                Text("Das Startdatum darf nicht vor dem Enddatum liegen")
+                Text(stringResource(R.string.addEventMenu_startdateAfterEnddate))
             },
         )
     }
