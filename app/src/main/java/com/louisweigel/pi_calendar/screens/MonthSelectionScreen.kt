@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.core.Month
 import kotlinx.coroutines.launch
@@ -168,7 +169,7 @@ fun MonthSelectionScreen(
                         contentColor = if (isCurrentlySelected) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onBackground,
                     ),
                 ) {
-                    Text(month.toString(), style = MaterialTheme.typography.labelMedium)
+                    Text(stringResource(month.getTranslationKey()), style = MaterialTheme.typography.labelMedium)
                 }
             }
         }
