@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">π calendar</string>
+    <string name="app_name">π Calendar</string>
     <string name="mein_kalender">My calendar</string>
     <string name="geburtstage">Birthdays</string>
     <string name="settings">Settings</string>
@@ -7,8 +7,8 @@
     <string name="kalender">Calendar</string>
 
     <string name="addEventsMenu_geburtstag">Birthday</string>
-    <string name="addEventsMenu_erinnerung">Reminder</string>
-    <string name="addEventsMenu_termin">Appointment </string>
+    <string name="addEventsMenu_erinnerung">Task</string>
+    <string name="addEventsMenu_termin">Event</string>
 
     <string name="calendarScreen_mo">Mon</string>
     <string name="calendarScreen_di">Tue</string>
@@ -22,9 +22,9 @@
     <string name="month_februar">February</string>
     <string name="month_mearz">March</string>
     <string name="month_april">April</string>
-    <string name="month_mai">Mai</string>
+    <string name="month_mai">May</string>
     <string name="month_juni">June</string>
-    <string name="month_juli">Juli</string>
+    <string name="month_juli">July</string>
     <string name="month_august">August</string>
     <string name="month_september">September</string>
     <string name="month_oktober">October</string>
