@@ -123,9 +123,9 @@ class MainActivity : ComponentActivity() {
                         if (isNewEventExpanded) {
                             NewEventSheet(
                                 { isNewEventExpanded = false },
-                                { _, _ ->
+                                { event, calendar ->
                                     isNewEventExpanded = false
-                                    // TODO: save new event
+                                    calendar.entries.add(event)
                                 },
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                                 listOf(

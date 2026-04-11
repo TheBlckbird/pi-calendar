@@ -22,6 +22,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -81,6 +82,8 @@ fun NewEventSheet(
 
     var showErrorAlert by remember { mutableStateOf(false) }
 
+    val isInputValid by remember { derivedStateOf { title != "" } }
+
     val onSaveClick = {
         val title = if (title == "") "(Kein Name)" else title
 
@@ -123,7 +126,10 @@ fun NewEventSheet(
                     Text("Abbrechen")
                 }
 
-                Button(onClick = onSaveClick) {
+                Button(
+                    onClick = onSaveClick,
+                    enabled = isInputValid,
+                ) {
                     Text("Speichern")
                 }
             }
@@ -178,7 +184,7 @@ fun NewEventSheet(
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text("Titel") },
+                label = { Text("Titel *") },
                 modifier = Modifier.fillMaxWidth()
             )
 
