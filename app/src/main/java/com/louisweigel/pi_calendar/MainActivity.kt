@@ -40,6 +40,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            // Note: This will later be put into another class, but for now just use this for
+            // referencing the calendar manager
+            val stubManager = CalendarManager("/tmp/pi-calendar.db")
+
             var isFabExpanded by remember { mutableStateOf(false) }
             var isMonthSelectionExpanded by remember { mutableStateOf(false) }
             var isNewEventExpanded by remember { mutableStateOf(false) }
@@ -117,8 +121,6 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                             )
                         }
-
-                        val stubManager = CalendarManager("/tmp/pi-calendar.db")
 
                         if (isNewEventExpanded) {
                             NewEventSheet(
