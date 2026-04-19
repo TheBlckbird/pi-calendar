@@ -25,6 +25,7 @@ import com.louisweigel.pi_calendar.core.CalendarManager
 import com.louisweigel.pi_calendar.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.screens.MonthSelection
 import com.louisweigel.pi_calendar.screens.MonthSelectionScreen
+import com.louisweigel.pi_calendar.screens.calendarentry_sheets.NewBirthdaySheet
 import com.louisweigel.pi_calendar.screens.calendarentry_sheets.NewEventSheet
 import com.louisweigel.pi_calendar.screens.navigation.AddEventsMenu
 import com.louisweigel.pi_calendar.screens.navigation.NavigationDrawerScreen
@@ -48,6 +49,7 @@ class MainActivity : ComponentActivity() {
             var isFabExpanded by remember { mutableStateOf(false) }
             var isMonthSelectionExpanded by remember { mutableStateOf(false) }
             var isNewEventExpanded by remember { mutableStateOf(false) }
+            var isNewBirthdayExpanded by remember { mutableStateOf(false) }
 
             var currentSelectedMonth by remember {
                 mutableStateOf(MonthSelection.getToday())
@@ -87,7 +89,7 @@ class MainActivity : ComponentActivity() {
                                 { isFabExpanded = !isFabExpanded },
                                 { isFabExpanded = false },
                                 { isNewEventExpanded = true },
-                                {},
+                                { isNewBirthdayExpanded = true},
                                 {},
                             )
                         },
@@ -140,6 +142,20 @@ class MainActivity : ComponentActivity() {
                                 listOf(
                                     stubManager.defaultEventsCalendar,
                                 ) + stubManager.getCalendars(),
+                            )
+                        }
+
+                        if (isNewBirthdayExpanded) {
+                            NewBirthdaySheet(
+                                { isNewBirthdayExpanded = false },
+                                { birthday, calendar ->
+                                    isNewBirthdayExpanded = false
+                                    calendar.entries.add(birthday)
+                                },
+                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                                listOf(
+                                    stubManager.defaultEventsCalendar,
+                                ) + stubManager.getAllCalenders(),
                             )
                         }
                     }
