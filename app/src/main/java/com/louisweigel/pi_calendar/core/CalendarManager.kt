@@ -3,7 +3,6 @@ package com.louisweigel.pi_calendar.core
 import androidx.compose.ui.graphics.Color
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntryType
-import java.util.Date
 import kotlin.time.Instant
 
 class CalendarManager(private val dbPath: String) {
@@ -159,5 +158,47 @@ class CalendarManager(private val dbPath: String) {
      */
     fun saveToDb(): Boolean {
         TODO("needs more planning")
+    }
+
+    /**
+     * Gets all the calendars that are shared with a specific person
+     */
+    fun getCalendarsSharedWith(person: Person): List<Calendar> {
+        val sharedCalendars = mutableListOf<Calendar>()
+
+        for (calendar in calendars) {
+            if (calendar.isSharedWith(person)) {
+                sharedCalendars.add(calendar)
+            }
+        }
+
+        return sharedCalendars
+    }
+
+    /**
+     * Returns all calendar entries that are shared with a specific person.
+     *
+     * `includeCalendars` sets whether all entries from the calendars that are shared with the person should also be included
+     */
+    fun getEntriesSharedWith(person: Person, includeCalendars: Boolean = false): List<CalendarEntry> {
+        val sharedEntries = mutableListOf<CalendarEntry>()
+
+        if (includeCalendars) {
+            val sharedCalendars = getCalendarsSharedWith(person)
+
+            for (calendar in sharedCalendars) {
+                sharedEntries += calendar.entries
+            }
+        }
+
+        for (calendar in calendars) {
+            for (entry in calendar.entries) {
+                if (entry.isSharedWith(person)) {
+                    sharedEntries.add(entry)
+                }
+            }
+        }
+
+        return sharedEntries
     }
 }

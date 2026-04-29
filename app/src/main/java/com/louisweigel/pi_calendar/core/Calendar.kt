@@ -65,4 +65,11 @@ class Calendar(
     fun stopSharing(person: Person): Boolean {
         return sharedWith.remove(person)
     }
+
+    /**
+     * Checks whether the calendar is currently shared with the given person
+     */
+    fun isSharedWith(person: Person): Boolean {
+        return sharedWith.contains(person)
+    }
 }
