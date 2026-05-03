@@ -21,10 +21,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.CalendarManager
 import com.louisweigel.pi_calendar.core.Month
-import com.louisweigel.pi_calendar.screens.CalendarScreen
+import com.louisweigel.pi_calendar.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.screens.MonthSelection
 import com.louisweigel.pi_calendar.screens.MonthSelectionScreen
 import com.louisweigel.pi_calendar.screens.calendarentry_sheets.NewEventSheet
@@ -108,7 +107,7 @@ class MainActivity : ComponentActivity() {
                                 .background(MaterialTheme.colorScheme.surfaceContainer),
 
                             ) {
-                            CalendarScreen()
+                            CalendarScreen(currentSelectedMonth)
                         }
 
                         if (isMonthSelectionExpanded) {
