@@ -1,21 +1,47 @@
 package com.louisweigel.pi_calendar.screens.calendar_screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.screens.MonthSelection
+import java.time.Year
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.scan
 import kotlinx.datetime.DayOfWeek
@@ -28,6 +54,8 @@ import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
 @Composable
+fun CalendarScreen(currentMonth: MonthSelection) {
+    val pagerState = rememberPagerState(pageCount = { 100 }, initialPage = 50)
 fun CalendarScreen(
     currentMonthYear: MonthSelection,
     onMonthChange: (Boolean) -> Unit,
@@ -97,6 +125,12 @@ fun CalendarScreen(
                     else -> {
                         RoundedCornerShape(4.dp)
                     }
+                }
+
+                val entries = if (index == 25) {
+                    listOf(Triple(R.drawable.cake_24px, "Andreas Geburtstag", Color.Blue))
+                } else {
+                    listOf<Triple<Int?, String, Color>>()
                 }
 
                 val day = index - daysBeforeFirst + 1
