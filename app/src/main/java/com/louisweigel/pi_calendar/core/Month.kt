@@ -51,6 +51,40 @@ enum class Month {
         }
     }
 
+    fun toIndex(): Int {
+        return when (this) {
+            JANUARY -> 1
+            FEBRUARY -> 2
+            MARCH -> 3
+            APRIL -> 4
+            MAY -> 5
+            JUNE -> 6
+            JULY -> 7
+            AUGUST -> 8
+            SEPTEMBER -> 9
+            OCTOBER -> 10
+            NOVEMBER -> 11
+            DECEMBER -> 12
+        }
+    }
+
+    fun getPrevious(): com.louisweigel.pi_calendar.core.Month {
+        return when (this) {
+            JANUARY -> DECEMBER
+            FEBRUARY -> JANUARY
+            MARCH -> FEBRUARY
+            APRIL -> MARCH
+            MAY -> APRIL
+            JUNE -> MAY
+            JULY -> JUNE
+            AUGUST -> JULY
+            SEPTEMBER -> AUGUST
+            OCTOBER -> SEPTEMBER
+            NOVEMBER -> OCTOBER
+            DECEMBER -> NOVEMBER
+        }
+    }
+
     companion object {
         fun from(value: Month): com.louisweigel.pi_calendar.core.Month {
             return when (value) {
