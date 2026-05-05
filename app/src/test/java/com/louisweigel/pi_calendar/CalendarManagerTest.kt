@@ -19,14 +19,14 @@ class CalendarManagerTest {
 
     @Test
     fun createFindDeleteCalendars_works() {
-        assertEquals(3, calendarManager.getAllCalenders().count())
+        assertEquals(0, calendarManager.getAllCalenders().count())
 
         calendarManager.addCalendar("Eltern", "", Color.Black)
         val workCalendar = calendarManager.addCalendar("Arbeit", "", Color.Yellow)
-        assertEquals(5, calendarManager.getAllCalenders().count())
+        assertEquals(2, calendarManager.getAllCalenders().count())
 
         assertEquals(null, calendarManager.addCalendar("Arbeit", "", Color.Yellow))
-        assertEquals(5, calendarManager.getAllCalenders().count())
+        assertEquals(2, calendarManager.getAllCalenders().count())
 
         val foundWorkCalendar = calendarManager.findCalendar("Arbeit")
         assertEquals(foundWorkCalendar, workCalendar)
@@ -56,7 +56,7 @@ class CalendarManagerTest {
 
     @Test
     fun calendarEntries_work() {
-        assertEquals(0, calendarManager.defaultEventsCalendar.getCalendarEntries().count())
+        assertEquals(0, calendarManager.defaultEventsCalendar.entries.count())
 
         val event1 = Event(
             "Fahrstunde",
@@ -65,7 +65,7 @@ class CalendarManagerTest {
             Instant.parse("2020-07-30T19:30:00Z"),
             false
         )
-        calendarManager.defaultEventsCalendar.addCalendarEntry(event1)
+        calendarManager.defaultEventsCalendar.entries.add(event1)
 
         val event2 = Event(
             "Urlaub",
@@ -74,7 +74,7 @@ class CalendarManagerTest {
             Instant.parse("2020-08-07T00:00:00Z"),
             true
         )
-        calendarManager.defaultEventsCalendar.addCalendarEntry(event2)
+        calendarManager.defaultEventsCalendar.entries.add(event2)
 
         val event3 = Event(
             "ganz lange Fahrstunde",
@@ -83,7 +83,7 @@ class CalendarManagerTest {
             Instant.parse("2020-08-31T19:30:00Z"),
             false
         )
-        calendarManager.defaultEventsCalendar.addCalendarEntry(event3)
+        calendarManager.defaultEventsCalendar.entries.add(event3)
 
         val event4 = Event(
             "Feier Andreas",
@@ -92,9 +92,9 @@ class CalendarManagerTest {
             Instant.parse("2020-09-20T00:00:00Z"),
             true
         )
-        calendarManager.defaultEventsCalendar.addCalendarEntry(event4)
+        calendarManager.defaultEventsCalendar.entries.add(event4)
 
-        assertEquals(4, calendarManager.defaultEventsCalendar.getCalendarEntries().count())
+        assertEquals(4, calendarManager.defaultEventsCalendar.entries.count())
 
         assertEquals(calendarManager.defaultEventsCalendar.findCalendarEntries(
             listOf(CalendarEntryType.Event),

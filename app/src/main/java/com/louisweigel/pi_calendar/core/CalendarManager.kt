@@ -128,6 +128,19 @@ class CalendarManager(private val dbPath: String) {
     }
 
     /**
+     * Returns all the entries from all calendars and returns them as a pair with their Calendar
+     */
+    fun getAllCalendarEntries(): List<Pair<Calendar, CalendarEntry>> {
+        val entries = mutableListOf<Pair< Calendar, CalendarEntry>>()
+
+        for (calendar in calendars) {
+            entries += calendar.entries.map { entry -> Pair(calendar, entry) }
+        }
+
+        return entries
+    }
+
+    /**
      * Find a calendar entry that matches all the given properties
      */
     fun findCalendarEntries(
