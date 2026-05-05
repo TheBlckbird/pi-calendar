@@ -24,15 +24,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.core.Month
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.time.LocalDate
 
 data class MonthSelection(val month: Month, val year: Int) {
-    fun getToday(): MonthSelection {
-        val today = LocalDate.now()
+    /**
+     * Computes the next month/year combination and returns it
+     */
+    fun getNext(): MonthSelection {
+        val nextMonth = this.month.getNext()
+        var newYear = this.year
 
-        val month = Month.from(today.month)
-        val year = today.year
-        return MonthSelection(month, year)
+        if (nextMonth == Month.JANUARY) {
+            newYear += 1
+        }
+
+        return MonthSelection(nextMonth, newYear)
+    }
+
+    /**
+     * Computes the previous month/year combination and returns it
+     */
+    fun getPrevious(): MonthSelection {
+        val previousMonth = this.month.getPrevious()
+        var newYear = this.year
+
+        if (previousMonth == Month.DECEMBER) {
+            newYear -= 1
+        }
+
+        return MonthSelection(previousMonth, newYear)
     }
 
     override fun toString(): String {
@@ -43,6 +64,21 @@ data class MonthSelection(val month: Month, val year: Int) {
         }
 
         return month.toString() + yearPart
+    }
+
+    companion object {
+        /**
+         * Returns the current month and year.
+         *
+         * A clock can be passed for testing, but this argument should usually be ignored
+         */
+        fun getToday(clock: Clock = Clock.systemDefaultZone()): MonthSelection {
+            val today = LocalDate.now(clock)
+
+            val month = Month.from(today.month)
+            val year = today.year
+            return MonthSelection(month, year)
+        }
     }
 }
 

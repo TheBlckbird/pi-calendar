@@ -1,0 +1,39 @@
+package com.louisweigel.pi_calendar
+
+import com.louisweigel.pi_calendar.core.Month
+import com.louisweigel.pi_calendar.screens.MonthSelection
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
+
+class MonthSelectionTest {
+    @Test
+    fun `getNext and getPrevious return expected month and year`() {
+        var monthSelection = MonthSelection(Month.NOVEMBER, 2024)
+        monthSelection = monthSelection.getNext()
+        assertEquals(MonthSelection(Month.DECEMBER, 2024), monthSelection)
+
+        monthSelection = monthSelection.getNext()
+        assertEquals(MonthSelection(Month.JANUARY, 2025), monthSelection)
+
+        monthSelection = monthSelection.getPrevious()
+        assertEquals(MonthSelection(Month.DECEMBER, 2024), monthSelection)
+    }
+
+    @Test
+    fun `getToday returns expected month and year`() {
+        val monthSelection = MonthSelection(Month.NOVEMBER, 2024)
+
+        val clock = Clock.fixed(
+            Instant.parse("2026-05-05T00:00:00Z"),
+            ZoneId.of("UTC")
+        )
+
+        val result = monthSelection.getToday(clock)
+
+        assertEquals(Month.MAY, result.month)
+        assertEquals(2026, result.year)
+    }
+}
