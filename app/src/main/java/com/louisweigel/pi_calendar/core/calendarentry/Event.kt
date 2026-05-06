@@ -10,4 +10,9 @@ class Event(
     val isAllDay: Boolean
 ) : CalendarEntry(
     title, description, date
-)
+) {
+    override fun includesDate(date: Instant): Boolean {
+        return date >= this.date && date < until
+
+    }
+}

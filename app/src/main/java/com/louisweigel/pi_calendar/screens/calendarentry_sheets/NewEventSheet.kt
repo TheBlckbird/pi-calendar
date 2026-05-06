@@ -38,6 +38,13 @@ import com.louisweigel.pi_calendar.core.calendarentry.Event
 import com.louisweigel.pi_calendar.screens.components.ClickableSwitchRow
 import com.louisweigel.pi_calendar.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.screens.components.TimePickerRow
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.atTime
+import kotlinx.datetime.plus
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import java.time.LocalTime
 import kotlin.time.Instant
 
@@ -90,15 +97,43 @@ fun NewEventSheet(
             timeUntilMillis += timeUntilState.minute * 60 * 1000 + timeUntilState.hour * 60 * 60 * 1000
         }
 
-        val dateFrom = Instant.fromEpochMilliseconds(dateFromState.selectedDateMillis!! + timeFromMillis)
-        val dateUntil = Instant.fromEpochMilliseconds(dateUntilState.selectedDateMillis!! + timeUntilMillis)
+        //val dateFrom = Instant.fromEpochMilliseconds(dateFromState.selectedDateMillis!! + timeFromMillis)
+        //val dateUntil = Instant.fromEpochMilliseconds(dateUntilState.selectedDateMillis!! + timeUntilMillis)
+
+        val timeZone = TimeZone.currentSystemDefault()
+
+        val fromLocalDate = Instant
+            .fromEpochMilliseconds(dateFromState.selectedDateMillis!!)
+            .toLocalDateTime(TimeZone.UTC)
+            .date
+
+        val untilLocalDate = Instant
+            .fromEpochMilliseconds(dateUntilState.selectedDateMillis!!)
+            .toLocalDateTime(TimeZone.UTC)
+            .date
+
+        val dateFrom = if (isAllDay) {
+            fromLocalDate.atStartOfDayIn(timeZone)
+        } else {
+            fromLocalDate
+                .atTime(timeFromState.hour, timeFromState.minute)
+                .toInstant(timeZone)
+        }
+
+        val dateUntil = if (isAllDay) {
+            untilLocalDate.plus(1, DateTimeUnit.DAY).atStartOfDayIn(timeZone)
+        } else {
+            untilLocalDate
+                .atTime(timeUntilState.hour, timeUntilState.minute)
+                .toInstant(timeZone)
+        }
 
         if (dateFrom > dateUntil) {
             showErrorAlert = true
         } else {
             onSave(
                 Event(
-                    title, description, dateFrom, dateUntil, true
+                    title, description, dateFrom, dateUntil, isAllDay
                 ),
                 selectedCalendar,
             )

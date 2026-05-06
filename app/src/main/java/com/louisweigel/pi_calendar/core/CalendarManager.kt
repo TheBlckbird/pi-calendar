@@ -23,10 +23,17 @@ class CalendarManager(private val dbPath: String) {
         Calendar("Geburtstage", "Alle gespeicherten Geburtstage", Color.Blue, true)
 
     /**
-     * Returns all known calendars
+     * Returns all non default calendars
      */
-    fun getAllCalenders(): List<Calendar> {
+    fun getCalendars(): List<Calendar> {
         return calendars
+    }
+
+    /**
+     * Returns all calendars, including the default calendars
+     */
+    private fun getAllCalendars(): List<Calendar> {
+        return calendars + defaultBirthdaysCalendar + defaultRemindersCalendar + defaultEventsCalendar
     }
 
     /**
@@ -128,6 +135,19 @@ class CalendarManager(private val dbPath: String) {
     }
 
     /**
+     * Returns a list with all the calendar entries and their corresponding calendar
+     */
+    fun getAllCalendarEntries(): List<Pair<Calendar, CalendarEntry>> {
+        val entries = mutableListOf<Pair<Calendar, CalendarEntry>>()
+
+        for (calendar in getAllCalendars()) {
+            entries += calendar.entries.map { Pair(calendar, it) }
+        }
+
+        return entries
+    }
+
+    /**
      * Find a calendar entry that matches all the given properties
      */
     fun findCalendarEntries(
@@ -138,7 +158,7 @@ class CalendarManager(private val dbPath: String) {
     ): List<Pair<Calendar, CalendarEntry>> {
         val foundEntries = mutableListOf<Pair<Calendar, CalendarEntry>>()
 
-        for (calendar in calendars) {
+        for (calendar in getAllCalendars()) {
             foundEntries +=
                 calendar.findCalendarEntries(
                     calendarEntryTypes,
@@ -166,7 +186,7 @@ class CalendarManager(private val dbPath: String) {
     fun getCalendarsSharedWith(person: Person): List<Calendar> {
         val sharedCalendars = mutableListOf<Calendar>()
 
-        for (calendar in calendars) {
+        for (calendar in getAllCalendars()) {
             if (calendar.isSharedWith(person)) {
                 sharedCalendars.add(calendar)
             }
@@ -191,7 +211,7 @@ class CalendarManager(private val dbPath: String) {
             }
         }
 
-        for (calendar in calendars) {
+        for (calendar in getAllCalendars()) {
             for (entry in calendar.entries) {
                 if (entry.isSharedWith(person)) {
                     sharedEntries.add(entry)

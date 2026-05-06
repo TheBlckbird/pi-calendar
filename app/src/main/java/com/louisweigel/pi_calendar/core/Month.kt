@@ -102,6 +102,23 @@ enum class Month {
         }
     }
 
+    fun toJavaMonth(): Month {
+        return when (this) {
+            JANUARY -> Month.JANUARY
+            FEBRUARY -> Month.FEBRUARY
+            MARCH -> Month.MARCH
+            APRIL -> Month.APRIL
+            MAY -> Month.MAY
+            JUNE -> Month.JUNE
+            JULY -> Month.JULY
+            AUGUST -> Month.AUGUST
+            SEPTEMBER -> Month.SEPTEMBER
+            OCTOBER -> Month.OCTOBER
+            NOVEMBER -> Month.NOVEMBER
+            DECEMBER -> Month.DECEMBER
+        }
+    }
+
     companion object {
         fun from(value: Month): com.louisweigel.pi_calendar.core.Month {
             return when (value) {

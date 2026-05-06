@@ -9,20 +9,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
+import com.louisweigel.pi_calendar.core.Calendar
+import com.louisweigel.pi_calendar.core.calendarentry.Birthday
+import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.screens.MonthSelection
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.scan
-import java.time.DayOfWeek
-import java.time.LocalDate
+import kotlinx.datetime.DayOfWeek
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toJavaMonth
+import kotlinx.datetime.todayIn
+import kotlin.time.Clock
 
 @Composable
-fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Unit) {
+fun CalendarScreen(
+    currentMonthYear: MonthSelection,
+    onMonthChange: (Boolean) -> Unit,
+    calendarEntries: List<Pair<Calendar, CalendarEntry>>
+) {
     val pageCount = 10_000
-    val initialPage = pageCount/2
+    val initialPage = pageCount / 2
     val pagerState = rememberPagerState(pageCount = { pageCount }, initialPage = initialPage)
 
     LaunchedEffect(pagerState) {
@@ -42,7 +54,8 @@ fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Uni
     HorizontalPager(pagerState) {
         CalendarGrid(
             Modifier.fillMaxSize(),
-            listOf(stringResource(R.string.calendarScreen_monday),
+            listOf(
+                stringResource(R.string.calendarScreen_monday),
                 stringResource(R.string.calendarScreen_tuesday),
                 stringResource(R.string.calendarScreen_wednesday),
                 stringResource(R.string.calendarScreen_thursday),
@@ -51,7 +64,7 @@ fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Uni
                 stringResource(R.string.calendarScreen_sunday)
             ),
         ) {
-            val firstDayOfWeek = getFirstDayOfWeek(currentMonth)
+            val firstDayOfWeek = getFirstDayOfWeek(currentMonthYear)
             val daysBeforeFirst = when (firstDayOfWeek) {
                 DayOfWeek.MONDAY -> 0
                 DayOfWeek.TUESDAY -> 1
@@ -61,31 +74,29 @@ fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Uni
                 DayOfWeek.SATURDAY -> 5
                 DayOfWeek.SUNDAY -> 6
             }
-            val monthLength = getMonthLength(currentMonth)
+            val monthLength = getMonthLength(currentMonthYear)
 
             repeat(42) { index ->
                 val borderRadius = when (index) {
                     0 -> {
                         RoundedCornerShape(12.dp, 4.dp, 4.dp, 4.dp)
                     }
+
                     6 -> {
                         RoundedCornerShape(4.dp, 12.dp, 4.dp, 4.dp)
                     }
+
                     35 -> {
                         RoundedCornerShape(4.dp, 4.dp, 4.dp, 12.dp)
                     }
+
                     41 -> {
                         RoundedCornerShape(4.dp, 4.dp, 12.dp, 4.dp)
                     }
+
                     else -> {
                         RoundedCornerShape(4.dp)
                     }
-                }
-
-                val entries = if (index == 25) {
-                    listOf(Triple(R.drawable.cake_24px, "Andreas Geburtstag", Color.Blue))
-                } else {
-                    listOf<Triple<Int?, String, Color>>()
                 }
 
                 val day = index - daysBeforeFirst + 1
@@ -94,25 +105,63 @@ fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Uni
                 val isThisMonth = !isLastMonth && !isNextMonth
                 var isToday = false
 
+                var actualDate: LocalDate
+
                 val displayDay = if (isLastMonth) {
-                    val previousMonth = currentMonth.month.getPrevious()
-                    val previousMonthLength = getMonthLength(MonthSelection(previousMonth, currentMonth.year))
-                    (previousMonthLength - daysBeforeFirst + index + 1).toString()
+                    val previousMonthYear = currentMonthYear.getPrevious()
+                    val previousMonthLength =
+                        getMonthLength(previousMonthYear)
+
+                    val day = previousMonthLength - daysBeforeFirst + index + 1
+
+                    actualDate = LocalDate(previousMonthYear.year, previousMonthYear.month.toJavaMonth(), day)
+
+                    day
                 } else if (isNextMonth) {
-                    (index - monthLength - daysBeforeFirst+ 1).toString()
+                    val nextMonthYear = currentMonthYear.getNext()
+                    val day = index - monthLength - daysBeforeFirst + 1
+                    actualDate = LocalDate(nextMonthYear.year, nextMonthYear.month.toJavaMonth(), day)
+
+                    day
                 } else {
-                    val date = LocalDate.of(currentMonth.year, currentMonth.month.toIndex(), day)
-                    val today = LocalDate.now()
+                    val date = LocalDate(currentMonthYear.year, currentMonthYear.month.toIndex(), day)
+                    val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
                     isToday = today == date
 
-                    day.toString()
+                    actualDate = date
+
+                    day
                 }
 
+                val date = actualDate.atStartOfDayIn(TimeZone.currentSystemDefault())
+
                 CalendarCell(
-                    displayDay,
+                    displayDay.toString(),
                     borderRadius,
                     isToday,
-                    entries,
+                    calendarEntries
+                        .filter { (_, entry) ->
+                            entry.includesDate(date)
+                        }
+                        .map {
+                            val title = if (it.component2().title == "") {
+                                stringResource(R.string.calendarEntry_noTitle)
+                            } else {
+                                it.component2().title
+                            }
+
+                            val iconResource = if (it.component2() is Birthday) {
+                                R.drawable.cake_24px
+                            } else {
+                                null
+                            }
+
+                            Triple(
+                                iconResource,
+                                title,
+                                it.component1().color
+                            )
+                        },
                     isThisMonth,
                     modifier = if (index % 7 == 0) {
                         Modifier.padding(start = 2.dp)
@@ -130,11 +179,11 @@ fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Uni
 // Rework these functions (maybe)
 
 private fun getFirstDayOfWeek(month: MonthSelection): DayOfWeek {
-    val date = LocalDate.of(month.year, month.month.toIndex(), 1)
+    val date = LocalDate(month.year, month.month.toIndex(), 1)
     return date.dayOfWeek
 }
 
 private fun getMonthLength(month: MonthSelection): Int {
-    val date = LocalDate.of(month.year, month.month.toIndex(), 1)
-    return date.month.length(date.isLeapYear)
+    val date = LocalDate(month.year, month.month.toIndex(), 1)
+    return date.month.toJavaMonth().length(date.toJavaLocalDate().isLeapYear)
 }
