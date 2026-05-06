@@ -1,6 +1,7 @@
 package com.louisweigel.pi_calendar.screens.calendar_screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 
 @Composable
 fun CalendarCell(
@@ -85,7 +85,9 @@ fun CalendarCell(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Column {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
                 for (entry in entries) {
                     Box(
                         modifier = Modifier

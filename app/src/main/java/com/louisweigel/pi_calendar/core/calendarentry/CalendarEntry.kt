@@ -30,6 +30,13 @@ abstract class CalendarEntry(val title: String, val description: String, val dat
     fun isSharedWith(person: Person): Boolean {
         return sharedWith.contains(person)
     }
+
+    /**
+     * Checks whether the given instant is included in the time frame of the event
+     */
+    open fun includesDate(date: Instant): Boolean {
+        return date == this.date
+    }
 }
 
 enum class CalendarEntryType {

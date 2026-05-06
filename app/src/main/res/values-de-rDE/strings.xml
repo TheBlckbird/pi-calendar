@@ -40,4 +40,5 @@
     <string name="addEventMenu_until">Bis</string>
     <string name="okay">Ok</string>
     <string name="addEventMenu_startdateAfterEnddate">Das Startdatum darf nicht vor dem Enddatum liegen</string>
+    <string name="calendarEntry_noTitle">(Kein Titel)</string>
 </resources>

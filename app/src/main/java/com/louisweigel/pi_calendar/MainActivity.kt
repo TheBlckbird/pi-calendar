@@ -22,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import com.louisweigel.pi_calendar.core.CalendarManager
-import com.louisweigel.pi_calendar.core.Month
 import com.louisweigel.pi_calendar.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.screens.MonthSelection
 import com.louisweigel.pi_calendar.screens.MonthSelectionScreen
@@ -32,7 +31,6 @@ import com.louisweigel.pi_calendar.screens.navigation.NavigationDrawerScreen
 import com.louisweigel.pi_calendar.screens.navigation.TopBar
 import com.louisweigel.pi_calendar.ui.theme.PicalendarTheme
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +40,10 @@ class MainActivity : ComponentActivity() {
             // Note: This will later be put into another class, but for now just use this for
             // referencing the calendar manager
             val stubManager = CalendarManager("/tmp/pi-calendar.db")
+
+            var entries by remember {
+                mutableStateOf(stubManager.getAllCalendarEntries())
+            }
 
             var isFabExpanded by remember { mutableStateOf(false) }
             var isMonthSelectionExpanded by remember { mutableStateOf(false) }
@@ -103,14 +105,15 @@ class MainActivity : ComponentActivity() {
 
                             ) {
                             CalendarScreen(
-                                currentSelectedMonth
-                            ) { isForward ->
-                                currentSelectedMonth = if (isForward) {
-                                    currentSelectedMonth.getNext()
-                                } else {
-                                    currentSelectedMonth.getPrevious()
-                                }
-                            }
+                                currentSelectedMonth, { isForward ->
+                                    currentSelectedMonth = if (isForward) {
+                                        currentSelectedMonth.getNext()
+                                    } else {
+                                        currentSelectedMonth.getPrevious()
+                                    }
+                                },
+                                entries
+                            )
                         }
 
                         if (isMonthSelectionExpanded) {
@@ -130,11 +133,13 @@ class MainActivity : ComponentActivity() {
                                 { event, calendar ->
                                     isNewEventExpanded = false
                                     calendar.entries.add(event)
+                                    entries = stubManager.getAllCalendarEntries()
+                                    println(entries.count())
                                 },
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                                 listOf(
                                     stubManager.defaultEventsCalendar,
-                                ) + stubManager.getAllCalenders(),
+                                ) + stubManager.getCalendars(),
                             )
                         }
                     }

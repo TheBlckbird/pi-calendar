@@ -19,14 +19,14 @@ class CalendarManagerTest {
 
     @Test
     fun createFindDeleteCalendars_works() {
-        assertEquals(3, calendarManager.getAllCalenders().count())
+        assertEquals(3, calendarManager.getCalendars().count())
 
         calendarManager.addCalendar("Eltern", "", Color.Black)
         val workCalendar = calendarManager.addCalendar("Arbeit", "", Color.Yellow)
-        assertEquals(5, calendarManager.getAllCalenders().count())
+        assertEquals(5, calendarManager.getCalendars().count())
 
         assertEquals(null, calendarManager.addCalendar("Arbeit", "", Color.Yellow))
-        assertEquals(5, calendarManager.getAllCalenders().count())
+        assertEquals(5, calendarManager.getCalendars().count())
 
         val foundWorkCalendar = calendarManager.findCalendar("Arbeit")
         assertEquals(foundWorkCalendar, workCalendar)
