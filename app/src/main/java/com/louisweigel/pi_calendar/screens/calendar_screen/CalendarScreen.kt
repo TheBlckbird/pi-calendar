@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
@@ -29,9 +28,13 @@ import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
 @Composable
-fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Unit) {
+fun CalendarScreen(
+    currentMonthYear: MonthSelection,
+    onMonthChange: (Boolean) -> Unit,
+    calendarEntries: List<Pair<Calendar, CalendarEntry>>
+) {
     val pageCount = 10_000
-    val initialPage = pageCount/2
+    val initialPage = pageCount / 2
     val pagerState = rememberPagerState(pageCount = { pageCount }, initialPage = initialPage)
 fun CalendarScreen(
     currentMonthYear: MonthSelection,
@@ -102,12 +105,6 @@ fun CalendarScreen(
                     else -> {
                         RoundedCornerShape(4.dp)
                     }
-                }
-
-                val entries = if (index == 25) {
-                    listOf(Triple(R.drawable.cake_24px, "Andreas Geburtstag", Color.Blue))
-                } else {
-                    listOf<Triple<Int?, String, Color>>()
                 }
 
                 val day = index - daysBeforeFirst + 1
