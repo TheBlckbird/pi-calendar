@@ -4,9 +4,8 @@ import com.louisweigel.pi_calendar.core.Month
 import com.louisweigel.pi_calendar.screens.MonthSelection
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneId
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 class MonthSelectionTest {
     @Test
@@ -24,16 +23,22 @@ class MonthSelectionTest {
 
     @Test
     fun `getToday returns expected month and year`() {
-        val monthSelection = MonthSelection(Month.NOVEMBER, 2024)
-
-        val clock = Clock.fixed(
-            Instant.parse("2026-05-05T00:00:00Z"),
-            ZoneId.of("UTC")
-        )
-
+        val clock = Clock.Fixed(Instant.parse("2026-05-05T00:00:00Z"))
         val result = MonthSelection.getToday(clock)
 
         assertEquals(Month.MAY, result.month)
         assertEquals(2026, result.year)
     }
 }
+
+/**
+ * Used for mocking a clock
+ */
+private class FixedClock(private val fixedInstant: Instant): Clock {
+    override fun now(): Instant = fixedInstant
+}
+
+/**
+ * Used for mocking a clock
+ */
+private fun Clock.Companion.Fixed(fixedInstant: Instant): Clock = FixedClock(fixedInstant)

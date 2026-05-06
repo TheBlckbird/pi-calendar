@@ -37,14 +37,6 @@ fun CalendarScreen(
     val pageCount = 10_000
     val initialPage = pageCount / 2
     val pagerState = rememberPagerState(pageCount = { pageCount }, initialPage = initialPage)
-fun CalendarScreen(
-    currentMonthYear: MonthSelection,
-    onMonthChange: (Boolean) -> Unit,
-    calendarEntries: List<Pair<Calendar, CalendarEntry>>
-) {
-    val pageCount = 10_000
-    val initialPage = pageCount / 2
-    val pagerState = rememberPagerState(pageCount = { pageCount }, initialPage = initialPage)
 
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.settledPage }
