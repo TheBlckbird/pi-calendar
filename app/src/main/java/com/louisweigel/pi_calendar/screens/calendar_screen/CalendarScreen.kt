@@ -16,6 +16,7 @@ import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.screens.MonthSelection
+import com.louisweigel.pi_calendar.utils.toGenitive
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.scan
 import kotlinx.datetime.DayOfWeek
@@ -122,17 +123,27 @@ fun CalendarScreen(
 
                     val day = previousMonthLength - daysBeforeFirst + index + 1
 
-                    actualDate = LocalDate(previousMonthYear.year, previousMonthYear.month.toJavaMonth(), day)
+                    actualDate = LocalDate(
+                        previousMonthYear.year,
+                        previousMonthYear.month.toKotlinMonth(),
+                        day
+                    )
 
                     day
                 } else if (isNextMonth) {
                     val nextMonthYear = currentMonthYear.getNext()
                     val day = index - monthLength - daysBeforeFirst + 1
-                    actualDate = LocalDate(nextMonthYear.year, nextMonthYear.month.toJavaMonth(), day)
+                    actualDate =
+                        LocalDate(
+                            nextMonthYear.year,
+                            nextMonthYear.month.toKotlinMonth(),
+                            day
+                        )
 
                     day
                 } else {
-                    val date = LocalDate(currentMonthYear.year, currentMonthYear.month.toIndex(), day)
+                    val date =
+                        LocalDate(currentMonthYear.year, currentMonthYear.month.toIndex(), day)
                     val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
                     isToday = today == date
 
@@ -154,6 +165,13 @@ fun CalendarScreen(
                         .map {
                             val title = if (it.component2().title == "") {
                                 stringResource(R.string.calendarEntry_noTitle)
+                            } else if (it.component2() is Birthday) {
+                                val birthday = it.component2() as Birthday
+                                "${birthday.title.toGenitive()} ${birthday.getAge(actualDate.year)}. ${
+                                    stringResource(
+                                        R.string.calendarScreen_birthday
+                                    )
+                                }"
                             } else {
                                 it.component2().title
                             }

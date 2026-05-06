@@ -1,9 +1,9 @@
 package com.louisweigel.pi_calendar.core.calendarentry
 
 import com.louisweigel.pi_calendar.core.Person
-import java.util.Date
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.util.UUID
-import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 abstract class CalendarEntry(val title: String, val description: String, val date: Instant) {
@@ -32,10 +32,12 @@ abstract class CalendarEntry(val title: String, val description: String, val dat
     }
 
     /**
-     * Checks whether the given instant is included in the time frame of the event
+     * Checks whether the given date is included in the time frame of the event
      */
     open fun includesDate(date: Instant): Boolean {
-        return date == this.date
+        val localDate = date.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val thisLocalDate = this.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        return localDate == thisLocalDate
     }
 }
 

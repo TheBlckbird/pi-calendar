@@ -1,7 +1,6 @@
 package com.louisweigel.pi_calendar.core
 
 import com.louisweigel.pi_calendar.R
-import java.time.Month
 
 enum class Month {
     JANUARY,
@@ -68,7 +67,7 @@ enum class Month {
         }
     }
 
-    fun getPrevious(): com.louisweigel.pi_calendar.core.Month {
+    fun getPrevious(): Month {
         return when (this) {
             JANUARY -> DECEMBER
             FEBRUARY -> JANUARY
@@ -85,7 +84,7 @@ enum class Month {
         }
     }
 
-    fun getNext(): com.louisweigel.pi_calendar.core.Month {
+    fun getNext(): Month {
         return when (this) {
             JANUARY -> FEBRUARY
             FEBRUARY -> MARCH
@@ -102,38 +101,38 @@ enum class Month {
         }
     }
 
-    fun toJavaMonth(): Month {
+    fun toKotlinMonth(): kotlinx.datetime.Month {
         return when (this) {
-            JANUARY -> Month.JANUARY
-            FEBRUARY -> Month.FEBRUARY
-            MARCH -> Month.MARCH
-            APRIL -> Month.APRIL
-            MAY -> Month.MAY
-            JUNE -> Month.JUNE
-            JULY -> Month.JULY
-            AUGUST -> Month.AUGUST
-            SEPTEMBER -> Month.SEPTEMBER
-            OCTOBER -> Month.OCTOBER
-            NOVEMBER -> Month.NOVEMBER
-            DECEMBER -> Month.DECEMBER
+            JANUARY -> kotlinx.datetime.Month.JANUARY
+            FEBRUARY -> kotlinx.datetime.Month.FEBRUARY
+            MARCH -> kotlinx.datetime.Month.MARCH
+            APRIL -> kotlinx.datetime.Month.APRIL
+            MAY -> kotlinx.datetime.Month.MAY
+            JUNE -> kotlinx.datetime.Month.JUNE
+            JULY -> kotlinx.datetime.Month.JULY
+            AUGUST -> kotlinx.datetime.Month.AUGUST
+            SEPTEMBER -> kotlinx.datetime.Month.SEPTEMBER
+            OCTOBER -> kotlinx.datetime.Month.OCTOBER
+            NOVEMBER -> kotlinx.datetime.Month.NOVEMBER
+            DECEMBER -> kotlinx.datetime.Month.DECEMBER
         }
     }
 
     companion object {
-        fun from(value: Month): com.louisweigel.pi_calendar.core.Month {
+        fun from(value: kotlinx.datetime.Month): Month {
             return when (value) {
-                Month.APRIL -> APRIL
-                Month.AUGUST -> AUGUST
-                Month.DECEMBER -> DECEMBER
-                Month.FEBRUARY -> FEBRUARY
-                Month.JANUARY -> JANUARY
-                Month.JULY -> JULY
-                Month.JUNE -> JUNE
-                Month.MARCH -> MARCH
-                Month.MAY -> MAY
-                Month.NOVEMBER -> NOVEMBER
-                Month.OCTOBER -> OCTOBER
-                Month.SEPTEMBER -> SEPTEMBER
+                kotlinx.datetime.Month.APRIL -> APRIL
+                kotlinx.datetime.Month.AUGUST -> AUGUST
+                kotlinx.datetime.Month.DECEMBER -> DECEMBER
+                kotlinx.datetime.Month.FEBRUARY -> FEBRUARY
+                kotlinx.datetime.Month.JANUARY -> JANUARY
+                kotlinx.datetime.Month.JULY -> JULY
+                kotlinx.datetime.Month.JUNE -> JUNE
+                kotlinx.datetime.Month.MARCH -> MARCH
+                kotlinx.datetime.Month.MAY -> MAY
+                kotlinx.datetime.Month.NOVEMBER -> NOVEMBER
+                kotlinx.datetime.Month.OCTOBER -> OCTOBER
+                kotlinx.datetime.Month.SEPTEMBER -> SEPTEMBER
             }
         }
     }

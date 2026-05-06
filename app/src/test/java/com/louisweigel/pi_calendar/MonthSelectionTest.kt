@@ -31,7 +31,7 @@ class MonthSelectionTest {
             ZoneId.of("UTC")
         )
 
-        val result = monthSelection.getToday(clock)
+        val result = MonthSelection.getToday(clock)
 
         assertEquals(Month.MAY, result.month)
         assertEquals(2026, result.year)

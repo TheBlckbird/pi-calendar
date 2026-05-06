@@ -40,4 +40,7 @@
     <string name="okay">Ok</string>
     <string name="addEventMenu_startdateAfterEnddate">The start date can\'t be after the end date</string>
     <string name="calendarEntry_noTitle">(No Title)</string>
+    <string name="addBirthdayMenu_nameField">Name</string>
+    <string name="addBirthdayMenu_dateOfBirth">Date of Birth</string>
+    <string name="calendarScreen_birthday">Birthday</string>
 </resources>

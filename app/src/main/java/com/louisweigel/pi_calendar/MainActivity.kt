@@ -148,14 +148,12 @@ class MainActivity : ComponentActivity() {
                         if (isNewBirthdayExpanded) {
                             NewBirthdaySheet(
                                 { isNewBirthdayExpanded = false },
-                                { birthday, calendar ->
+                                { birthday ->
                                     isNewBirthdayExpanded = false
-                                    calendar.entries.add(birthday)
+                                    stubManager.defaultBirthdaysCalendar.entries += birthday
+                                    entries = stubManager.getAllCalendarEntries()
                                 },
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                                listOf(
-                                    stubManager.defaultEventsCalendar,
-                                ) + stubManager.getAllCalenders(),
                             )
                         }
                     }

@@ -24,8 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.core.Month
 import kotlinx.coroutines.launch
-import java.time.Clock
-import java.time.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
+import kotlin.time.Clock
 
 data class MonthSelection(val month: Month, val year: Int) {
     /**
@@ -57,7 +58,9 @@ data class MonthSelection(val month: Month, val year: Int) {
     }
 
     override fun toString(): String {
-        val yearPart = if (year != LocalDate.now().year) {
+        val yearNow = Clock.System.todayIn(TimeZone.currentSystemDefault()).year
+
+        val yearPart = if (year != yearNow) {
             " $year"
         } else {
             ""
@@ -72,8 +75,8 @@ data class MonthSelection(val month: Month, val year: Int) {
          *
          * A clock can be passed for testing, but this argument should usually be ignored
          */
-        fun getToday(clock: Clock = Clock.systemDefaultZone()): MonthSelection {
-            val today = LocalDate.now(clock)
+        fun getToday(clock: Clock = Clock.System): MonthSelection {
+            val today = clock.todayIn(TimeZone.currentSystemDefault())
 
             val month = Month.from(today.month)
             val year = today.year
