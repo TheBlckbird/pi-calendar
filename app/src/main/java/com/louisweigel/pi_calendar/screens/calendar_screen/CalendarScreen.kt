@@ -1,50 +1,45 @@
 package com.louisweigel.pi_calendar.screens.calendar_screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.screens.MonthSelection
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.scan
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.Year
 
 @Composable
-fun CalendarScreen(currentMonth: MonthSelection) {
-    val pagerState = rememberPagerState(pageCount = { 100 }, initialPage = 50)
+fun CalendarScreen(currentMonth: MonthSelection, onMonthChange: (Boolean) -> Unit) {
+    val pageCount = 10_000
+    val initialPage = pageCount/2
+    val pagerState = rememberPagerState(pageCount = { pageCount }, initialPage = initialPage)
 
-    HorizontalPager(pagerState) { page ->
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.settledPage }
+            .scan(Pair(pagerState.settledPage, pagerState.settledPage)) { (_, prev), new ->
+                Pair(prev, new)
+            }
+            .distinctUntilChanged()
+            .collect { (prev, current) ->
+                if (current != prev) {
+                    val isForward = current > prev
+                    onMonthChange(isForward)
+                }
+            }
+    }
+
+    HorizontalPager(pagerState) {
         CalendarGrid(
             Modifier.fillMaxSize(),
             listOf(stringResource(R.string.calendarScreen_monday),

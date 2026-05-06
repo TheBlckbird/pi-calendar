@@ -48,12 +48,7 @@ class MainActivity : ComponentActivity() {
             var isNewEventExpanded by remember { mutableStateOf(false) }
 
             var currentSelectedMonth by remember {
-                mutableStateOf(
-                    MonthSelection(
-                        Month.from(LocalDate.now().month),
-                        LocalDate.now().year
-                    )
-                )
+                mutableStateOf(MonthSelection.getToday())
             }
 
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -79,7 +74,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 currentSelectedMonth,
                                 {
-                                    currentSelectedMonth = currentSelectedMonth.getToday()
+                                    currentSelectedMonth = MonthSelection.getToday()
                                 }
                             )
                         },
@@ -107,7 +102,15 @@ class MainActivity : ComponentActivity() {
                                 .background(MaterialTheme.colorScheme.surfaceContainer),
 
                             ) {
-                            CalendarScreen(currentSelectedMonth)
+                            CalendarScreen(
+                                currentSelectedMonth
+                            ) { isForward ->
+                                currentSelectedMonth = if (isForward) {
+                                    currentSelectedMonth.getNext()
+                                } else {
+                                    currentSelectedMonth.getPrevious()
+                                }
+                            }
                         }
 
                         if (isMonthSelectionExpanded) {
