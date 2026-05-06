@@ -38,6 +38,7 @@ import com.louisweigel.pi_calendar.core.calendarentry.Event
 import com.louisweigel.pi_calendar.screens.components.ClickableSwitchRow
 import com.louisweigel.pi_calendar.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.screens.components.TimePickerRow
+import com.louisweigel.pi_calendar.utils.getMillisNow
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
@@ -62,7 +63,7 @@ fun NewEventSheet(
 
     var isDatePickerFromOpen by rememberSaveable { mutableStateOf(false) }
     val dateFromState = rememberDatePickerState(
-        initialSelectedDateMillis = System.currentTimeMillis()
+        initialSelectedDateMillis = getMillisNow()
     )
 
     var isTimePickerFromOpen by rememberSaveable { mutableStateOf(false) }
@@ -73,7 +74,7 @@ fun NewEventSheet(
 
     var isDatePickerUntilOpen by rememberSaveable { mutableStateOf(false) }
     val dateUntilState = rememberDatePickerState(
-        initialSelectedDateMillis = System.currentTimeMillis(),
+        initialSelectedDateMillis = getMillisNow()
     )
 
     var isTimePickerUntilOpen by rememberSaveable { mutableStateOf(false) }
@@ -89,17 +90,6 @@ fun NewEventSheet(
     var showErrorAlert by remember { mutableStateOf(false) }
 
     val onSaveClick = {
-        var timeFromMillis = 0
-        var timeUntilMillis = 0
-
-        if (!isAllDay) {
-            timeFromMillis += timeFromState.minute * 60 * 1000 + timeFromState.hour * 60 * 60 * 1000
-            timeUntilMillis += timeUntilState.minute * 60 * 1000 + timeUntilState.hour * 60 * 60 * 1000
-        }
-
-        //val dateFrom = Instant.fromEpochMilliseconds(dateFromState.selectedDateMillis!! + timeFromMillis)
-        //val dateUntil = Instant.fromEpochMilliseconds(dateUntilState.selectedDateMillis!! + timeUntilMillis)
-
         val timeZone = TimeZone.currentSystemDefault()
 
         val fromLocalDate = Instant
