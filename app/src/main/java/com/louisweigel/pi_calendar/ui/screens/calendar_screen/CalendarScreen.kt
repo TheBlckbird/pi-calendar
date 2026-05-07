@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.screens.calendar_screen
+package com.louisweigel.pi_calendar.ui.screens.calendar_screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,7 +15,7 @@ import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
-import com.louisweigel.pi_calendar.screens.MonthSelection
+import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.utils.toGenitive
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.scan

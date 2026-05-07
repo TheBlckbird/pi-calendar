@@ -1,7 +1,7 @@
 package com.louisweigel.pi_calendar
 
 import com.louisweigel.pi_calendar.core.Month
-import com.louisweigel.pi_calendar.screens.MonthSelection
+import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import kotlin.time.Clock

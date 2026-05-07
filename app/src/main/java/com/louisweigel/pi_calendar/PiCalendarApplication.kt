@@ -1,6 +1,7 @@
 package com.louisweigel.pi_calendar
 
 import android.app.Application
+import androidx.core.app.NotificationCompat
 import com.louisweigel.pi_calendar.core.db.PiDatabase
 import com.louisweigel.pi_calendar.core.db.repositories.CalendarRepository
 import com.louisweigel.pi_calendar.core.db.repositories.CalendarEntryRepository

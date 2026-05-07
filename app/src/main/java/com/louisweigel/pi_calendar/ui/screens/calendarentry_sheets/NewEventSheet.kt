@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.screens.calendarentry_sheets
+package com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,9 +35,9 @@ import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Event
-import com.louisweigel.pi_calendar.screens.components.ClickableSwitchRow
-import com.louisweigel.pi_calendar.screens.components.DatePickerRow
-import com.louisweigel.pi_calendar.screens.components.TimePickerRow
+import com.louisweigel.pi_calendar.ui.screens.components.ClickableSwitchRow
+import com.louisweigel.pi_calendar.ui.screens.components.DatePickerRow
+import com.louisweigel.pi_calendar.ui.screens.components.TimePickerRow
 import com.louisweigel.pi_calendar.utils.getMillisNow
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone

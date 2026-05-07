@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.screens.components
+package com.louisweigel.pi_calendar.ui.screens.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
