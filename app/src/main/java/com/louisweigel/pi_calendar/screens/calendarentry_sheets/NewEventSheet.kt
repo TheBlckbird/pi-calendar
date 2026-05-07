@@ -52,7 +52,7 @@ import kotlin.time.Instant
 @Composable
 fun NewEventSheet(
     onDismissRequest: () -> Unit,
-    onSave: (Event, Calendar) -> Unit,
+    onSave: (Event) -> Unit,
     modifier: Modifier = Modifier,
     calendars: List<Calendar>,
 ) {
@@ -123,9 +123,13 @@ fun NewEventSheet(
         } else {
             onSave(
                 Event(
-                    title, description, dateFrom, dateUntil, isAllDay
-                ),
-                selectedCalendar,
+                    title,
+                    description,
+                    dateFrom,
+                    dateUntil,
+                    isAllDay,
+                    selectedCalendar.uuid
+                )
             )
         }
     }

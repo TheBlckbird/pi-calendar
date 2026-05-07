@@ -1,75 +1,38 @@
 package com.louisweigel.pi_calendar.core
 
 import androidx.compose.ui.graphics.Color
-import com.louisweigel.pi_calendar.core.calendarentry.Birthday
-import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
-import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntryType
-import com.louisweigel.pi_calendar.core.calendarentry.Event
-import com.louisweigel.pi_calendar.core.calendarentry.Reminder
-import java.util.Date
-import kotlin.time.Instant
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.louisweigel.pi_calendar.core.db.Converters
+import java.util.UUID
 
-class Calendar(
+@Entity(
+    foreignKeys = [ForeignKey(
+        entity = Person::class,
+        parentColumns = ["uuid"],
+        childColumns = ["ownerUuid"],
+        onDelete = ForeignKey.CASCADE,
+        onUpdate = ForeignKey.CASCADE
+    )],
+    indices = [Index("ownerUuid")]
+
+)
+@TypeConverters(Converters::class)
+data class Calendar(
     val name: String,
     val description: String,
     val color: Color,
     val isSystem: Boolean,
-    val owner: Person? = null,
+    val ownerUuid: UUID? = null
 ) {
-    val entries = mutableListOf<CalendarEntry>()
-    private val sharedWith = mutableListOf<Person>()
+    @PrimaryKey var uuid: UUID = UUID.randomUUID()
 
-    /**
-     * Removes the given calendar entry if it exists
-     */
-    fun removeCalendarEntry(calendarEntry: CalendarEntry): Boolean {
-        return entries.remove(calendarEntry)
-    }
-
-    /**
-     * Find a list of calendar entries that match the given
-     */
-    fun findCalendarEntries(
-        calendarEntryTypes: List<CalendarEntryType>,
-        title: String?,
-        description: String?,
-        dateRange: Pair<Instant, Instant>?
-    ): List<CalendarEntry> {
-        return entries
-            .filter { entry ->
-                entry is Birthday && calendarEntryTypes.contains(CalendarEntryType.Birthday) ||
-                        entry is Event && calendarEntryTypes.contains(CalendarEntryType.Event) ||
-                        entry is Reminder && calendarEntryTypes.contains(CalendarEntryType.Reminder)
-            }
-            .filter { entry -> if (title != null) entry.title.contains(title) else true }
-            .filter { entry -> if (description != null) entry.description.contains(description) else true }
-            .filter { entry ->
-                if (dateRange != null) {
-                    entry.date > dateRange.component1() && entry.date < dateRange.component2()
-                } else {
-                    true
-                }
-            }
-    }
-
-    /**
-     * Share this calendar with another person
-     */
-    fun shareWithPerson(person: Person) {
-        sharedWith.add(person)
-    }
-
-    /**
-     * Stop sharing this calendar with the given person
-     */
-    fun stopSharing(person: Person): Boolean {
-        return sharedWith.remove(person)
-    }
-
-    /**
-     * Checks whether the calendar is currently shared with the given person
-     */
-    fun isSharedWith(person: Person): Boolean {
-        return sharedWith.contains(person)
+    companion object {
+        const val DEFAULT_EVENTS_CALENDAR_NAME = "Mein Kalender"
+        const val DEFAULT_BIRTHDAYS_CALENDAR_NAME = "Geburtstage"
+        const val DEFAULT_REMINDERS_CALENDAR_NAME = "Erinnerungen"
     }
 }
