@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +23,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import com.louisweigel.pi_calendar.core.CalendarManager
 import com.louisweigel.pi_calendar.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.screens.MonthSelection
 import com.louisweigel.pi_calendar.screens.MonthSelectionScreen
@@ -31,20 +32,21 @@ import com.louisweigel.pi_calendar.screens.navigation.AddEventsMenu
 import com.louisweigel.pi_calendar.screens.navigation.NavigationDrawerScreen
 import com.louisweigel.pi_calendar.screens.navigation.TopBar
 import com.louisweigel.pi_calendar.ui.theme.PicalendarTheme
+import com.louisweigel.pi_calendar.viewmodels.CalendarEntryViewModel
+import com.louisweigel.pi_calendar.viewmodels.CalendarViewModel
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private val calendarViewModel: CalendarViewModel by viewModels { CalendarViewModel.Factory }
+    private val entryViewModel: CalendarEntryViewModel by viewModels { CalendarEntryViewModel.Factory }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
-            // Note: This will later be put into another class, but for now just use this for
-            // referencing the calendar manager
-            val stubManager = CalendarManager("/tmp/pi-calendar.db")
-
-            var entries by remember {
-                mutableStateOf(stubManager.getAllCalendarEntries())
-            }
+            val entryUiState by entryViewModel.uiState.collectAsState()
+            val calendarUiState by calendarViewModel.uiState.collectAsState()
 
             var isFabExpanded by remember { mutableStateOf(false) }
             var isMonthSelectionExpanded by remember { mutableStateOf(false) }
@@ -89,7 +91,7 @@ class MainActivity : ComponentActivity() {
                                 { isFabExpanded = !isFabExpanded },
                                 { isFabExpanded = false },
                                 { isNewEventExpanded = true },
-                                { isNewBirthdayExpanded = true},
+                                { isNewBirthdayExpanded = true },
                                 {},
                             )
                         },
@@ -114,7 +116,7 @@ class MainActivity : ComponentActivity() {
                                         currentSelectedMonth.getPrevious()
                                     }
                                 },
-                                entries
+                                entryUiState.entriesWithCalendar
                             )
                         }
 
@@ -132,27 +134,23 @@ class MainActivity : ComponentActivity() {
                         if (isNewEventExpanded) {
                             NewEventSheet(
                                 { isNewEventExpanded = false },
-                                { event, calendar ->
+                                { event ->
                                     isNewEventExpanded = false
-                                    calendar.entries.add(event)
-                                    entries = stubManager.getAllCalendarEntries()
-                                    println(entries.count())
+                                    entryViewModel.addEntry(event)
                                 },
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                                listOf(
-                                    stubManager.defaultEventsCalendar,
-                                ) + stubManager.getCalendars(),
+                                calendarUiState.calendars
                             )
                         }
 
-                        if (isNewBirthdayExpanded) {
+                        if (isNewBirthdayExpanded && calendarUiState.defaultBirthdaysCalendar != null) {
                             NewBirthdaySheet(
                                 { isNewBirthdayExpanded = false },
                                 { birthday ->
                                     isNewBirthdayExpanded = false
-                                    stubManager.defaultBirthdaysCalendar.entries += birthday
-                                    entries = stubManager.getAllCalendarEntries()
+                                    entryViewModel.addEntry(birthday)
                                 },
+                                calendarUiState.defaultBirthdaysCalendar!!,
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                             )
                         }

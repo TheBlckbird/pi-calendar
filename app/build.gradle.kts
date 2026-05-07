@@ -70,4 +70,11 @@ dependencies {
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.material)
     implementation(libs.kotlinx.datetime)
+
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    // Kotlin Extensions and Coroutines support for Room
+    implementation(libs.androidx.room.ktx)
+    // Test helpers
+    testImplementation(libs.androidx.room.testing)
 }

@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
+import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.utils.getInstantFromMillis
@@ -35,6 +36,7 @@ import com.louisweigel.pi_calendar.utils.getMillisNow
 fun NewBirthdaySheet(
     onDismissRequest: () -> Unit,
     onSave: (Birthday) -> Unit,
+    birthdayCalendar: Calendar,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -52,7 +54,8 @@ fun NewBirthdaySheet(
             Birthday(
                 name,
                 description,
-                date
+                date,
+                birthdayCalendar.uuid
             ),
         )
     }
