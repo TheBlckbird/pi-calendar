@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.screens
+package com.louisweigel.pi_calendar.ui.screens
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.PaddingValues
