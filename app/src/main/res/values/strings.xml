@@ -43,4 +43,5 @@
     <string name="addBirthdayMenu_nameField">Name</string>
     <string name="addBirthdayMenu_dateOfBirth">Date of Birth</string>
     <string name="calendarScreen_birthday">Birthday</string>
+    <string name="addReminderMenu_dateTimeField">Date &amp; Time</string>
 </resources>

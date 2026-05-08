@@ -36,7 +36,7 @@ import com.louisweigel.pi_calendar.utils.getMillisNow
 fun NewReminderSheet(
     onDismissRequest: () -> Unit,
     onSave: (Reminder) -> Unit,
-    birthdayCalendar: Calendar,
+    reminderCalendar: Calendar,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -55,7 +55,7 @@ fun NewReminderSheet(
                 name,
                 description,
                 date,
-                birthdayCalendar.uuid
+                reminderCalendar.uuid,
             ),
         )
     }
@@ -86,7 +86,7 @@ fun NewReminderSheet(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text(stringResource(R.string.addBirthdayMenu_nameField)) },
+                label = { Text(stringResource(R.string.addEntryMenu_titleField)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -106,7 +106,7 @@ fun NewReminderSheet(
             Column {
                 Column(verticalArrangement = Arrangement.spacedBy((-10).dp)) {
                     Text(
-                        stringResource(R.string.addBirthdayMenu_dateOfBirth),
+                        stringResource(R.string.addReminderMenu_dateTimeField),
                         color = MaterialTheme.colorScheme.secondary,
                         style = MaterialTheme.typography.labelMedium,
                     )

@@ -157,7 +157,6 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-
                         if (isNewReminderExpanded) {
                             NewReminderSheet(
                                 { isNewReminderExpanded = false },
@@ -165,8 +164,8 @@ class MainActivity : ComponentActivity() {
                                     isNewReminderExpanded = false
                                     entryViewModel.addEntry(reminder)
                                 },
+                                calendarUiState.defaultRemindersCalendar!!,
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                                calendarUiState.calendars
                             )
                         }
                     }
