@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar
+package com.louisweigel.pi_calendar.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,9 +23,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import com.louisweigel.pi_calendar.ui.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.ui.screens.MonthSelectionScreen
+import com.louisweigel.pi_calendar.ui.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewBirthdaySheet
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewEventSheet
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewReminderSheet
