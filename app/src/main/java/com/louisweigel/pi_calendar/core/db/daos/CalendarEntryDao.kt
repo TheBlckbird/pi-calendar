@@ -49,6 +49,11 @@ interface CalendarEntryDao {
     }
 
 
+    /**
+     * Gets all events with their respective calendar as an observable
+     *
+     * Doesn't include events from hidden calendars
+     */
     @Query(
         """
     SELECT
@@ -65,13 +70,20 @@ interface CalendarEntryDao {
         c.description AS calendar_description,
         c.color AS calendar_color,
         c.isSystem AS calendar_isSystem,
-        c.ownerUuid AS calendar_ownerUuid
+        c.ownerUuid AS calendar_ownerUuid,
+        c.isShown AS calendar_isShown
     FROM Event e
     INNER JOIN Calendar c ON c.uuid = e.calendarUuid
+    WHERE calendar_isShown = 1
 """
     )
     fun observeAllEventsWithCalendar(): Flow<List<EventWithCalendar>>
 
+    /**
+     * Gets all birthdays with their respective calendar as an observable
+     *
+     * Doesn't include birthdays from hidden calendars
+     */
     @Query(
         """
     SELECT
@@ -86,13 +98,20 @@ interface CalendarEntryDao {
         c.description AS calendar_description,
         c.color AS calendar_color,
         c.isSystem AS calendar_isSystem,
-        c.ownerUuid AS calendar_ownerUuid
+        c.ownerUuid AS calendar_ownerUuid,
+        c.isShown AS calendar_isShown
     FROM Birthday b
     INNER JOIN Calendar c ON c.uuid = b.calendarUuid
+    WHERE calendar_isShown = 1
 """
     )
     fun observeAllBirthdaysWithCalendar(): Flow<List<BirthdayWithCalendar>>
 
+    /**
+     * Gets all reminders with their respective calendar as an observable
+     *
+     * Doesn't include reminders from hidden calendars
+     */
     @Query(
         """
     SELECT
@@ -107,13 +126,21 @@ interface CalendarEntryDao {
         c.description AS calendar_description,
         c.color AS calendar_color,
         c.isSystem AS calendar_isSystem,
-        c.ownerUuid AS calendar_ownerUuid
+        c.ownerUuid AS calendar_ownerUuid,
+        c.isShown AS calendar_isShown
     FROM Reminder r
     INNER JOIN Calendar c ON c.uuid = r.calendarUuid
+    WHERE calendar_isShown = 1
 """
     )
     fun observeAllRemindersWithCalendar(): Flow<List<ReminderWithCalendar>>
 
+
+    /**
+     * Gets all calendar entries with their respective calendar as an observable
+     *
+     * Doesn't include entries from hidden calendars
+     */
     fun observeAllWithCalendar(): Flow<List<Pair<Calendar, CalendarEntry>>> = combine(
         observeAllEventsWithCalendar(),
         observeAllBirthdaysWithCalendar(),

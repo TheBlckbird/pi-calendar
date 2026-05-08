@@ -2,6 +2,7 @@ package com.louisweigel.pi_calendar.core.db
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -27,7 +28,11 @@ import kotlinx.coroutines.launch
         Reminder::class,
         Birthday::class
     ],
-    version = 1
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ],
+    version = 2,
+    exportSchema = true
 )
 abstract class PiDatabase : RoomDatabase() {
     abstract fun personDao(): PersonDao
@@ -62,7 +67,6 @@ abstract class PiDatabase : RoomDatabase() {
                                     "",
                                     Color.Green,
                                     true,
-                                    null,
                                 )
                             )
 
@@ -72,7 +76,6 @@ abstract class PiDatabase : RoomDatabase() {
                                     "",
                                     Color.Red,
                                     true,
-                                    null,
                                 )
                             )
 
@@ -82,7 +85,6 @@ abstract class PiDatabase : RoomDatabase() {
                                     "",
                                     Color.Blue,
                                     true,
-                                    null,
                                 )
                             )
                         }

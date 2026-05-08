@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">π Calendar</string>
-    <string name="mein_kalender">My calendar</string>
     <string name="geburtstage">Birthdays</string>
     <string name="settings">Settings</string>
     <string name="help_feedback"><![CDATA[Help & feedback]]></string>

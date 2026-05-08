@@ -3,6 +3,7 @@ package com.louisweigel.pi_calendar.core.db.repositories
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.daos.CalendarDao
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class CalendarRepository(
@@ -12,26 +13,32 @@ class CalendarRepository(
         dao.insertCalendar(calendar)
 
     suspend fun getAll(): List<Calendar> =
-        dao.getAll()
+        dao.getAllUserCalendars()
 
     fun observeAll(): Flow<List<Calendar>> =
-        dao.observeAll()
+        dao.observeAllUserCalendars()
 
     suspend fun delete(calendar: Calendar) =
         dao.delete(calendar)
 
+    suspend fun update(calendar: Calendar) =
+        dao.update(calendar)
+
     suspend fun getByName(name: String): Calendar? =
         dao.getByName(name)
+
+    fun observeByName(name: String): Flow<Calendar?> =
+        dao.observeByName(name)
 
     suspend fun getByUuid(uuid: UUID): Calendar? =
         dao.getByUuid(uuid)
 
-    suspend fun getDefaultEventsCalendar(): Calendar =
-        dao.getByName(Calendar.DEFAULT_EVENTS_CALENDAR_NAME)!!
+    fun observeDefaultEventsCalendar(): Flow<Calendar> =
+        dao.observeByName(Calendar.DEFAULT_EVENTS_CALENDAR_NAME).map { it!! }
 
-    suspend fun getDefaultBirthdaysCalendar(): Calendar =
-        dao.getByName(Calendar.DEFAULT_BIRTHDAYS_CALENDAR_NAME)!!
+    fun observeDefaultBirthdaysCalendar(): Flow<Calendar> =
+        dao.observeByName(Calendar.DEFAULT_BIRTHDAYS_CALENDAR_NAME).map { it!! }
 
-    suspend fun getDefaultRemindersCalendar(): Calendar =
-        dao.getByName(Calendar.DEFAULT_REMINDERS_CALENDAR_NAME)!!
+    fun observeDefaultRemindersCalendar(): Flow<Calendar> =
+        dao.observeByName(Calendar.DEFAULT_REMINDERS_CALENDAR_NAME).map { it!! }
 }
