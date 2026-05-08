@@ -28,6 +28,7 @@ import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.ui.screens.MonthSelectionScreen
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewBirthdaySheet
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewEventSheet
+import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewReminderSheet
 import com.louisweigel.pi_calendar.ui.screens.navigation.AddEventsMenu
 import com.louisweigel.pi_calendar.ui.screens.navigation.NavigationDrawerScreen
 import com.louisweigel.pi_calendar.ui.screens.navigation.TopBar
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
             var isMonthSelectionExpanded by remember { mutableStateOf(false) }
             var isNewEventExpanded by remember { mutableStateOf(false) }
             var isNewBirthdayExpanded by remember { mutableStateOf(false) }
+            var isNewReminderExpanded by remember { mutableStateOf(false) }
 
             var currentSelectedMonth by remember {
                 mutableStateOf(MonthSelection.getToday())
@@ -92,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                 { isFabExpanded = false },
                                 { isNewEventExpanded = true },
                                 { isNewBirthdayExpanded = true },
-                                {},
+                                {isNewReminderExpanded = true},
                             )
                         },
 
@@ -151,6 +153,18 @@ class MainActivity : ComponentActivity() {
                                     entryViewModel.addEntry(birthday)
                                 },
                                 calendarUiState.defaultBirthdaysCalendar!!,
+                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                            )
+                        }
+
+                        if (isNewReminderExpanded) {
+                            NewReminderSheet(
+                                { isNewReminderExpanded = false },
+                                { reminder ->
+                                    isNewReminderExpanded = false
+                                    entryViewModel.addEntry(reminder)
+                                },
+                                calendarUiState.defaultRemindersCalendar!!,
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                             )
                         }
