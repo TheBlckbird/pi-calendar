@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">π Kalender</string>
-    <string name="mein_kalender">Mein Kalender</string>
     <string name="geburtstage">Geburtstage</string>
     <string name="settings">Einstellungen</string>
     <string name="help_feedback"><![CDATA[Hilfe & Feedback]]></string>

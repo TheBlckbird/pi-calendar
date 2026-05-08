@@ -14,7 +14,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class CalendarUiState(
+    /**
+     * All user created calendars
+     */
     val calendars: List<Calendar> = emptyList(),
+    val defaultEventsCalendar: Calendar? = null,
     val defaultBirthdaysCalendar: Calendar? = null,
     val defaultRemindersCalendar: Calendar? = null,
 )
@@ -25,20 +29,26 @@ class CalendarViewModel(private val calendarRepository: CalendarRepository) : Vi
 
     init {
         viewModelScope.launch {
-            val defaultEventsCalendar = calendarRepository.getDefaultEventsCalendar()
-            val defaultBirthdaysCalendar = calendarRepository.getDefaultBirthdaysCalendar()
-            val defaultRemindersCalendar = calendarRepository.getDefaultRemindersCalendar()
-
-            _uiState.update {
-                it.copy(
-                    calendars = it.calendars + defaultEventsCalendar,
-                    defaultBirthdaysCalendar = defaultBirthdaysCalendar,
-                    defaultRemindersCalendar = defaultRemindersCalendar,
-                )
-            }
-
             calendarRepository.observeAll().collect { calendars ->
-                _uiState.update { it.copy(calendars = calendars + defaultEventsCalendar) }
+                _uiState.update { it.copy(calendars = calendars) }
+            }
+        }
+
+        viewModelScope.launch {
+            calendarRepository.observeDefaultEventsCalendar().collect { calendar ->
+                _uiState.update { it.copy(defaultEventsCalendar = calendar) }
+            }
+        }
+
+        viewModelScope.launch {
+            calendarRepository.observeDefaultBirthdaysCalendar().collect { calendar ->
+                _uiState.update { it.copy(defaultBirthdaysCalendar = calendar) }
+            }
+        }
+
+        viewModelScope.launch {
+            calendarRepository.observeDefaultRemindersCalendar().collect { calendar ->
+                _uiState.update { it.copy(defaultRemindersCalendar = calendar) }
             }
         }
     }
@@ -46,6 +56,12 @@ class CalendarViewModel(private val calendarRepository: CalendarRepository) : Vi
     fun addCalendar(calendar: Calendar) {
         viewModelScope.launch {
             calendarRepository.insert(calendar)
+        }
+    }
+
+    fun updateCalendar(calendar: Calendar) {
+        viewModelScope.launch {
+            calendarRepository.update(calendar)
         }
     }
 

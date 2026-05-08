@@ -28,12 +28,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
+import com.louisweigel.pi_calendar.core.Calendar
 
+/**
+ * The sidebar including the calendars and help link
+ *
+ * @param[calendars] All calendars that should be shown and togglable
+ * @param[onCalendarToggle]
+ */
 @Composable
-fun NavigationDrawerScreen() {
-    var checked1 by remember { mutableStateOf(true) }
-    var checked2 by remember { mutableStateOf(true) }
-
+fun NavigationDrawerScreen(
+    calendars: List<Calendar>,
+    onCalendarToggle: (Calendar, Boolean) -> Unit,
+) {
     val uriHandler = LocalUriHandler.current
 
     ModalDrawerSheet {
@@ -51,34 +58,24 @@ fun NavigationDrawerScreen() {
             HorizontalDivider()
 
             CalendarSectionTitle()
-            NavigationDrawerItem(
-                label = {
-                    CalendarMenuItem(
-                        stringResource(R.string.mein_kalender),
-                        MaterialTheme.colorScheme.secondary,
-                        checked1
-                    ) { newState -> checked1 = newState }
-                },
-                selected = false,
-                onClick = {
-                    checked1 = !checked1
-                }
-            )
-            NavigationDrawerItem(
-                label = {
-                    CalendarMenuItem(
-                        stringResource(R.string.geburtstage),
-                        MaterialTheme.colorScheme.tertiary,
-                        checked2
-                    ) { newState ->
-                        checked2 = newState
+
+            for (calendar in calendars) {
+                NavigationDrawerItem(
+                    label = {
+                        CalendarMenuItem(
+                            calendar.name,
+                            MaterialTheme.colorScheme.secondary,
+                            calendar.isShown
+                        ) { newState ->
+                            onCalendarToggle(calendar, newState)
+                        }
+                    },
+                    selected = false,
+                    onClick = {
+                        onCalendarToggle(calendar, !calendar.isShown)
                     }
-                },
-                selected = false,
-                onClick = {
-                    checked2 = !checked2
-                }
-            )
+                )
+            }
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 

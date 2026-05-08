@@ -64,7 +64,30 @@ class MainActivity : ComponentActivity() {
 
             PicalendarTheme {
                 ModalNavigationDrawer(
-                    drawerContent = { NavigationDrawerScreen() },
+                    drawerContent = {
+                        // Get all available calendars including the system calendars
+
+                        val calendars = calendarUiState.calendars.toMutableList()
+
+                        if (calendarUiState.defaultEventsCalendar != null) {
+                            calendars += calendarUiState.defaultEventsCalendar!!
+                        }
+
+                        if (calendarUiState.defaultBirthdaysCalendar != null) {
+                            calendars += calendarUiState.defaultBirthdaysCalendar!!
+                        }
+
+                        if (calendarUiState.defaultRemindersCalendar != null) {
+                            calendars += calendarUiState.defaultRemindersCalendar!!
+                        }
+
+                        NavigationDrawerScreen(
+                            calendars
+                        ) { calendar, newState ->
+                            val updatedCalendar = calendar.copy(isShown = newState)
+                            calendarViewModel.updateCalendar(updatedCalendar)
+                        }
+                    },
                     drawerState = drawerState,
                 ) {
                     Scaffold(
@@ -94,7 +117,7 @@ class MainActivity : ComponentActivity() {
                                 { isFabExpanded = false },
                                 { isNewEventExpanded = true },
                                 { isNewBirthdayExpanded = true },
-                                {isNewReminderExpanded = true},
+                                { isNewReminderExpanded = true },
                             )
                         },
 
@@ -141,7 +164,7 @@ class MainActivity : ComponentActivity() {
                                     entryViewModel.addEntry(event)
                                 },
                                 modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                                calendarUiState.calendars
+                                calendarUiState.calendars + calendarUiState.defaultEventsCalendar!!
                             )
                         }
 
