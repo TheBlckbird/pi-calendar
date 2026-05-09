@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.ui.screens.calendar_manager
+package com.louisweigel.pi_calendar.ui.activities.calendarmanager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,13 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -26,14 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,11 +36,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.viewmodels.CalendarViewModel
-import kotlinx.coroutines.launch
 
 @Composable
-fun CalendarManager(
-    backToMain: () -> Unit,
+fun CalendarManagerScreen(
+    onBackToMain: () -> Unit,
     calendarViewModel: CalendarViewModel = viewModel(factory = CalendarViewModel.Factory),
 ) {
     val calendarUiState by calendarViewModel.uiState.collectAsState()
@@ -80,7 +71,7 @@ fun CalendarManager(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    IconButton(backToMain) {
+                    IconButton(onBackToMain) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
                             null
@@ -111,7 +102,14 @@ fun CalendarManager(
                 val listItemColors = ListItemDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.surfaceContainer
                 )
-                for (calendar in calendarUiState.calendars) {
+                for (calendar in (
+                        calendarUiState.calendars
+                                + calendarUiState.defaultEventsCalendar
+                                + calendarUiState.defaultBirthdaysCalendar
+                                + calendarUiState.defaultRemindersCalendar
+                        )) {
+                    if (calendar == null) continue
+
                     ListItem(
                         colors = listItemColors,
                         headlineContent = {
@@ -121,18 +119,24 @@ fun CalendarManager(
                         },
                         trailingContent = {
                             Row {
-                                IconButton({
-                                    editCalendarData = calendar
-                                }) {
+                                IconButton(
+                                    {
+                                        editCalendarData = calendar
+                                    },
+                                    enabled = !calendar.isSystem,
+                                ) {
                                     Icon(
                                         painterResource(R.drawable.edit_24px),
                                         null,
                                     )
                                 }
 
-                                IconButton({
-                                    deleteCalendarData = calendar
-                                }) {
+                                IconButton(
+                                    {
+                                        deleteCalendarData = calendar
+                                    },
+                                    enabled = !calendar.isSystem,
+                                ) {
                                     Icon(
                                         painterResource(R.drawable.delete_24px),
                                         null,
@@ -239,6 +243,4 @@ fun CalendarManager(
             }
         )
     }
-
-    // TODO: show greyed out system calendars
 }

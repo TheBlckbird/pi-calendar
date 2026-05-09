@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.ui.screens.calendar_manager
+package com.louisweigel.pi_calendar.ui.activities.calendarmanager
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
