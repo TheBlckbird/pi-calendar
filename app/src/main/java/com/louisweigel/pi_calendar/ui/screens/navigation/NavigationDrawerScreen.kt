@@ -15,11 +15,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +37,7 @@ import com.louisweigel.pi_calendar.core.Calendar
 fun NavigationDrawerScreen(
     calendars: List<Calendar>,
     onCalendarToggle: (Calendar, Boolean) -> Unit,
+    openCalendarManager: () -> Unit,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -64,7 +62,7 @@ fun NavigationDrawerScreen(
                     label = {
                         CalendarMenuItem(
                             calendar.name,
-                            MaterialTheme.colorScheme.secondary,
+                            calendar.color,
                             calendar.isShown
                         ) { newState ->
                             onCalendarToggle(calendar, newState)
@@ -76,6 +74,18 @@ fun NavigationDrawerScreen(
                     }
                 )
             }
+
+            NavigationDrawerItem(
+                label = { Text(stringResource(R.string.calendarManager)) },
+                selected = false,
+                icon = {
+                    Icon(
+                        painterResource(R.drawable.edit_calendar_24px),
+                        null,
+                    )
+                },
+                onClick = openCalendarManager
+            )
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 

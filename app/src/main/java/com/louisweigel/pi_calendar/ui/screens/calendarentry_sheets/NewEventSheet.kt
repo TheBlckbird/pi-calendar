@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
@@ -27,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +35,7 @@ import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Event
 import com.louisweigel.pi_calendar.ui.screens.components.ClickableSwitchRow
 import com.louisweigel.pi_calendar.ui.screens.components.DatePickerRow
+import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
 import com.louisweigel.pi_calendar.ui.screens.components.TimePickerRow
 import com.louisweigel.pi_calendar.utils.getMillisNow
 import kotlinx.datetime.DateTimeUnit
@@ -141,21 +140,7 @@ fun NewEventSheet(
         Column(
             modifier = modifier.padding(horizontal = 20.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                TextButton(onClick = onDismissRequest) {
-                    Text(stringResource(R.string.cancel))
-                }
-
-                Button(
-                    onClick = onSaveClick,
-                ) {
-                    Text(stringResource(R.string.save))
-                }
-            }
+            ModalSaveCancelRow(onDismissRequest, onSaveClick)
 
             Row(
                 modifier = Modifier
@@ -207,14 +192,14 @@ fun NewEventSheet(
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text(stringResource(R.string.addEntryMenu_titleField) + "*") },
+                label = { Text(stringResource(R.string.addEntryMenu_titleField)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                label = { Text(stringResource(R.string.addEntryMenu_descriptionField)) },
+                label = { Text(stringResource(R.string.addMenu_descriptionField)) },
                 modifier = Modifier.fillMaxWidth()
             )
 

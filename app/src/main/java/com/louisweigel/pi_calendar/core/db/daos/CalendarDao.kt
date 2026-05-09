@@ -3,6 +3,7 @@ package com.louisweigel.pi_calendar.core.db.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.louisweigel.pi_calendar.core.Calendar
@@ -11,8 +12,8 @@ import java.util.UUID
 
 @Dao
 interface CalendarDao {
-    @Insert
-    suspend fun insertCalendar(calendar: Calendar)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCalendar(calendar: Calendar): Long
 
     @Query("SELECT * FROM calendar WHERE isSystem = 0")
     suspend fun getAllUserCalendars(): List<Calendar>

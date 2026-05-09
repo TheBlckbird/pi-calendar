@@ -8,8 +8,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.louisweigel.pi_calendar.PiCalendarApplication
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.repositories.CalendarRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -26,6 +28,9 @@ data class CalendarUiState(
 class CalendarViewModel(private val calendarRepository: CalendarRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(CalendarUiState())
     val uiState: StateFlow<CalendarUiState> = _uiState
+
+    private val _addCalendarResult = MutableSharedFlow<Boolean>()
+    val addCalendarResult = _addCalendarResult.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -53,18 +58,28 @@ class CalendarViewModel(private val calendarRepository: CalendarRepository) : Vi
         }
     }
 
+    /**
+     * Add a new calendar and store it
+     */
     fun addCalendar(calendar: Calendar) {
         viewModelScope.launch {
-            calendarRepository.insert(calendar)
+            val result = calendarRepository.insert(calendar)
+            _addCalendarResult.emit(result)
         }
     }
 
+    /**
+     * Update the given calendar
+     */
     fun updateCalendar(calendar: Calendar) {
         viewModelScope.launch {
             calendarRepository.update(calendar)
         }
     }
 
+    /**
+     * Delete the calendar
+     */
     fun deleteCalendar(calendar: Calendar) {
         viewModelScope.launch {
             calendarRepository.delete(calendar)

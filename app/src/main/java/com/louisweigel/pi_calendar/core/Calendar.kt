@@ -7,6 +7,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.db.Converters
 import java.util.UUID
 
@@ -21,8 +22,10 @@ import java.util.UUID
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE
     )],
-    indices = [Index("ownerUuid")]
-
+    indices = [
+        Index("ownerUuid"),
+        Index("name", unique = true),
+    ],
 )
 @TypeConverters(Converters::class)
 data class Calendar(
@@ -43,7 +46,7 @@ data class Calendar(
      *
      * Default calendars can't be deleted and won't be included in an all calendars query
      */
-    val isSystem: Boolean,
+    val isSystem: Boolean = false,
     /**
      * Whether the entries of this calendar should currently be shown
      */
@@ -60,5 +63,17 @@ data class Calendar(
         const val DEFAULT_EVENTS_CALENDAR_NAME = "Mein Kalender"
         const val DEFAULT_BIRTHDAYS_CALENDAR_NAME = "Geburtstage"
         const val DEFAULT_REMINDERS_CALENDAR_NAME = "Erinnerungen"
+
+        val POSSIBLE_COLORS = arrayOf(
+            R.string.color_purple to Color(0xFF5B2E91),
+            R.string.color_indigo to Color(0xFF3949AB),
+            R.string.color_blue to Color(0xFF1565C0),
+            R.string.color_teal to Color(0xFF006D77),
+            R.string.color_darkGreen to Color(0xFF2E7D32),
+            R.string.color_green to Color(0xFF558B2F),
+            R.string.color_orange to Color(0xFFB85C00),
+            R.string.color_terracotta to Color(0xFFB04A2F),
+            R.string.color_red to Color(0xFFB71C1C),
+        )
     }
 }

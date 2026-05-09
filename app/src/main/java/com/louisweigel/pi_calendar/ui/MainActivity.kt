@@ -23,8 +23,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import com.louisweigel.pi_calendar.ui.screens.CurrentView
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.ui.screens.MonthSelectionScreen
+import com.louisweigel.pi_calendar.ui.screens.calendar_manager.CalendarManager
 import com.louisweigel.pi_calendar.ui.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewBirthdaySheet
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewEventSheet
@@ -59,6 +61,8 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(MonthSelection.getToday())
             }
 
+            var currentView by remember { mutableStateOf(CurrentView.CalendarScreen) }
+
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             val scope = rememberCoroutineScope()
 
@@ -82,115 +86,133 @@ class MainActivity : ComponentActivity() {
                         }
 
                         NavigationDrawerScreen(
-                            calendars
-                        ) { calendar, newState ->
-                            val updatedCalendar = calendar.copy(isShown = newState)
-                            calendarViewModel.updateCalendar(updatedCalendar)
-                        }
+                            calendars,
+                            { calendar, newState ->
+                                val updatedCalendar = calendar.copy(isShown = newState)
+                                calendarViewModel.updateCalendar(updatedCalendar)
+                            },
+                            {
+                                currentView = CurrentView.CalendarManager
+                                scope.launch {
+                                    drawerState.close()
+                                }
+                            },
+                        )
                     },
                     drawerState = drawerState,
                 ) {
-                    Scaffold(
-                        modifier = Modifier.fillMaxSize(),
+                    when (currentView) {
+                        CurrentView.CalendarScreen -> {
+                            Scaffold(
+                                modifier = Modifier.Companion.fillMaxSize(),
 
-                        topBar = {
-                            TopBar(
-                                {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
+                                topBar = {
+                                    TopBar(
+                                        {
+                                            scope.launch {
+                                                drawerState.open()
+                                            }
+                                        },
+                                        {
+                                            isMonthSelectionExpanded = true
+                                        },
+                                        currentSelectedMonth,
+                                        {
+                                            currentSelectedMonth = MonthSelection.getToday()
+                                        }
+                                    )
                                 },
-                                {
-                                    isMonthSelectionExpanded = true
+
+                                floatingActionButton = {
+                                    AddEventsMenu(
+                                        isFabExpanded,
+                                        { isFabExpanded = !isFabExpanded },
+                                        { isFabExpanded = false },
+                                        { isNewEventExpanded = true },
+                                        { isNewBirthdayExpanded = true },
+                                        { isNewReminderExpanded = true },
+                                    )
                                 },
-                                currentSelectedMonth,
-                                {
-                                    currentSelectedMonth = MonthSelection.getToday()
+
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+                            ) { innerPadding ->
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding)
+                                        .pointerInput(Unit) {
+                                            detectTapGestures(onTap = { isFabExpanded = false })
+                                        }
+                                        .background(MaterialTheme.colorScheme.surfaceContainer),
+
+                                    ) {
+                                    CalendarScreen(
+                                        currentSelectedMonth, { isForward ->
+                                            currentSelectedMonth = if (isForward) {
+                                                currentSelectedMonth.getNext()
+                                            } else {
+                                                currentSelectedMonth.getPrevious()
+                                            }
+                                        },
+                                        entryUiState.entriesWithCalendar
+                                    )
                                 }
-                            )
-                        },
 
-                        floatingActionButton = {
-                            AddEventsMenu(
-                                isFabExpanded,
-                                { isFabExpanded = !isFabExpanded },
-                                { isFabExpanded = false },
-                                { isNewEventExpanded = true },
-                                { isNewBirthdayExpanded = true },
-                                { isNewReminderExpanded = true },
-                            )
-                        },
-
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                    ) { innerPadding ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .pointerInput(Unit) {
-                                    detectTapGestures(onTap = { isFabExpanded = false })
+                                if (isMonthSelectionExpanded) {
+                                    MonthSelectionScreen(
+                                        currentSelectedMonth,
+                                        { newSelection ->
+                                            currentSelectedMonth = newSelection
+                                        },
+                                        { isMonthSelectionExpanded = false },
+                                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                                    )
                                 }
-                                .background(MaterialTheme.colorScheme.surfaceContainer),
 
-                            ) {
-                            CalendarScreen(
-                                currentSelectedMonth, { isForward ->
-                                    currentSelectedMonth = if (isForward) {
-                                        currentSelectedMonth.getNext()
-                                    } else {
-                                        currentSelectedMonth.getPrevious()
-                                    }
-                                },
-                                entryUiState.entriesWithCalendar
-                            )
+                                if (isNewEventExpanded) {
+                                    NewEventSheet(
+                                        { isNewEventExpanded = false },
+                                        { event ->
+                                            isNewEventExpanded = false
+                                            entryViewModel.addEntry(event)
+                                        },
+                                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                                        calendarUiState.calendars + calendarUiState.defaultEventsCalendar!!
+                                    )
+                                }
+
+                                if (isNewBirthdayExpanded && calendarUiState.defaultBirthdaysCalendar != null) {
+                                    NewBirthdaySheet(
+                                        { isNewBirthdayExpanded = false },
+                                        { birthday ->
+                                            isNewBirthdayExpanded = false
+                                            entryViewModel.addEntry(birthday)
+                                        },
+                                        calendarUiState.defaultBirthdaysCalendar!!,
+                                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                                    )
+                                }
+
+                                if (isNewReminderExpanded) {
+                                    NewReminderSheet(
+                                        { isNewReminderExpanded = false },
+                                        { reminder ->
+                                            isNewReminderExpanded = false
+                                            entryViewModel.addEntry(reminder)
+                                        },
+                                        calendarUiState.defaultRemindersCalendar!!,
+                                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                                    )
+                                }
+                            }
                         }
 
-                        if (isMonthSelectionExpanded) {
-                            MonthSelectionScreen(
-                                currentSelectedMonth,
-                                { newSelection ->
-                                    currentSelectedMonth = newSelection
-                                },
-                                { isMonthSelectionExpanded = false },
-                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                            )
-                        }
 
-                        if (isNewEventExpanded) {
-                            NewEventSheet(
-                                { isNewEventExpanded = false },
-                                { event ->
-                                    isNewEventExpanded = false
-                                    entryViewModel.addEntry(event)
-                                },
-                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                                calendarUiState.calendars + calendarUiState.defaultEventsCalendar!!
-                            )
-                        }
-
-                        if (isNewBirthdayExpanded && calendarUiState.defaultBirthdaysCalendar != null) {
-                            NewBirthdaySheet(
-                                { isNewBirthdayExpanded = false },
-                                { birthday ->
-                                    isNewBirthdayExpanded = false
-                                    entryViewModel.addEntry(birthday)
-                                },
-                                calendarUiState.defaultBirthdaysCalendar!!,
-                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                            )
-                        }
-
-                        if (isNewReminderExpanded) {
-                            NewReminderSheet(
-                                { isNewReminderExpanded = false },
-                                { reminder ->
-                                    isNewReminderExpanded = false
-                                    entryViewModel.addEntry(reminder)
-                                },
-                                calendarUiState.defaultRemindersCalendar!!,
-                                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                            )
-                        }
+                        CurrentView.CalendarManager -> CalendarManager(
+                            {
+                                currentView = CurrentView.CalendarScreen
+                            },
+                        )
                     }
                 }
             }
