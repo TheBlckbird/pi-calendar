@@ -21,6 +21,7 @@ import com.louisweigel.pi_calendar.ui.screens.calendarmanager.CalendarManagerScr
 import com.louisweigel.pi_calendar.ui.screens.calendar_screen.CalendarScreen
 import com.louisweigel.pi_calendar.ui.screens.singleday.SingleDayScreen
 import com.louisweigel.pi_calendar.ui.theme.PicalendarTheme
+import com.louisweigel.pi_calendar.utils.serializableType
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -34,29 +35,6 @@ private object CalendarManager
 
 @Serializable
 private data class SingleDay(val date: LocalDate)
-
-// Source - https://stackoverflow.com/a/79773267
-// Posted by BenjyTec
-// Retrieved 2026-05-10, License - CC BY-SA 4.0
-
-inline fun <reified T : Any> serializableType(
-    isNullableAllowed: Boolean = false,
-    json: Json = Json,
-) = object : NavType<T>(isNullableAllowed = isNullableAllowed) {
-
-    override fun put(bundle: SavedState, key: String, value: T) {
-        bundle.write { putString(key, json.encodeToString(value)) }
-    }
-
-    override fun get(bundle: SavedState, key: String): T? {
-        return json.decodeFromString<T?>(bundle.read { getString(key) })
-    }
-
-    override fun parseValue(value: String): T = json.decodeFromString(value)
-
-    override fun serializeAsValue(value: T): String = json.encodeToString(value)
-}
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +76,6 @@ class MainActivity : ComponentActivity() {
 
                         composable<SingleDay>(
                             typeMap = mapOf(
-                                typeOf<List<Pair<com.louisweigel.pi_calendar.core.Calendar, CalendarEntry>>>() to serializableType<List<Pair<com.louisweigel.pi_calendar.core.Calendar, CalendarEntry>>>(),
                                 typeOf<LocalDate>() to serializableType<LocalDate>(),
                             )
                         ) { backStackEntry ->

@@ -1,6 +1,5 @@
 package com.louisweigel.pi_calendar.core.calendarentry
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.room.Entity
@@ -15,7 +14,6 @@ import com.louisweigel.pi_calendar.utils.toGenitive
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.Serializable
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
@@ -30,14 +28,13 @@ import kotlin.uuid.Uuid
     indices = [Index("calendarUuid")]
 )
 @TypeConverters(Converters::class)
-@Serializable
 class Birthday(
     override val title: String,
     override val description: String,
     override val date: Instant,
     override val calendarUuid: Uuid,
     @PrimaryKey override val uuid: Uuid = Uuid.random(),
-) : CalendarEntry() {
+) : CalendarEntry(uuid, title, description, date, calendarUuid) {
     override fun includesDate(date: Instant): Boolean {
         val localDate = date.toLocalDateTime(TimeZone.currentSystemDefault())
         val localDateOfBirth = this.date.toLocalDateTime(TimeZone.currentSystemDefault())

@@ -9,9 +9,6 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.db.Converters
-import com.louisweigel.pi_calendar.utils.ColorAsLongSerializer
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 import kotlin.uuid.Uuid
 
 /**
@@ -31,7 +28,6 @@ import kotlin.uuid.Uuid
     ],
 )
 @TypeConverters(Converters::class)
-@Serializable
 data class Calendar(
     /**
      * Name of the calendar
@@ -41,10 +37,7 @@ data class Calendar(
      * Description of what the calendar does
      */
     val description: String,
-    /**
-     * Color the events are shown in
-     */
-    @Serializable(with = ColorAsLongSerializer::class)
+
     val color: Color,
     /**
      * Whether this is one of the default calendars or not.
