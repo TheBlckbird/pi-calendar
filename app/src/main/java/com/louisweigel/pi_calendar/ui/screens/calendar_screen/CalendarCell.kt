@@ -112,7 +112,8 @@ fun CalendarCell(
                                 entry.component2(),
                                 fontSize = 11.sp,
                                 softWrap = false,
-                                lineHeight = 11.sp
+                                lineHeight = 11.sp,
+                                color = Color.White,
                             )
                         }
                     }

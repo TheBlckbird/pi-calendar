@@ -9,8 +9,13 @@ import java.util.UUID
 class CalendarRepository(
     private val dao: CalendarDao
 ) {
-    suspend fun insert(calendar: Calendar) =
-        dao.insertCalendar(calendar)
+    /**
+     * Tries to insert the given calendar into the database.
+     *
+     * Returns `false` if it failed due to the UNIQUE constraint failing
+     */
+    suspend fun insert(calendar: Calendar): Boolean =
+        dao.insertCalendar(calendar) != -1L
 
     suspend fun getAll(): List<Calendar> =
         dao.getAllUserCalendars()

@@ -54,7 +54,7 @@ abstract class PiDatabase : RoomDatabase() {
             db = Room.databaseBuilder(
                 context.applicationContext,
                 PiDatabase::class.java,
-                "pi-calendar.db" // TODO: change debug
+                "pi-calendar.db"
             )
                 .addCallback(object : Callback() {
                     override fun onCreate(dbSqlite: SupportSQLiteDatabase) {
@@ -65,7 +65,7 @@ abstract class PiDatabase : RoomDatabase() {
                                 Calendar(
                                     Calendar.DEFAULT_EVENTS_CALENDAR_NAME,
                                     "",
-                                    Color.Green,
+                                    Color(0xFF2962FF),
                                     true,
                                 )
                             )
@@ -74,7 +74,7 @@ abstract class PiDatabase : RoomDatabase() {
                                 Calendar(
                                     Calendar.DEFAULT_BIRTHDAYS_CALENDAR_NAME,
                                     "",
-                                    Color.Red,
+                                    Color.Gray,
                                     true,
                                 )
                             )
@@ -83,7 +83,7 @@ abstract class PiDatabase : RoomDatabase() {
                                 Calendar(
                                     Calendar.DEFAULT_REMINDERS_CALENDAR_NAME,
                                     "",
-                                    Color.Blue,
+                                    Color(0xFF00C853),
                                     true,
                                 )
                             )
