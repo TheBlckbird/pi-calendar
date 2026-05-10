@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.louisweigel.pi_calendar.R
@@ -124,12 +125,13 @@ fun SingleDayScreen(
                 .background(MaterialTheme.colorScheme.surfaceContainer),
         ) {
             Column {
-                for ((calendar, entry) in entryUiState.entriesWithCalendar
+                val entries = entryUiState.entriesWithCalendar
                     .filter { (_, entry) ->
                         entry.includesDate(date.atStartOfDayIn(TimeZone.currentSystemDefault()))
                     }
                     .sortedWith(compareBy { it.component2().date })
-                ) {
+
+                for ((calendar, entry) in entries) {
                     ListItem(
                         colors = ListItemDefaults.colors(
                             containerColor = calendar.color
@@ -170,10 +172,16 @@ fun SingleDayScreen(
                     )
                 }
 
+                if (entries.isEmpty()) {
+                    Text(
+                        stringResource(R.string.singleDay_noEntries),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
             }
         }
-
-
 
         if (editEntryData != null) {
             when (editEntryData!!) {
