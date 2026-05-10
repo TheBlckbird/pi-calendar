@@ -4,7 +4,7 @@ import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.daos.CalendarDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 class CalendarRepository(
     private val dao: CalendarDao
@@ -35,7 +35,7 @@ class CalendarRepository(
     fun observeByName(name: String): Flow<Calendar?> =
         dao.observeByName(name)
 
-    suspend fun getByUuid(uuid: UUID): Calendar? =
+    suspend fun getByUuid(uuid: Uuid): Calendar? =
         dao.getByUuid(uuid)
 
     fun observeDefaultEventsCalendar(): Flow<Calendar> =

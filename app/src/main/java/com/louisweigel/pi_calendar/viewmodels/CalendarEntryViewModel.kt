@@ -30,9 +30,9 @@ class CalendarEntryViewModel(private val calendarEntryRepository: CalendarEntryR
         }
     }
 
-    fun addEntry(entry: CalendarEntry) {
+    fun upsertEntry(entry: CalendarEntry) {
         viewModelScope.launch {
-            calendarEntryRepository.insert(entry)
+            calendarEntryRepository.upsert(entry)
         }
     }
 

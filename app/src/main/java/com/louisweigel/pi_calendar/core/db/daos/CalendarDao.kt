@@ -5,12 +5,15 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.TypeConverters
 import androidx.room.Update
 import com.louisweigel.pi_calendar.core.Calendar
+import com.louisweigel.pi_calendar.core.db.Converters
 import kotlinx.coroutines.flow.Flow
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @Dao
+@TypeConverters(Converters::class)
 interface CalendarDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCalendar(calendar: Calendar): Long
@@ -34,5 +37,5 @@ interface CalendarDao {
     fun observeByName(name: String): Flow<Calendar?>
 
     @Query("SELECT * FROM calendar WHERE uuid = :uuid LIMIT 1")
-    suspend fun getByUuid(uuid: UUID): Calendar?
+    suspend fun getByUuid(uuid: Uuid): Calendar?
 }

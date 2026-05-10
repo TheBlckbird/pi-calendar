@@ -29,6 +29,10 @@ import com.louisweigel.pi_calendar.ui.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
 import com.louisweigel.pi_calendar.utils.getInstantFromMillis
 import com.louisweigel.pi_calendar.utils.getMillisNow
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toLocalDateTime
+import kotlin.uuid.Uuid
 
 @Composable
 fun NewBirthdaySheet(
@@ -36,14 +40,26 @@ fun NewBirthdaySheet(
     onSave: (Birthday) -> Unit,
     birthdayCalendar: Calendar,
     modifier: Modifier = Modifier,
+    editBirthday: Birthday? = null,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
     var isDatePickerFromOpen by rememberSaveable { mutableStateOf(false) }
-    val dateOfBirthState = rememberDatePickerState(initialSelectedDateMillis = getMillisNow())
+    var dateOfBirthState = rememberDatePickerState(initialSelectedDateMillis = getMillisNow())
 
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+
+    if (editBirthday != null) {
+        name = editBirthday.title
+        description = editBirthday.description
+
+        // Do some date calculations to get the correct time
+        val localDateOfBirth = editBirthday.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val utcDateFromMillis = localDateOfBirth.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+
+        dateOfBirthState = rememberDatePickerState(utcDateFromMillis)
+    }
 
     val onSaveClick = {
         val date = getInstantFromMillis(dateOfBirthState.selectedDateMillis!!)
@@ -53,7 +69,8 @@ fun NewBirthdaySheet(
                 name,
                 description,
                 date,
-                birthdayCalendar.uuid
+                birthdayCalendar.uuid,
+                editBirthday?.uuid ?: Uuid.random(),
             ),
         )
     }

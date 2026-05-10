@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
@@ -128,14 +129,14 @@ interface CalendarEntryDao {
     )
     fun observeAllRemindersWithCalendar(): Flow<List<ReminderWithCalendar>>
 
-    @Insert
-    suspend fun insertEvent(event: Event)
+    @Upsert
+    suspend fun upsertEvent(event: Event)
 
-    @Insert
-    suspend fun insertBirthday(birthday: Birthday)
+    @Upsert
+    suspend fun upsertBirthday(birthday: Birthday)
 
-    @Insert
-    suspend fun insertReminder(reminder: Reminder)
+    @Upsert
+    suspend fun upsertReminder(reminder: Reminder)
 
     @Delete
     suspend fun deleteEvent(event: Event)

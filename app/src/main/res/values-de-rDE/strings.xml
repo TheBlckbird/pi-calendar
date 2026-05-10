@@ -65,4 +65,5 @@
     <string name="color_terracotta">Terrakotta</string>
     <string name="color_red">Red</string>
     <string name="calendarManager_selectColor">Farbe auswählen</string>
+    <string name="singleDay_entryDeletionDescription">Das Löschen kann nicht mehr rückgängig gemacht werden</string>
 </resources>

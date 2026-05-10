@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.Converters
-import java.util.UUID
+import kotlinx.serialization.Serializable
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 @Entity(
     foreignKeys = [ForeignKey(
@@ -21,17 +22,16 @@ import kotlin.time.Instant
     indices = [Index("calendarUuid")]
 )
 @TypeConverters(Converters::class)
+@Serializable
 class Event(
     override val title: String,
     override val description: String,
     override val date: Instant,
     val until: Instant,
     val isAllDay: Boolean,
-    override val calendarUuid: UUID,
-    @PrimaryKey override val uuid: UUID = UUID.randomUUID(),
-) : CalendarEntry(
-    uuid, title, description, date, calendarUuid
-) {
+    override val calendarUuid: Uuid,
+    @PrimaryKey override val uuid: Uuid = Uuid.random(),
+) : CalendarEntry() {
     override fun includesDate(date: Instant): Boolean {
         return date >= this.date && date < until
     }

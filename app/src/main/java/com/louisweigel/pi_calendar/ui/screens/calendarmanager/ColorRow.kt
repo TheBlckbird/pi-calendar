@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.ui.activities.calendarmanager
+package com.louisweigel.pi_calendar.ui.screens.calendarmanager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

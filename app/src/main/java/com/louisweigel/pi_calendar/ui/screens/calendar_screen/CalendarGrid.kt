@@ -32,7 +32,8 @@ import kotlin.time.Clock
 fun CalendarGrid(
     currentMonthYear: MonthSelection,
     onMonthChange: (Boolean) -> Unit,
-    calendarEntries: List<Pair<Calendar, CalendarEntry>>
+    calendarEntries: List<Pair<Calendar, CalendarEntry>>,
+    onClick: (LocalDate) -> Unit,
 ) {
     val pageCount = 10_000
     val initialPage = pageCount / 2
@@ -155,19 +156,6 @@ fun CalendarGrid(
                             entry.includesDate(date)
                         }
                         .map {
-                            val title = if (it.component2().title == "") {
-                                stringResource(R.string.calendarEntry_noTitle)
-                            } else if (it.component2() is Birthday) {
-                                val birthday = it.component2() as Birthday
-                                "${birthday.title.toGenitive()} ${birthday.getAge(actualDate.year)}. ${
-                                    stringResource(
-                                        R.string.calendarScreen_birthday
-                                    )
-                                }"
-                            } else {
-                                it.component2().title
-                            }
-
                             val iconResource = if (it.component2() is Birthday) {
                                 R.drawable.cake_24px
                             } else {
@@ -176,11 +164,15 @@ fun CalendarGrid(
 
                             Triple(
                                 iconResource,
-                                title,
+                                it.component2().getTitle(actualDate),
                                 it.component1().color
                             )
                         },
+
                     isThisMonth,
+                    {
+                        onClick(actualDate)
+                    },
                     modifier = if (index % 7 == 0) {
                         Modifier.padding(start = 2.dp)
                     } else if (index % 7 == 6) {

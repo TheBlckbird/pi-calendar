@@ -9,7 +9,10 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.db.Converters
-import java.util.UUID
+import com.louisweigel.pi_calendar.utils.ColorAsLongSerializer
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
+import kotlin.uuid.Uuid
 
 /**
  * `Calendar` represents an object that can hold calendar entries
@@ -28,6 +31,7 @@ import java.util.UUID
     ],
 )
 @TypeConverters(Converters::class)
+@Serializable
 data class Calendar(
     /**
      * Name of the calendar
@@ -40,6 +44,7 @@ data class Calendar(
     /**
      * Color the events are shown in
      */
+    @Serializable(with = ColorAsLongSerializer::class)
     val color: Color,
     /**
      * Whether this is one of the default calendars or not.
@@ -56,8 +61,8 @@ data class Calendar(
      *
      * _Currently unused_
      */
-    val ownerUuid: UUID? = null,
-    @PrimaryKey val uuid: UUID = UUID.randomUUID(),
+    val ownerUuid: Uuid? = null,
+    @PrimaryKey val uuid: Uuid = Uuid.random(),
 ) {
     companion object {
         const val DEFAULT_EVENTS_CALENDAR_NAME = "Mein Kalender"
