@@ -41,6 +41,7 @@ import com.louisweigel.pi_calendar.core.calendarentry.Event
 import com.louisweigel.pi_calendar.core.calendarentry.Reminder
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewBirthdaySheet
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewEventSheet
+import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewReminderSheet
 import com.louisweigel.pi_calendar.viewmodels.CalendarEntryViewModel
 import com.louisweigel.pi_calendar.viewmodels.CalendarViewModel
 import kotlinx.datetime.LocalDate
@@ -123,9 +124,12 @@ fun SingleDayScreen(
                 .background(MaterialTheme.colorScheme.surfaceContainer),
         ) {
             Column {
-                for ((calendar, entry) in entryUiState.entriesWithCalendar.filter { (_, entry) ->
-                    entry.includesDate(date.atStartOfDayIn(TimeZone.currentSystemDefault()))
-                }) {
+                for ((calendar, entry) in entryUiState.entriesWithCalendar
+                    .filter { (_, entry) ->
+                        entry.includesDate(date.atStartOfDayIn(TimeZone.currentSystemDefault()))
+                    }
+                    .sortedWith(compareBy { it.component2().date })
+                ) {
                     ListItem(
                         colors = ListItemDefaults.colors(
                             containerColor = calendar.color
@@ -202,7 +206,16 @@ fun SingleDayScreen(
                 }
 
                 is Reminder -> {
-                    TODO()
+                    NewReminderSheet(
+                        { editEntryData = null },
+                        { reminder ->
+                            editEntryData = null
+                            entryViewModel.upsertEntry(reminder)
+                        },
+                        calendarUiState.defaultRemindersCalendar!!,
+                        modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                        editReminder = editEntryData as Reminder,
+                    )
                 }
             }
         }
