@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.db.Converters
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 /**
  * `Calendar` represents an object that can hold calendar entries
@@ -37,9 +37,7 @@ data class Calendar(
      * Description of what the calendar does
      */
     val description: String,
-    /**
-     * Color the events are shown in
-     */
+
     val color: Color,
     /**
      * Whether this is one of the default calendars or not.
@@ -56,8 +54,8 @@ data class Calendar(
      *
      * _Currently unused_
      */
-    val ownerUuid: UUID? = null,
-    @PrimaryKey val uuid: UUID = UUID.randomUUID(),
+    val ownerUuid: Uuid? = null,
+    @PrimaryKey val uuid: Uuid = Uuid.random(),
 ) {
     companion object {
         const val DEFAULT_EVENTS_CALENDAR_NAME = "Mein Kalender"

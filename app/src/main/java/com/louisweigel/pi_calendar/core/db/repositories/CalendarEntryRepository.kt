@@ -40,18 +40,18 @@ class CalendarEntryRepository(
                     )
         }
 
-    suspend fun insert(entry: CalendarEntry) {
+    suspend fun upsert(entry: CalendarEntry) {
         when (entry) {
             is Event -> {
-                dao.insertEvent(entry)
+                dao.upsertEvent(entry)
             }
 
             is Birthday -> {
-                dao.insertBirthday(entry)
+                dao.upsertBirthday(entry)
             }
 
             is Reminder -> {
-                dao.insertReminder(entry)
+                dao.upsertReminder(entry)
             }
         }
     }

@@ -47,6 +47,7 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import java.time.LocalTime
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 @Composable
 fun NewEventSheet(
@@ -54,6 +55,7 @@ fun NewEventSheet(
     onSave: (Event) -> Unit,
     modifier: Modifier = Modifier,
     calendars: List<Calendar>,
+    editEvent: Event? = null,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -61,23 +63,23 @@ fun NewEventSheet(
     var isCalendarSelectionExpanded by remember { mutableStateOf(false) }
 
     var isDatePickerFromOpen by rememberSaveable { mutableStateOf(false) }
-    val dateFromState = rememberDatePickerState(
+    var dateFromState = rememberDatePickerState(
         initialSelectedDateMillis = getMillisNow()
     )
 
     var isTimePickerFromOpen by rememberSaveable { mutableStateOf(false) }
-    val timeFromState = rememberTimePickerState(
+    var timeFromState = rememberTimePickerState(
         initialHour = LocalTime.now().hour,
         initialMinute = LocalTime.now().minute,
     )
 
     var isDatePickerUntilOpen by rememberSaveable { mutableStateOf(false) }
-    val dateUntilState = rememberDatePickerState(
+    var dateUntilState = rememberDatePickerState(
         initialSelectedDateMillis = getMillisNow()
     )
 
     var isTimePickerUntilOpen by rememberSaveable { mutableStateOf(false) }
-    val timeUntilState = rememberTimePickerState(
+    var timeUntilState = rememberTimePickerState(
         initialHour = LocalTime.now().hour,
         initialMinute = LocalTime.now().minute,
     )
@@ -85,6 +87,45 @@ fun NewEventSheet(
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var isAllDay by remember { mutableStateOf(true) }
+
+    if (editEvent != null) {
+        selectedCalendar = calendars.find { it.uuid == editEvent.calendarUuid }!!
+
+        // Do some date calculations to get the correct time
+        val localDateFrom = editEvent.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val utcDateFromMillis = localDateFrom.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+
+        dateFromState = rememberDatePickerState(utcDateFromMillis)
+
+        val fromDateTime = editEvent.date.toLocalDateTime(TimeZone.currentSystemDefault())
+        timeFromState = rememberTimePickerState(
+            initialHour = fromDateTime.hour,
+            initialMinute = fromDateTime.minute,
+        )
+
+        // Do some more date calculations to get the correct time
+        val localDateUntil = editEvent.until.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val adjustedDateUntil = if (editEvent.isAllDay) {
+            // Subtract the day that's added when saving
+            localDateUntil.plus(-1, DateTimeUnit.DAY)
+        } else {
+            localDateUntil
+        }
+
+        val utcDateUntilMillis = adjustedDateUntil.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+
+        dateUntilState = rememberDatePickerState(utcDateUntilMillis)
+
+        val untilDateTime = editEvent.until.toLocalDateTime(TimeZone.currentSystemDefault())
+        timeUntilState = rememberTimePickerState(
+            initialHour = untilDateTime.hour,
+            initialMinute = untilDateTime.minute,
+        )
+
+        title = editEvent.title
+        description = editEvent.description
+        isAllDay = editEvent.isAllDay
+    }
 
     var showErrorAlert by remember { mutableStateOf(false) }
 
@@ -110,6 +151,7 @@ fun NewEventSheet(
         }
 
         val dateUntil = if (isAllDay) {
+            // Add one day because of exclusive rendering
             untilLocalDate.plus(1, DateTimeUnit.DAY).atStartOfDayIn(timeZone)
         } else {
             untilLocalDate
@@ -127,7 +169,8 @@ fun NewEventSheet(
                     dateFrom,
                     dateUntil,
                     isAllDay,
-                    selectedCalendar.uuid
+                    selectedCalendar.uuid,
+                    editEvent?.uuid ?: Uuid.random(),
                 )
             )
         }

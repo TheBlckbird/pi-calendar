@@ -1,4 +1,4 @@
-package com.louisweigel.pi_calendar.ui.activities.calendarmanager
+package com.louisweigel.pi_calendar.ui.screens.calendarmanager
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
+import kotlin.uuid.Uuid
 
 @Composable
 fun NewCalendarSheet(
@@ -55,22 +56,14 @@ fun NewCalendarSheet(
         if (name.isEmpty()) {
             showNoNameDialog = true
         } else {
-            val calendar = if (editCalendar == null) {
+            onSave(
                 Calendar(
                     name,
                     description,
                     selectedColor,
+                    uuid = editCalendar?.uuid ?: Uuid.random()
                 )
-            } else {
-                Calendar(
-                    name,
-                    description,
-                    selectedColor,
-                    uuid = editCalendar.uuid,
-                )
-            }
-
-            onSave(calendar)
+            )
         }
     }
 

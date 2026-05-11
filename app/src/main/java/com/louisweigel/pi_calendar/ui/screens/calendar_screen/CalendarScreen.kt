@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.louisweigel.pi_calendar.core.Calendar
+import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.ui.screens.MonthSelectionScreen
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewBirthdaySheet
@@ -31,10 +33,13 @@ import com.louisweigel.pi_calendar.ui.screens.navigation.TopBar
 import com.louisweigel.pi_calendar.viewmodels.CalendarEntryViewModel
 import com.louisweigel.pi_calendar.viewmodels.CalendarViewModel
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun CalendarScreen(
     onNavigateToCalendarManager: () -> Unit,
+    onNavigateToSingleDay: (LocalDate) -> Unit,
+
     calendarViewModel: CalendarViewModel = viewModel(factory = CalendarViewModel.Factory),
     entryViewModel: CalendarEntryViewModel = viewModel(factory = CalendarEntryViewModel.Factory),
 ) {
@@ -141,7 +146,10 @@ fun CalendarScreen(
                             currentSelectedMonth.getPrevious()
                         }
                     },
-                    entryUiState.entriesWithCalendar
+                    entryUiState.entriesWithCalendar,
+                    { date ->
+                        onNavigateToSingleDay(date)
+                    }
                 )
             }
 
@@ -161,7 +169,7 @@ fun CalendarScreen(
                     { isNewEventExpanded = false },
                     { event ->
                         isNewEventExpanded = false
-                        entryViewModel.addEntry(event)
+                        entryViewModel.upsertEntry(event)
                     },
                     modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                     calendarUiState.calendars + calendarUiState.defaultEventsCalendar!!
@@ -173,7 +181,7 @@ fun CalendarScreen(
                     { isNewBirthdayExpanded = false },
                     { birthday ->
                         isNewBirthdayExpanded = false
-                        entryViewModel.addEntry(birthday)
+                        entryViewModel.upsertEntry(birthday)
                     },
                     calendarUiState.defaultBirthdaysCalendar!!,
                     modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
@@ -185,7 +193,7 @@ fun CalendarScreen(
                     { isNewReminderExpanded = false },
                     { reminder ->
                         isNewReminderExpanded = false
-                        entryViewModel.addEntry(reminder)
+                        entryViewModel.upsertEntry(reminder)
                     },
                     calendarUiState.defaultRemindersCalendar!!,
                     modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),

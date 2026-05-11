@@ -1,17 +1,22 @@
 package com.louisweigel.pi_calendar.core.calendarentry
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.room.Ignore
+import com.louisweigel.pi_calendar.R
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import java.util.UUID
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
-abstract class CalendarEntry(
-    @Ignore open val uuid: UUID,
+
+sealed class CalendarEntry(
+    @Ignore open val uuid: Uuid,
     @Ignore open val title: String,
     @Ignore open val description: String,
     @Ignore open val date: Instant,
-    @Ignore open val calendarUuid: UUID
+    @Ignore open val calendarUuid: Uuid,
 ) {
 
     /**
@@ -21,5 +26,19 @@ abstract class CalendarEntry(
         val localDate = date.toLocalDateTime(TimeZone.currentSystemDefault()).date
         val thisLocalDate = this.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
         return localDate == thisLocalDate
+    }
+
+    /**
+     * Gets the title for the calendar entry
+     */
+    @Composable
+    open fun getTitle(date: LocalDate): String {
+        val title = if (this.title == "") {
+            stringResource(R.string.calendarEntry_noTitle)
+        } else {
+            this.title
+        }
+
+        return title
     }
 }

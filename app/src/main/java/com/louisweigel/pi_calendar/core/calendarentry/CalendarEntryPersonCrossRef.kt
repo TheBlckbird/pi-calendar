@@ -1,10 +1,10 @@
 package com.louisweigel.pi_calendar.core.calendarentry
 
 import androidx.room.Entity
-import java.util.UUID
+import kotlin.uuid.Uuid
 
 @Entity(primaryKeys = ["calendarEntryUuid", "personUuid"])
 data class CalendarEntryPersonCrossRef(
-    val calendarEntryUuid: UUID,
-    val personUuid: UUID
+    val calendarEntryUuid: Uuid,
+    val personUuid: Uuid
 )

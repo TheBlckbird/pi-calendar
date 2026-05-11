@@ -37,10 +37,11 @@ fun CalendarCell(
     isToday: Boolean,
     entries: List<Triple<Int?, String, Color>>,
     isThisMonth: Boolean,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Button(
-        {},
+        onClick,
         modifier = modifier
             .fillMaxSize()
             .padding(2.dp),

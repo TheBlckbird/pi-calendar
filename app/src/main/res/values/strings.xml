@@ -64,4 +64,6 @@
     <string name="color_terracotta">Terracotta</string>
     <string name="color_red">Red</string>
     <string name="calendarManager_selectColor">Select Color</string>
+    <string name="singleDay_entryDeletionDescription">Deleting this is irreversible</string>
+    <string name="singleDay_noEntries">No Entries on this day</string>
 </resources>

@@ -29,6 +29,10 @@ import com.louisweigel.pi_calendar.ui.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
 import com.louisweigel.pi_calendar.utils.getInstantFromMillis
 import com.louisweigel.pi_calendar.utils.getMillisNow
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toLocalDateTime
+import kotlin.uuid.Uuid
 
 @Composable
 fun NewReminderSheet(
@@ -36,17 +40,29 @@ fun NewReminderSheet(
     onSave: (Reminder) -> Unit,
     reminderCalendar: Calendar,
     modifier: Modifier = Modifier,
+    editReminder: Reminder? = null,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
     var isDatePickerFromOpen by rememberSaveable { mutableStateOf(false) }
-    val dateOfBirthState = rememberDatePickerState(initialSelectedDateMillis = getMillisNow())
+    var date = rememberDatePickerState(initialSelectedDateMillis = getMillisNow())
 
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
 
+    if (editReminder != null) {
+        name = editReminder.title
+        description = editReminder.description
+
+        // Do some date calculations to get the correct time
+        val localDate = editReminder.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val utcDateFromMillis = localDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+
+        date = rememberDatePickerState(utcDateFromMillis)
+    }
+
     val onSaveClick = {
-        val date = getInstantFromMillis(dateOfBirthState.selectedDateMillis!!)
+        val date = getInstantFromMillis(date.selectedDateMillis!!)
 
         onSave(
             Reminder(
@@ -54,6 +70,7 @@ fun NewReminderSheet(
                 description,
                 date,
                 reminderCalendar.uuid,
+                editReminder?.uuid ?: Uuid.random(),
             ),
         )
     }
@@ -101,7 +118,7 @@ fun NewReminderSheet(
                     ) {
                         DatePickerRow(
                             isDatePickerFromOpen,
-                            dateOfBirthState,
+                            date,
                             { isDatePickerFromOpen = false },
                             { isDatePickerFromOpen = true },
                         )

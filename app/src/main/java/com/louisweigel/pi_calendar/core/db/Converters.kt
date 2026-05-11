@@ -3,6 +3,7 @@ package com.louisweigel.pi_calendar.core.db
 import androidx.compose.ui.graphics.Color
 import androidx.room.TypeConverter
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 
 object Converters {
     @TypeConverter
@@ -16,4 +17,10 @@ object Converters {
 
     @TypeConverter
     fun toColor(value: Long?): Color? = value?.let { Color(it.toULong()) }
+
+    @TypeConverter
+    fun fromUuid(uuid: Uuid?): ByteArray? = uuid?.toByteArray()
+
+    @TypeConverter
+    fun toUuid(value: ByteArray?): Uuid? = value?.let { Uuid.fromByteArray(it) }
 }
