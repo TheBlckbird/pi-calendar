@@ -20,8 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.louisweigel.pi_calendar.core.Calendar
-import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.ui.screens.MonthSelectionScreen
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewBirthdaySheet
@@ -37,6 +35,8 @@ import kotlinx.datetime.LocalDate
 
 @Composable
 fun CalendarScreen(
+    lastMonthSelection: MonthSelection,
+    onMonthSelectionChange: (MonthSelection) -> Unit,
     onNavigateToCalendarManager: () -> Unit,
     onNavigateToSingleDay: (LocalDate) -> Unit,
 
@@ -53,12 +53,16 @@ fun CalendarScreen(
     var isNewReminderExpanded by remember { mutableStateOf(false) }
 
     var currentSelectedMonth by remember {
-        mutableStateOf(MonthSelection.getToday())
+        mutableStateOf(lastMonthSelection)
     }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    val changeMonthSelection: (MonthSelection) -> Unit = { monthSelection ->
+        currentSelectedMonth = monthSelection
+        onMonthSelectionChange(monthSelection)
+    }
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -110,7 +114,7 @@ fun CalendarScreen(
                     },
                     currentSelectedMonth,
                     {
-                        currentSelectedMonth = MonthSelection.getToday()
+                        changeMonthSelection(MonthSelection.getToday())
                     }
                 )
             },
@@ -140,11 +144,13 @@ fun CalendarScreen(
                 ) {
                 CalendarGrid(
                     currentSelectedMonth, { isForward ->
-                        currentSelectedMonth = if (isForward) {
-                            currentSelectedMonth.getNext()
-                        } else {
-                            currentSelectedMonth.getPrevious()
-                        }
+                        changeMonthSelection(
+                            if (isForward) {
+                                currentSelectedMonth.getNext()
+                            } else {
+                                currentSelectedMonth.getPrevious()
+                            }
+                        )
                     },
                     entryUiState.entriesWithCalendar,
                     { date ->
@@ -157,7 +163,7 @@ fun CalendarScreen(
                 MonthSelectionScreen(
                     currentSelectedMonth,
                     { newSelection ->
-                        currentSelectedMonth = newSelection
+                        changeMonthSelection(newSelection)
                     },
                     { isMonthSelectionExpanded = false },
                     modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
