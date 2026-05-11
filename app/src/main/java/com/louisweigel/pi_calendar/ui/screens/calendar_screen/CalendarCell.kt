@@ -1,20 +1,19 @@
 package com.louisweigel.pi_calendar.ui.screens.calendar_screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,86 +39,78 @@ fun CalendarCell(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(
-        onClick,
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(2.dp),
-
-        shape = shape,
-
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            contentColor = MaterialTheme.colorScheme.onBackground
-        ),
-
-        contentPadding = PaddingValues(0.dp, 8.dp, 0.dp, 0.dp),
+            .padding(2.dp)
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.background)
+            .clickable { onClick() }
+            .padding(top = 8.dp),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Column(modifier = Modifier.align(Alignment.Top)) {
-            val textModifier = if (isToday) {
-                Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.primary)
-                    .width(28.dp)
-            } else {
-                Modifier
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            val textColor = when {
+                isToday -> MaterialTheme.colorScheme.onPrimary
+                !isThisMonth -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f)
+                else -> MaterialTheme.colorScheme.onBackground
             }
 
-            val textColor = if (isToday) {
-                MaterialTheme.colorScheme.onPrimary
-            } else if (!isThisMonth) {
-                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-            } else {
-                MaterialTheme.colorScheme.onBackground
-            }
-
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Text(
-                    text,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = textModifier.fillMaxWidth(),
-                    color = textColor,
-                    textAlign = TextAlign.Center
-                )
-            }
+            Text(
+                text = text,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold,
+                color = textColor,
+                modifier = if (isToday) {
+                    Modifier
+                        .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(10.dp))
+                        .width(28.dp)
+                } else Modifier,
+                textAlign = TextAlign.Center
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Column(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 2.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                for (entry in entries) {
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .fillMaxWidth()
-                            .height(15.dp)
-                            .background(entry.component3())
-                            .padding(4.dp, 1.dp, 0.dp, 1.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Row {
-                            if (entry.component1() != null) {
-                                Icon(
-                                    painter = painterResource(entry.component1()!!),
-                                    contentDescription = null
-                                )
-
-                                Spacer(Modifier.width(2.dp))
-                            }
-
-                            Text(
-                                entry.component2(),
-                                fontSize = 11.sp,
-                                softWrap = false,
-                                lineHeight = 11.sp,
-                                color = Color.White,
-                            )
-                        }
-                    }
+                entries.take(5).forEach { entry ->
+                    EntryRow(entry)
                 }
             }
         }
+    }
+}
+
+
+@Composable
+private fun EntryRow(entry: Triple<Int?, String, Color>) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(14.dp)
+            .background(entry.third, RoundedCornerShape(2.dp))
+            .padding(start = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (entry.first != null) {
+            Icon(
+                painter = painterResource(entry.first!!),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(11.dp)
+            )
+            Spacer(Modifier.width(2.dp))
+        }
+        Text(
+            text = entry.second,
+            fontSize = 10.sp,
+            color = Color.White,
+            maxLines = 1,
+            softWrap = false,
+            lineHeight = 10.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
