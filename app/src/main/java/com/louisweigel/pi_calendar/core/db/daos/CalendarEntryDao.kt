@@ -42,13 +42,6 @@ interface CalendarEntryDao {
     @Query("SELECT * FROM reminder")
     fun observeReminders(): Flow<List<Reminder>>
 
-    fun observeAll(): Flow<List<CalendarEntry>> = combine(
-        observeEvents(), observeBirthdays(), observeReminders()
-    ) { events, birthdays, reminders ->
-        (events + birthdays + reminders).sortedBy { it.date }
-    }
-
-
     /**
      * Gets all events with their respective calendar as an observable
      *
@@ -134,24 +127,6 @@ interface CalendarEntryDao {
 """
     )
     fun observeAllRemindersWithCalendar(): Flow<List<ReminderWithCalendar>>
-
-
-    /**
-     * Gets all calendar entries with their respective calendar as an observable
-     *
-     * Doesn't include entries from hidden calendars
-     */
-    fun observeAllWithCalendar(): Flow<List<Pair<Calendar, CalendarEntry>>> = combine(
-        observeAllEventsWithCalendar(),
-        observeAllBirthdaysWithCalendar(),
-        observeAllRemindersWithCalendar()
-    ) { events, birthdays, reminders ->
-        (
-                events.map { Pair(it.calendar, it.event) }
-                        + birthdays.map { Pair(it.calendar, it.birthday) }
-                        + reminders.map { Pair(it.calendar, it.reminder) }
-                )
-    }
 
     @Insert
     suspend fun insertEvent(event: Event)
