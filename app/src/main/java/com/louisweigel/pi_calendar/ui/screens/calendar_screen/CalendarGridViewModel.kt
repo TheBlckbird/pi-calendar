@@ -1,5 +1,6 @@
 package com.louisweigel.pi_calendar.ui.screens.calendar_screen
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -100,8 +101,8 @@ class CalendarGridViewModel : ViewModel() {
                             .filter { (_, entry) ->
                                 entry.includesDate(date)
                             }
-                            .map {
-                                val iconResource = if (it.component2() is Birthday) {
+                            .map { (calendar, entry) ->
+                                val iconResource = if (entry is Birthday) {
                                     R.drawable.cake_24px
                                 } else {
                                     null
@@ -109,8 +110,8 @@ class CalendarGridViewModel : ViewModel() {
 
                                 Triple(
                                     iconResource,
-                                    "it.component2().getTitle(actualDate)",
-                                    it.component1().color
+                                    @Composable { entry.getTitle(actualDate) },
+                                    calendar.color
                                 )
                             }
                     )
@@ -126,7 +127,7 @@ data class DayState(
     val date: LocalDate,
     val isToday: Boolean,
     val isThisMonth: Boolean,
-    val entries: List<Triple<Int?, String, Color>>,
+    val entries: List<Triple<Int?, @Composable () -> String, Color>>,
 )
 
 // Rework these functions (maybe)

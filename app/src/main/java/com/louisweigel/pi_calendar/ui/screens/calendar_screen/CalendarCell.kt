@@ -34,7 +34,7 @@ fun CalendarCell(
     text: String,
     shape: Shape,
     isToday: Boolean,
-    entries: List<Triple<Int?, String, Color>>,
+    entries: List<Triple<Int?, @Composable () -> String, Color>>,
     isThisMonth: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -85,7 +85,7 @@ fun CalendarCell(
 
 
 @Composable
-private fun EntryRow(entry: Triple<Int?, String, Color>) {
+private fun EntryRow(entry: Triple<Int?, @Composable () -> String, Color>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -104,7 +104,7 @@ private fun EntryRow(entry: Triple<Int?, String, Color>) {
             Spacer(Modifier.width(2.dp))
         }
         Text(
-            text = entry.second,
+            text = entry.second(),
             fontSize = 10.sp,
             color = Color.White,
             maxLines = 1,
