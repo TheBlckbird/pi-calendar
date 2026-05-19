@@ -1,15 +1,14 @@
 package com.louisweigel.pi_calendar.ui.screens.singleday
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -22,20 +21,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.louisweigel.pi_calendar.R
-import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.core.calendarentry.Event
@@ -49,12 +46,17 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format
-import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.format.Padding
 import kotlinx.datetime.format.char
 import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
+/**
+ * The Screen for the detail view for a specific day
+ *
+ * @param[date] The date of the day that's being shown
+ * @param[onNavigateBack] This closure should be called to navigate back to the previous screen
+ */
 @Composable
 fun SingleDayScreen(
     date: LocalDate,
@@ -62,14 +64,55 @@ fun SingleDayScreen(
     entryViewModel: CalendarEntryViewModel = viewModel(factory = CalendarEntryViewModel.Factory),
     calendarViewModel: CalendarViewModel = viewModel(factory = CalendarViewModel.Factory),
 ) {
+    /**
+     * UI state of the calendar entry view model
+     */
     val entryUiState by entryViewModel.uiState.collectAsState()
+
+    /**
+     * UI state of the calendar view model
+     */
     val calendarUiState by calendarViewModel.uiState.collectAsState()
 
     /**
      * Null if no calendar entry is currently being edited, contains the entry to edit otherwise
      */
     var editEntryData by remember { mutableStateOf<CalendarEntry?>(null) }
+
+    /**
+     * Null if no calendar entry was requested to be deleted, contains the entry otherwise
+     *
+     * A confirmation dialog is shown if it currently holds data
+     */
     var deleteEntryData by remember { mutableStateOf<CalendarEntry?>(null) }
+
+    /**
+     * Title of the top bar
+     */
+    val title = remember {
+        val format = LocalDate.Format {
+            day(Padding.ZERO)
+            char('.')
+            monthNumber(Padding.ZERO)
+            char('.')
+            year(Padding.ZERO)
+        }
+
+        date.format(format)
+    }
+
+    /**
+     * Entries belonging to this day
+     */
+    val entries by remember {
+        derivedStateOf {
+            entryUiState.entriesWithCalendar
+                .filter { (_, entry) ->
+                    entry.includesDate(date.atStartOfDayIn(TimeZone.currentSystemDefault()))
+                }
+                .sortedWith(compareBy { it.component2().date })
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -80,38 +123,16 @@ fun SingleDayScreen(
                     IconButton(onNavigateBack) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
-                            null
+                            null,
                         )
                     }
                 },
 
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
                 ),
 
-                title = {
-                    val isCurrentYear =
-                        Clock.System.todayIn(TimeZone.currentSystemDefault()).year == date.year
-
-                    val format = if (isCurrentYear) {
-                        LocalDate.Format {
-                            day(Padding.ZERO)
-                            char('.')
-                            monthNumber(Padding.ZERO)
-                            char('.')
-                        }
-                    } else {
-                        LocalDate.Format {
-                            day(Padding.ZERO)
-                            char('.')
-                            monthNumber(Padding.ZERO)
-                            char('.')
-                            year(Padding.ZERO)
-                        }
-                    }
-
-                    Text(date.format(format))
-                },
+                title = { Text(title) },
             )
 
         },
@@ -125,12 +146,6 @@ fun SingleDayScreen(
                 .background(MaterialTheme.colorScheme.surfaceContainer),
         ) {
             Column {
-                val entries = entryUiState.entriesWithCalendar
-                    .filter { (_, entry) ->
-                        entry.includesDate(date.atStartOfDayIn(TimeZone.currentSystemDefault()))
-                    }
-                    .sortedWith(compareBy { it.component2().date })
-
                 for ((calendar, entry) in entries) {
                     ListItem(
                         colors = ListItemDefaults.colors(
