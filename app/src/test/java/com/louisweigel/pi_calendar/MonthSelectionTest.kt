@@ -26,8 +26,7 @@ class MonthSelectionTest {
         val clock = Clock.Fixed(Instant.parse("2026-05-05T00:00:00Z"))
         val result = MonthSelection.getToday(clock)
 
-        assertEquals(Month.MAY, result.month)
-        assertEquals(2026, result.year)
+        assertEquals(MonthSelection(Month.MAY, 2026), result)
     }
 }
 

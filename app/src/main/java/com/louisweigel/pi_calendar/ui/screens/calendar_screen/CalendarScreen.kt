@@ -152,7 +152,10 @@ fun CalendarScreen(
                             }
                         )
                     },
-                    entryUiState.entriesWithCalendar,
+                    entryUiState.entriesWithCalendar
+                        .filter { (_, entry) ->
+                            entry.isInMonth(currentSelectedMonth)
+                        },
                     { date ->
                         onNavigateToSingleDay(date)
                     }

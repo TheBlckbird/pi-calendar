@@ -107,9 +107,7 @@ fun SingleDayScreen(
     val entries by remember {
         derivedStateOf {
             entryUiState.entriesWithCalendar
-                .filter { (_, entry) ->
-                    entry.includesDate(date.atStartOfDayIn(TimeZone.currentSystemDefault()))
-                }
+                .filter { (_, entry) -> entry.includesDate(date) }
                 .sortedWith(compareBy { it.component2().date })
         }
     }

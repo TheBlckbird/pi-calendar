@@ -7,6 +7,10 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.Converters
+import com.louisweigel.pi_calendar.ui.screens.MonthSelection
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
@@ -30,7 +34,17 @@ class Event(
     override val calendarUuid: Uuid,
     @PrimaryKey override val uuid: Uuid = Uuid.random(),
 ) : CalendarEntry(uuid, title, description, date, calendarUuid) {
-    override fun includesDate(date: Instant): Boolean {
-        return date >= this.date && date < until
+
+    override fun includesDate(date: LocalDate): Boolean {
+        val startDate = this.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        val endDate = until.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        return date in startDate..<endDate
+    }
+
+    override fun isInMonth(monthSelection: MonthSelection): Boolean {
+        val untilDate = until.toLocalDateTime(TimeZone.currentSystemDefault())
+
+        return super.isInMonth(monthSelection)
+                || (untilDate.year == monthSelection.year && untilDate.month == monthSelection.month.toKotlinMonth())
     }
 }

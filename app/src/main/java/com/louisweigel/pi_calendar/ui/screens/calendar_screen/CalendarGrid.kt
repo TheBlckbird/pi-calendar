@@ -99,7 +99,7 @@ fun CalendarGrid(
                 }
 
                 CalendarCell(
-                    dayState.displayDay.toString(),
+                    dayState.date.day.toString(),
                     borderRadius,
                     dayState.isToday,
                     dayState.entries,

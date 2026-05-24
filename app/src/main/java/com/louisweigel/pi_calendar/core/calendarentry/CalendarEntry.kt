@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.room.Ignore
 import com.louisweigel.pi_calendar.R
+import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -22,10 +23,24 @@ sealed class CalendarEntry(
     /**
      * Checks whether the given date is included in the time frame of the event
      */
-    open fun includesDate(date: Instant): Boolean {
-        val localDate = date.toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val thisLocalDate = this.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
-        return localDate == thisLocalDate
+    open fun includesDate(date: LocalDate): Boolean {
+        val thisLocalDate = dateToLocalDate()
+        return date == thisLocalDate
+    }
+
+    /**
+     * Checks whether this entry is in the given month and year
+     */
+    open fun isInMonth(monthSelection: MonthSelection): Boolean {
+        val localDate = dateToLocalDate()
+        return localDate.year == monthSelection.year && localDate.month == monthSelection.month.toKotlinMonth()
+    }
+
+    /**
+     * Returns the date as a `LocalDate`
+     */
+    protected fun dateToLocalDate(): LocalDate {
+        return this.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
     }
 
     /**
