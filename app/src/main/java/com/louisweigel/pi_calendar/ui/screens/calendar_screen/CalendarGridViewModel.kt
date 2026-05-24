@@ -22,18 +22,30 @@ import kotlinx.datetime.toJavaMonth
 import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
-
 class CalendarGridViewModel : ViewModel() {
     private val _daysData = MutableStateFlow<List<DayState>>(emptyList())
+
+    /**
+     * List of the data for the 42 days
+     */
     val daysData: StateFlow<List<DayState>> = _daysData
 
+    /**
+     * Calculate the data for the 42 days in the calendar grid
+     *
+     * @param[currentMonthYear] The current month selection
+     * @param[calendarEntries] A list of all calendar entries
+     * (This can and should be reduced to just the calendar entries in this month and the one before and after this)
+     */
     fun calculateForMonth(
         currentMonthYear: MonthSelection,
         calendarEntries: List<Pair<Calendar, CalendarEntry>>
     ) {
+        // Run it in a background coroutine in order to avoid lagging the UI thread
         viewModelScope.launch {
             _daysData.update {
                 val firstDayOfWeek = getFirstDayOfWeek(currentMonthYear)
+                // Get the amount of days before the first day in the month
                 val daysBeforeFirst = when (firstDayOfWeek) {
                     DayOfWeek.MONDAY -> 0
                     DayOfWeek.TUESDAY -> 1
@@ -52,55 +64,42 @@ class CalendarGridViewModel : ViewModel() {
                     val isThisMonth = !isLastMonth && !isNextMonth
                     var isToday = false
 
-                    var actualDate: LocalDate
-
-                    val calculatedDay = if (isLastMonth) {
+                    // Compute the date of the day
+                    var date: LocalDate
+                    if (isLastMonth) {
                         val previousMonthYear = currentMonthYear.getPrevious()
                         val previousMonthLength =
                             getMonthLength(previousMonthYear)
 
                         val day = previousMonthLength - daysBeforeFirst + index + 1
 
-                        actualDate = LocalDate(
+                        date = LocalDate(
                             previousMonthYear.year,
                             previousMonthYear.month.toKotlinMonth(),
                             day
                         )
-
-                        day
                     } else if (isNextMonth) {
                         val nextMonthYear = currentMonthYear.getNext()
                         val day = index - monthLength - daysBeforeFirst + 1
-                        actualDate =
+                        date =
                             LocalDate(
                                 nextMonthYear.year,
                                 nextMonthYear.month.toKotlinMonth(),
                                 day
                             )
-
-                        day
                     } else {
-                        val date =
+                        date =
                             LocalDate(currentMonthYear.year, currentMonthYear.month.toIndex(), day)
                         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
                         isToday = today == date
-
-                        actualDate = date
-
-                        day
                     }
 
-                    val date = actualDate.atStartOfDayIn(TimeZone.currentSystemDefault())
-
                     DayState(
-                        displayDay = calculatedDay,
-                        date = actualDate,
+                        date = date,
                         isToday = isToday,
                         isThisMonth = isThisMonth,
                         entries = calendarEntries
-                            .filter { (_, entry) ->
-                                entry.includesDate(date)
-                            }
+                            .filter { (_, entry) -> entry.includesDate(date) }
                             .map { (calendar, entry) ->
                                 val iconResource = if (entry is Birthday) {
                                     R.drawable.cake_24px
@@ -110,7 +109,7 @@ class CalendarGridViewModel : ViewModel() {
 
                                 Triple(
                                     iconResource,
-                                    @Composable { entry.getTitle(actualDate) },
+                                    @Composable { entry.getTitle(date) },
                                     calendar.color
                                 )
                             }
@@ -121,22 +120,41 @@ class CalendarGridViewModel : ViewModel() {
     }
 }
 
-
+/**
+ * Represents the data needed to display a single cell in the calendar grid
+ */
 data class DayState(
-    val displayDay: Int,
+    /**
+     * The date of this day
+     */
     val date: LocalDate,
+    /**
+     * Whether this day is the current day
+     */
     val isToday: Boolean,
+    /**
+     * Whether this date is in the current month
+     */
     val isThisMonth: Boolean,
+    /**
+     * The calendar entries for this day
+     */
     val entries: List<Triple<Int?, @Composable () -> String, Color>>,
 )
 
-// Rework these functions (maybe)
-
+/**
+ * Returns which day the first day of the month is (Monday-Sunday)
+ */
 private fun getFirstDayOfWeek(month: MonthSelection): DayOfWeek {
     val date = LocalDate(month.year, month.month.toIndex(), 1)
     return date.dayOfWeek
 }
 
+/**
+ * Returns the length of the given month in that year
+ *
+ * Does take leap years into account
+ */
 private fun getMonthLength(month: MonthSelection): Int {
     val date = LocalDate(month.year, month.month.toIndex(), 1)
     return date.month.toJavaMonth().length(date.toJavaLocalDate().isLeapYear)

@@ -10,6 +10,7 @@ import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.Converters
+import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.utils.toGenitive
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -35,13 +36,18 @@ class Birthday(
     override val calendarUuid: Uuid,
     @PrimaryKey override val uuid: Uuid = Uuid.random(),
 ) : CalendarEntry(uuid, title, description, date, calendarUuid) {
-    override fun includesDate(date: Instant): Boolean {
-        val localDate = date.toLocalDateTime(TimeZone.currentSystemDefault())
-        val localDateOfBirth = this.date.toLocalDateTime(TimeZone.currentSystemDefault())
 
-        return localDate.day == localDateOfBirth.day
-                && localDate.month == localDateOfBirth.month
-                && localDate.year >= localDateOfBirth.year
+    override fun includesDate(date: LocalDate): Boolean {
+        val localDateOfBirth = dateToLocalDate()
+
+        return date.day == localDateOfBirth.day
+                && date.month == localDateOfBirth.month
+                && date.year >= localDateOfBirth.year
+    }
+
+    override fun isInMonth(monthSelection: MonthSelection): Boolean {
+        val localDateOfBirth = dateToLocalDate()
+        return localDateOfBirth.month == monthSelection.month.toKotlinMonth()
     }
 
     /**
