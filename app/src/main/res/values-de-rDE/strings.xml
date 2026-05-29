@@ -67,4 +67,5 @@
     <string name="calendarManager_selectColor">Farbe auswählen</string>
     <string name="singleDay_entryDeletionDescription">Das Löschen kann nicht mehr rückgängig gemacht werden</string>
     <string name="singleDay_noEntries">Keine Einträge an diesem Tag</string>
+    <string name="addReminderMenu_isDone">Erledigt</string>
 </resources>

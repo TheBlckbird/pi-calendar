@@ -1,5 +1,6 @@
 package com.louisweigel.pi_calendar.core.calendarentry
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -26,5 +27,7 @@ class Reminder(
     override val description: String,
     override val date: Instant,
     override val calendarUuid: Uuid,
+    @ColumnInfo(defaultValue = "0")
+    val isDone: Boolean,
     @PrimaryKey override val uuid: Uuid = Uuid.random(),
 ) : CalendarEntry(uuid, title, description, date, calendarUuid)
