@@ -22,10 +22,10 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Android SDK
-        run: android-actions/setup-android@v4
+        uses: android-actions/setup-android@v4
 
       - name: Run lints
-        uses: ./gradlew --no-daemon lintDebug
+        run: ./gradlew --no-daemon lintDebug
 
       - name: Run Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest --stacktrace
