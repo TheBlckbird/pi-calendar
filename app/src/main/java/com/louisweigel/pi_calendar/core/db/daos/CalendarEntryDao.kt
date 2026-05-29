@@ -113,6 +113,7 @@ interface CalendarEntryDao {
         r.title AS reminder_title,
         r.description AS reminder_description,
         r.date AS reminder_date,
+        r.isDone AS reminder_isDone,
         r.calendarUuid AS reminder_calendarUuid,
 
         c.uuid AS calendar_uuid,
