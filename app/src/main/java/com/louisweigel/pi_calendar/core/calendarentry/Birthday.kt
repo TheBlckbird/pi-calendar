@@ -13,7 +13,9 @@ import com.louisweigel.pi_calendar.core.db.Converters
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.utils.toGenitive
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
@@ -40,7 +42,13 @@ class Birthday(
     override fun includesDate(date: LocalDate): Boolean {
         val localDateOfBirth = dateToLocalDate()
 
-        return date.day == localDateOfBirth.day
+        var dayToCheck = localDateOfBirth.day
+
+        if (localDateOfBirth.day == 29 && localDateOfBirth.month == Month.FEBRUARY && !date.toJavaLocalDate().isLeapYear) {
+            dayToCheck = 28
+        }
+
+        return date.day == dayToCheck
                 && date.month == localDateOfBirth.month
                 && date.year >= localDateOfBirth.year
     }
