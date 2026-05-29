@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -42,6 +41,14 @@ import kotlinx.datetime.toLocalDateTime
 import java.time.LocalTime
 import kotlin.uuid.Uuid
 
+/**
+ * Shows a sheet to add a new reminder
+ *
+ * @param[onDismissRequest] This is called when the sheet is dismissed. It should hide it
+ * @param[onSave] This function is called with the new reminder that should be saved. It should also close this sheet
+ * @param[reminderCalendar] The calendar this reminder will be saved to. It should just be the default calendar for reminders
+ * @param[editReminder] Sets this to editing mode and pre-fills the fields with its data
+ */
 @Composable
 fun NewReminderSheet(
     onDismissRequest: () -> Unit,
@@ -71,10 +78,15 @@ fun NewReminderSheet(
         isDone = editReminder.isDone
 
         // Do some date calculations to get the correct time
-        val localDate = editReminder.date.toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val utcDateFromMillis = localDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+        val localDateTime = editReminder.date.toLocalDateTime(TimeZone.currentSystemDefault())
+        val utcDateFromMillis =
+            localDateTime.date.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
 
         dateState = rememberDatePickerState(utcDateFromMillis)
+        timeState = rememberTimePickerState(
+            initialHour = localDateTime.hour,
+            initialMinute = localDateTime.minute,
+        )
     }
 
     val onSaveClick = {

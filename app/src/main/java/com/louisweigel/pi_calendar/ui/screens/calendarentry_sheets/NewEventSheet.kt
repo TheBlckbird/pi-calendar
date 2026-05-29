@@ -49,6 +49,14 @@ import java.time.LocalTime
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
+/**
+ * Shows a sheet to add a new event
+ *
+ * @param[onDismissRequest] This is called when the sheet is dismissed. It should hide it
+ * @param[onSave] This function is called with the new event that should be saved. It should also close this sheet
+ * @param[calendars] A list of all available calendars for events
+ * @param[editEvent] Sets this to editing mode and pre-fills the fields with its data
+ */
 @Composable
 fun NewEventSheet(
     onDismissRequest: () -> Unit,

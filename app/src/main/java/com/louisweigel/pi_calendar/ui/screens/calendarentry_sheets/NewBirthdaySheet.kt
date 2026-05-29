@@ -34,6 +34,15 @@ import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
 import kotlin.uuid.Uuid
 
+
+/**
+ * Shows a sheet to add a new birthday
+ *
+ * @param[onDismissRequest] This is called when the sheet is dismissed. It should hide it
+ * @param[onSave] This function is called with the new birthday that should be saved. It should also close this sheet
+ * @param[birthdayCalendar] The calendar this birthday will be saved to. It should just be the default calendar for birthday
+ * @param[editBirthday] Sets this to editing mode and pre-fills the fields with its data
+ */
 @Composable
 fun NewBirthdaySheet(
     onDismissRequest: () -> Unit,

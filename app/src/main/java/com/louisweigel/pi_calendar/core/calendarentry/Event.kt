@@ -14,6 +14,9 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
+/**
+ * A simple event from a date until another date
+ */
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Calendar::class,
@@ -30,6 +33,9 @@ class Event(
     override val description: String,
     override val date: Instant,
     val until: Instant,
+    /**
+     * Whether this event occupies whole days or only time frames
+     */
     val isAllDay: Boolean,
     override val calendarUuid: Uuid,
     @PrimaryKey override val uuid: Uuid = Uuid.random(),
@@ -45,6 +51,6 @@ class Event(
         val untilDate = until.toLocalDateTime(TimeZone.currentSystemDefault())
 
         return super.isInMonth(monthSelection)
-                || (untilDate.year == monthSelection.year && untilDate.month == monthSelection.month.toKotlinMonth())
+                || (untilDate.year == monthSelection.year && untilDate.month == monthSelection.month)
     }
 }

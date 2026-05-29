@@ -11,6 +11,9 @@ import com.louisweigel.pi_calendar.core.db.Converters
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
+/**
+ * A reminder that can be set to done
+ */
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Calendar::class,
