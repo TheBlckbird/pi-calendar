@@ -20,6 +20,11 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
+/**
+ * Birthday entry
+ *
+ * Repeats every year and includes which birthday it is in the title
+ */
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Calendar::class,
@@ -55,7 +60,7 @@ class Birthday(
 
     override fun isInMonth(monthSelection: MonthSelection): Boolean {
         val localDateOfBirth = dateToLocalDate()
-        return localDateOfBirth.month == monthSelection.month.toKotlinMonth()
+        return localDateOfBirth.month == monthSelection.month
     }
 
     /**

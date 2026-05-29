@@ -5,6 +5,9 @@ import androidx.room.TypeConverter
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
+/**
+ * Type converters for Room
+ */
 object Converters {
     @TypeConverter
     fun fromInstant(instant: Instant?): Long? = instant?.toEpochMilliseconds()

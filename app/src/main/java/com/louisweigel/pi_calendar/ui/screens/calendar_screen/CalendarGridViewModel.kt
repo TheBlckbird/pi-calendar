@@ -8,6 +8,7 @@ import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
+import com.louisweigel.pi_calendar.core.toIndex
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,7 +76,7 @@ class CalendarGridViewModel : ViewModel() {
 
                         date = LocalDate(
                             previousMonthYear.year,
-                            previousMonthYear.month.toKotlinMonth(),
+                            previousMonthYear.month,
                             day
                         )
                     } else if (isNextMonth) {
@@ -84,7 +85,7 @@ class CalendarGridViewModel : ViewModel() {
                         date =
                             LocalDate(
                                 nextMonthYear.year,
-                                nextMonthYear.month.toKotlinMonth(),
+                                nextMonthYear.month,
                                 day
                             )
                     } else {

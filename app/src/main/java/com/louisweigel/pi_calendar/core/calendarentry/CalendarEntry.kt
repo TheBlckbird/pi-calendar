@@ -11,12 +11,20 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
-
+/**
+ * Abstract class describing an entry in the calendar
+ */
 sealed class CalendarEntry(
+    /**
+     * Unique identifier of this entry
+     */
     @Ignore open val uuid: Uuid,
     @Ignore open val title: String,
     @Ignore open val description: String,
     @Ignore open val date: Instant,
+    /**
+     * UUID of the calendar this belongs to
+     */
     @Ignore open val calendarUuid: Uuid,
 ) {
 
@@ -33,7 +41,7 @@ sealed class CalendarEntry(
      */
     open fun isInMonth(monthSelection: MonthSelection): Boolean {
         val localDate = dateToLocalDate()
-        return localDate.year == monthSelection.year && localDate.month == monthSelection.month.toKotlinMonth()
+        return localDate.year == monthSelection.year && localDate.month == monthSelection.month
     }
 
     /**

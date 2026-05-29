@@ -22,8 +22,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.louisweigel.pi_calendar.core.Month
+import com.louisweigel.pi_calendar.core.getNext
+import com.louisweigel.pi_calendar.core.getPrevious
+import com.louisweigel.pi_calendar.core.getTranslationKey
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlin.time.Clock
@@ -78,7 +81,7 @@ data class MonthSelection(val month: Month, val year: Int) {
         fun getToday(clock: Clock = Clock.System): MonthSelection {
             val today = clock.todayIn(TimeZone.currentSystemDefault())
 
-            val month = Month.from(today.month)
+            val month = today.month
             val year = today.year
             return MonthSelection(month, year)
         }
