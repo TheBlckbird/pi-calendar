@@ -24,8 +24,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -34,7 +36,7 @@ fun CalendarCell(
     text: String,
     shape: Shape,
     isToday: Boolean,
-    entries: List<Triple<Int?, @Composable () -> String, Color>>,
+    entries: List<CalendarEntryState>,
     isThisMonth: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -85,31 +87,41 @@ fun CalendarCell(
 
 
 @Composable
-private fun EntryRow(entry: Triple<Int?, @Composable () -> String, Color>) {
+private fun EntryRow(entry: CalendarEntryState) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(14.dp)
-            .background(entry.third, RoundedCornerShape(2.dp))
+            .background(entry.color, RoundedCornerShape(2.dp))
             .padding(start = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (entry.first != null) {
+        if (entry.icon != null) {
             Icon(
-                painter = painterResource(entry.first!!),
+                painter = painterResource(entry.icon),
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(11.dp)
             )
             Spacer(Modifier.width(2.dp))
         }
+
+        val textStyle = if (entry.isStrikeThrough) {
+            TextStyle(
+                textDecoration = TextDecoration.LineThrough
+            )
+        } else {
+            TextStyle()
+        }
+
         Text(
-            text = entry.second(),
+            text = entry.content(),
             fontSize = 10.sp,
             color = Color.White,
             maxLines = 1,
             softWrap = false,
             lineHeight = 10.sp,
+            style = textStyle,
             modifier = Modifier.fillMaxWidth()
         )
     }

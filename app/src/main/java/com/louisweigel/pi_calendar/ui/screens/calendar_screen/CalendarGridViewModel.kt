@@ -102,10 +102,13 @@ class CalendarGridViewModel : ViewModel() {
                         entries = calendarEntries
                             .filter { (_, entry) -> entry.includesDate(date) }
                             .map { (calendar, entry) ->
+                                var isDone = false
+
                                 val iconResource = if (entry is Birthday) {
                                     R.drawable.cake_24px
                                 } else if (entry is Reminder) {
                                     if (entry.isDone) {
+                                        isDone = true
                                         R.drawable.radio_button_checked_24px
                                     } else {
                                         R.drawable.radio_button_unchecked_24px
@@ -114,10 +117,11 @@ class CalendarGridViewModel : ViewModel() {
                                     null
                                 }
 
-                                Triple(
-                                    iconResource,
+                                CalendarEntryState(
                                     @Composable { entry.getTitle(date) },
-                                    calendar.color
+                                    iconResource,
+                                    calendar.color,
+                                    isDone,
                                 )
                             }
                     )
@@ -145,8 +149,34 @@ data class DayState(
     val isThisMonth: Boolean,
     /**
      * The calendar entries for this day
+     *
+     * - The first part is the texture index of an icon, if needed
+     * - The second component is the text content that should be shown
+     * - The third component is the color of the calendar entry
      */
-    val entries: List<Triple<Int?, @Composable () -> String, Color>>,
+    val entries: List<CalendarEntryState>,
+)
+
+/**
+ * State for an entry
+ */
+data class CalendarEntryState(
+    /**
+     * A closure returning the content for the entry
+     */
+    val content: @Composable () -> String,
+    /**
+     * A possible icon for the entry
+     */
+    val icon: Int?,
+    /**
+     * The color of the entry
+     */
+    val color: Color,
+    /**
+     * Whether the entry is stroke through
+     */
+    val isStrikeThrough: Boolean,
 )
 
 /**
