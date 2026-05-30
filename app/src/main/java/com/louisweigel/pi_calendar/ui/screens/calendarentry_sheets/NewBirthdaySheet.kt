@@ -29,6 +29,7 @@ import com.louisweigel.pi_calendar.ui.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
 import com.louisweigel.pi_calendar.utils.getInstantFromMillis
 import com.louisweigel.pi_calendar.utils.getMillisNow
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
@@ -50,11 +51,16 @@ fun NewBirthdaySheet(
     birthdayCalendar: Calendar,
     modifier: Modifier = Modifier,
     editBirthday: Birthday? = null,
+    defaultDate: LocalDate? = null,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
     var isDatePickerFromOpen by rememberSaveable { mutableStateOf(false) }
     var dateOfBirthState = rememberDatePickerState(initialSelectedDateMillis = getMillisNow())
+
+    if (defaultDate != null) {
+        dateOfBirthState.selectedDateMillis = defaultDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+    }
 
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }

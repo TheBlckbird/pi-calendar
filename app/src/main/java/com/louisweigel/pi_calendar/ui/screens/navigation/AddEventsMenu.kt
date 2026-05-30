@@ -22,6 +22,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -32,13 +36,15 @@ import com.louisweigel.pi_calendar.R
 
 @Composable
 fun AddEventsMenu(
-    isExpanded: Boolean,
-    onToggleExpanded: () -> Unit,
-    onClose: () -> Unit,
+    //isExpanded: Boolean,
+    //onToggleExpanded: () -> Unit,
+    //onClose: () -> Unit,
     onNewEvent: () -> Unit,
     onNewBirthday: () -> Unit,
     onNewReminder: () -> Unit,
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     val fabRadius = if (isExpanded) {
         28.dp
     } else {
@@ -65,7 +71,7 @@ fun AddEventsMenu(
             FabMenuEntry(0, isExpanded,
                 stringResource(R.string.addEntriesFab_geburtstag), {
                 onNewBirthday()
-                onClose()
+                isExpanded = false
             }) {
                 Icon(
                     painter = painterResource(R.drawable.cake_24px),
@@ -76,7 +82,7 @@ fun AddEventsMenu(
             FabMenuEntry(1, isExpanded,
                 stringResource(R.string.addEntriesFab_erinnerung), {
                 onNewReminder()
-                onClose()
+                isExpanded = false
             }) {
                 Icon(
                     painter = painterResource(R.drawable.task_alt_24px),
@@ -86,7 +92,7 @@ fun AddEventsMenu(
 
             FabMenuEntry(2, isExpanded, stringResource(R.string.addEntriesFab_termin), {
                 onNewEvent()
-                onClose()
+                isExpanded = false
             }) {
                 Icon(
                     painter = painterResource(R.drawable.event_24px),
@@ -96,7 +102,7 @@ fun AddEventsMenu(
         }
 
         FloatingActionButton(
-            onClick = onToggleExpanded,
+            onClick = { isExpanded = !isExpanded },
             shape = RoundedCornerShape(fabCornerRadius.value),
             contentColor = if (isExpanded) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onPrimaryContainer,
             containerColor = if (isExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primaryContainer

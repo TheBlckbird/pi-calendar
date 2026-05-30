@@ -40,6 +40,7 @@ import com.louisweigel.pi_calendar.core.calendarentry.Reminder
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewBirthdaySheet
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewEventSheet
 import com.louisweigel.pi_calendar.ui.screens.calendarentry_sheets.NewReminderSheet
+import com.louisweigel.pi_calendar.ui.screens.navigation.AddEventsMenu
 import com.louisweigel.pi_calendar.viewmodels.CalendarEntryViewModel
 import com.louisweigel.pi_calendar.viewmodels.CalendarViewModel
 import kotlinx.datetime.LocalDate
@@ -85,6 +86,10 @@ fun SingleDayScreen(
      * A confirmation dialog is shown if it currently holds data
      */
     var deleteEntryData by remember { mutableStateOf<CalendarEntry?>(null) }
+
+    var isNewEventExpanded by remember { mutableStateOf(false) }
+    var isNewBirthdayExpanded by remember { mutableStateOf(false) }
+    var isNewReminderExpanded by remember { mutableStateOf(false) }
 
     /**
      * Title of the top bar
@@ -133,6 +138,14 @@ fun SingleDayScreen(
                 title = { Text(title) },
             )
 
+        },
+
+        floatingActionButton = {
+            AddEventsMenu(
+                { isNewEventExpanded = true },
+                { isNewBirthdayExpanded = true },
+                { isNewReminderExpanded = true },
+            )
         },
 
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -267,6 +280,46 @@ fun SingleDayScreen(
                         Text(stringResource(R.string.cancel))
                     }
                 }
+            )
+        }
+
+        if (isNewEventExpanded) {
+            NewEventSheet(
+                { isNewEventExpanded = false },
+                { event ->
+                    isNewEventExpanded = false
+                    entryViewModel.upsertEntry(event)
+                },
+                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                calendarUiState.calendars + calendarUiState.defaultEventsCalendar!!,
+                defaultStartDate = date,
+                defaultEndDate = date,
+            )
+        }
+
+        if (isNewBirthdayExpanded && calendarUiState.defaultBirthdaysCalendar != null) {
+            NewBirthdaySheet(
+                { isNewBirthdayExpanded = false },
+                { birthday ->
+                    isNewBirthdayExpanded = false
+                    entryViewModel.upsertEntry(birthday)
+                },
+                calendarUiState.defaultBirthdaysCalendar!!,
+                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                defaultDate = date,
+            )
+        }
+
+        if (isNewReminderExpanded) {
+            NewReminderSheet(
+                { isNewReminderExpanded = false },
+                { reminder ->
+                    isNewReminderExpanded = false
+                    entryViewModel.upsertEntry(reminder)
+                },
+                calendarUiState.defaultRemindersCalendar!!,
+                modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                defaultDate = date,
             )
         }
     }

@@ -33,6 +33,7 @@ import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
 import com.louisweigel.pi_calendar.ui.screens.components.TimePickerRow
 import com.louisweigel.pi_calendar.utils.getInstantFromMillis
 import com.louisweigel.pi_calendar.utils.getMillisNow
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
@@ -56,11 +57,16 @@ fun NewReminderSheet(
     reminderCalendar: Calendar,
     modifier: Modifier = Modifier,
     editReminder: Reminder? = null,
+    defaultDate: LocalDate? = null,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
     var isDatePickerOpen by rememberSaveable { mutableStateOf(false) }
     var dateState = rememberDatePickerState(initialSelectedDateMillis = getMillisNow())
+
+    if (defaultDate != null) {
+        dateState.selectedDateMillis = defaultDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+    }
 
     var isTimePickerOpen by rememberSaveable { mutableStateOf(false) }
     var timeState = rememberTimePickerState(
