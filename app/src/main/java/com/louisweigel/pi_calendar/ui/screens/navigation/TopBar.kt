@@ -55,7 +55,7 @@ fun TopBar(
                 )
             ) {
                 Text(
-                    selectedMonth.toString(),
+                    selectedMonth.toTitle(),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Icon(
