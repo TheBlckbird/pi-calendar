@@ -89,7 +89,7 @@ fun NavigationDrawerScreen(
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
-            NavigationDrawerItem(
+            /*NavigationDrawerItem(
                 label = { Text(stringResource(R.string.settings)) },
                 selected = false,
                 icon = {
@@ -100,7 +100,7 @@ fun NavigationDrawerScreen(
                 },
                 badge = { Text("20") }, // Placeholder
                 onClick = { /* Handle click */ }
-            )
+            )*/
             NavigationDrawerItem(
                 label = { Text(stringResource(R.string.help_feedback)) },
                 selected = false,
