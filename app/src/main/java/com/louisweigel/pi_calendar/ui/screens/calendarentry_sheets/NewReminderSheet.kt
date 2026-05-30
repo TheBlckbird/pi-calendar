@@ -130,8 +130,6 @@ fun NewReminderSheet(
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            Spacer(modifier = Modifier.padding(bottom = 4.dp))
-
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
