@@ -7,7 +7,7 @@
     <string name="kalender">Kalender</string>
 
     <string name="addEntriesFab_geburtstag">Geburtstag</string>
-    <string name="addEntriesFab_erinnerung">Erinnerung</string>
+    <string name="addEntriesFab_erinnerung">Aufgabe</string>
     <string name="addEntriesFab_termin">Termin</string>
     <string name="calendarScreen_monday">Mo</string>
 
