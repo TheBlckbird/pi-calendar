@@ -60,7 +60,8 @@ data class MonthSelection(val month: Month, val year: Int) {
         return MonthSelection(previousMonth, newYear)
     }
 
-    override fun toString(): String {
+    @Composable
+    fun toTitle(): String {
         val yearNow = Clock.System.todayIn(TimeZone.currentSystemDefault()).year
 
         val yearPart = if (year != yearNow) {
@@ -69,7 +70,7 @@ data class MonthSelection(val month: Month, val year: Int) {
             ""
         }
 
-        return month.toString() + yearPart
+        return stringResource(month.getTranslationKey()) + yearPart
     }
 
     companion object {
