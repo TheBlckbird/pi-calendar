@@ -8,6 +8,7 @@ import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
+import com.louisweigel.pi_calendar.core.calendarentry.Reminder
 import com.louisweigel.pi_calendar.core.toIndex
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -104,6 +105,12 @@ class CalendarGridViewModel : ViewModel() {
                             .map { (calendar, entry) ->
                                 val iconResource = if (entry is Birthday) {
                                     R.drawable.cake_24px
+                                } else if (entry is Reminder) {
+                                    if (entry.isDone) {
+                                        R.drawable.radio_button_checked_24px
+                                    } else {
+                                        R.drawable.radio_button_unchecked_24px
+                                    }
                                 } else {
                                     null
                                 }
