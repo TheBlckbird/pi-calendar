@@ -41,6 +41,7 @@ import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
 import com.louisweigel.pi_calendar.ui.screens.components.TimePickerRow
 import com.louisweigel.pi_calendar.utils.getMillisNow
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
@@ -66,6 +67,8 @@ fun NewEventSheet(
     modifier: Modifier = Modifier,
     calendars: List<Calendar>,
     editEvent: Event? = null,
+    defaultStartDate: LocalDate? = null,
+    defaultEndDate: LocalDate? = null,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -77,6 +80,10 @@ fun NewEventSheet(
         initialSelectedDateMillis = getMillisNow()
     )
 
+    if (defaultStartDate != null) {
+        dateFromState.selectedDateMillis = defaultStartDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+    }
+
     var isTimePickerFromOpen by rememberSaveable { mutableStateOf(false) }
     var timeFromState = rememberTimePickerState(
         initialHour = LocalTime.now().hour,
@@ -87,6 +94,10 @@ fun NewEventSheet(
     var dateUntilState = rememberDatePickerState(
         initialSelectedDateMillis = getMillisNow()
     )
+
+    if (defaultEndDate != null) {
+        dateUntilState.selectedDateMillis = defaultEndDate.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+    }
 
     var isTimePickerUntilOpen by rememberSaveable { mutableStateOf(false) }
     var timeUntilState = rememberTimePickerState(

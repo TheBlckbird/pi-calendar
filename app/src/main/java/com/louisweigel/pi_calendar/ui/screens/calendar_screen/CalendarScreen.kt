@@ -1,7 +1,6 @@
 package com.louisweigel.pi_calendar.ui.screens.calendar_screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.louisweigel.pi_calendar.ui.screens.MonthSelection
 import com.louisweigel.pi_calendar.ui.screens.MonthSelectionScreen
@@ -46,7 +44,6 @@ fun CalendarScreen(
     val entryUiState by entryViewModel.uiState.collectAsState()
     val calendarUiState by calendarViewModel.uiState.collectAsState()
 
-    var isFabExpanded by remember { mutableStateOf(false) }
     var isMonthSelectionExpanded by remember { mutableStateOf(false) }
     var isNewEventExpanded by remember { mutableStateOf(false) }
     var isNewBirthdayExpanded by remember { mutableStateOf(false) }
@@ -121,9 +118,6 @@ fun CalendarScreen(
 
             floatingActionButton = {
                 AddEventsMenu(
-                    isFabExpanded,
-                    { isFabExpanded = !isFabExpanded },
-                    { isFabExpanded = false },
                     { isNewEventExpanded = true },
                     { isNewBirthdayExpanded = true },
                     { isNewReminderExpanded = true },
@@ -136,11 +130,7 @@ fun CalendarScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = { isFabExpanded = false })
-                    }
                     .background(MaterialTheme.colorScheme.surfaceContainer),
-
                 ) {
                 CalendarGrid(
                     currentSelectedMonth, { isForward ->
