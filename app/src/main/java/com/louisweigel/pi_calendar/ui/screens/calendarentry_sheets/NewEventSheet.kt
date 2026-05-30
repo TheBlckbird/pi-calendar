@@ -21,6 +21,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -292,7 +293,19 @@ fun NewEventSheet(
                         DatePickerRow(
                             isDatePickerFromOpen,
                             dateFromState,
-                            { isDatePickerFromOpen = false },
+                            {
+                                isDatePickerFromOpen = false
+
+                                val selected = dateFromState.selectedDateMillis
+
+                                if (
+                                    dateUntilState.selectedDateMillis != null
+                                    && selected != null
+                                    && selected > dateUntilState.selectedDateMillis!!
+                                ) {
+                                    dateUntilState.selectedDateMillis = selected
+                                }
+                            },
                             { isDatePickerFromOpen = true },
                         )
 
