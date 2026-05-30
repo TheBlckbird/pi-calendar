@@ -155,6 +155,8 @@ fun CalendarScreen(
                     entryUiState.entriesWithCalendar
                         .filter { (_, entry) ->
                             entry.isInMonth(currentSelectedMonth)
+                                    || entry.isInMonth(currentSelectedMonth.getPrevious())
+                                    || entry.isInMonth(currentSelectedMonth.getNext())
                         },
                     { date ->
                         onNavigateToSingleDay(date)
