@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.louisweigel.pi_calendar.R
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.Event
+import com.louisweigel.pi_calendar.ui.screens.calendarmanager.ColorRow
 import com.louisweigel.pi_calendar.ui.screens.components.ClickableSwitchRow
 import com.louisweigel.pi_calendar.ui.screens.components.DatePickerRow
 import com.louisweigel.pi_calendar.ui.screens.components.ModalSaveCancelRow
@@ -120,7 +121,8 @@ fun NewEventSheet(
             localDateUntil
         }
 
-        val utcDateUntilMillis = adjustedDateUntil.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+        val utcDateUntilMillis =
+            adjustedDateUntil.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
 
         dateUntilState = rememberDatePickerState(utcDateUntilMillis)
 
@@ -206,10 +208,16 @@ fun NewEventSheet(
                         .padding(0.dp),
                     shape = RoundedCornerShape(8.dp),
                 ) {
-                    Text(
-                        selectedCalendar.name,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
+
+                    ColorRow(
+                        selectedCalendar.name to selectedCalendar.color,
+                        {
+                            Text(
+                                it,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                        }
                     )
                 }
 
@@ -228,7 +236,10 @@ fun NewEventSheet(
                                 }
                             },
                             text = {
-                                Text(calendar.name)
+                                ColorRow(
+                                    calendar.name to calendar.color,
+                                    { Text(it) }
+                                )
                             },
                             onClick = {
                                 selectedCalendar = calendar
