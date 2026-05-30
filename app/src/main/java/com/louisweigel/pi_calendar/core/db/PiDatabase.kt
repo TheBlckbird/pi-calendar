@@ -84,7 +84,7 @@ abstract class PiDatabase : RoomDatabase() {
                                 Calendar(
                                     Calendar.DEFAULT_REMINDERS_CALENDAR_NAME,
                                     "",
-                                    Color(0xFF00C853),
+                                    Color(0xFF1A8247),
                                     true,
                                 )
                             )
