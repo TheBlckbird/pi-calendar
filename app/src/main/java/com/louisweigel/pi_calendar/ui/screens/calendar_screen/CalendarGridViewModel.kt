@@ -91,9 +91,10 @@ class CalendarGridViewModel : ViewModel() {
                     } else {
                         date =
                             LocalDate(currentMonthYear.year, currentMonthYear.month.toIndex(), day)
-                        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-                        isToday = today == date
                     }
+
+                    val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+                    isToday = today == date
 
                     DayState(
                         date = date,
