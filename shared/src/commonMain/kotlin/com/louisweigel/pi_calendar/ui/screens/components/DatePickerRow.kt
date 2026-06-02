@@ -13,6 +13,27 @@ import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.Padding
+import org.jetbrains.compose.resources.stringResource
+import pi_calendar_kmp.shared.generated.resources.Res
+import pi_calendar_kmp.shared.generated.resources.calendarScreen_friday
+import pi_calendar_kmp.shared.generated.resources.calendarScreen_monday
+import pi_calendar_kmp.shared.generated.resources.calendarScreen_saturday
+import pi_calendar_kmp.shared.generated.resources.calendarScreen_sunday
+import pi_calendar_kmp.shared.generated.resources.calendarScreen_thursday
+import pi_calendar_kmp.shared.generated.resources.calendarScreen_tuesday
+import pi_calendar_kmp.shared.generated.resources.calendarScreen_wednesday
+import pi_calendar_kmp.shared.generated.resources.month_april
+import pi_calendar_kmp.shared.generated.resources.month_august
+import pi_calendar_kmp.shared.generated.resources.month_december
+import pi_calendar_kmp.shared.generated.resources.month_february
+import pi_calendar_kmp.shared.generated.resources.month_january
+import pi_calendar_kmp.shared.generated.resources.month_july
+import pi_calendar_kmp.shared.generated.resources.month_june
+import pi_calendar_kmp.shared.generated.resources.month_may
+import pi_calendar_kmp.shared.generated.resources.month_march
+import pi_calendar_kmp.shared.generated.resources.month_november
+import pi_calendar_kmp.shared.generated.resources.month_october
+import pi_calendar_kmp.shared.generated.resources.month_september
 import kotlin.time.Instant
 
 @Composable
@@ -33,14 +54,42 @@ fun DatePickerRow(
             contentColor = MaterialTheme.colorScheme.onSurface
         )
     ) {
-        val instant = Instant.fromEpochMilliseconds(state.selectedDateMillis!!) // TODO: what about time zones?
+        val instant = Instant.fromEpochMilliseconds(state.selectedDateMillis!!)
 
-        val format = DateTimeComponents.Format { // TODO: check if this formatter is working as intended (i18n)?
-            dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+        val dayOfWeekNames = DayOfWeekNames(
+            listOf(
+                stringResource(Res.string.calendarScreen_monday),
+                stringResource(Res.string.calendarScreen_tuesday),
+                stringResource(Res.string.calendarScreen_wednesday),
+                stringResource(Res.string.calendarScreen_thursday),
+                stringResource(Res.string.calendarScreen_friday),
+                stringResource(Res.string.calendarScreen_saturday),
+                stringResource(Res.string.calendarScreen_sunday),
+            )
+        )
+        val monthNames = MonthNames(
+            listOf(
+                stringResource(Res.string.month_january),
+                stringResource(Res.string.month_february),
+                stringResource(Res.string.month_march),
+                stringResource(Res.string.month_april),
+                stringResource(Res.string.month_may),
+                stringResource(Res.string.month_june),
+                stringResource(Res.string.month_july),
+                stringResource(Res.string.month_august),
+                stringResource(Res.string.month_september),
+                stringResource(Res.string.month_october),
+                stringResource(Res.string.month_november),
+                stringResource(Res.string.month_december),
+            )
+        )
+
+        val format = DateTimeComponents.Format {
+            dayOfWeek(dayOfWeekNames)
             chars(", ")
-            dayOfMonth(Padding.ZERO)
+            day(Padding.ZERO)
             chars(". ")
-            monthName(MonthNames.ENGLISH_FULL)
+            monthName(monthNames)
             chars(" ")
             year()
         }

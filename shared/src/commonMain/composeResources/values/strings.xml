@@ -17,18 +17,18 @@
     <string name="calendarScreen_saturday">Sat</string>
     <string name="calendarScreen_sunday">Sun</string>
 
-    <string name="month_januar">January</string>
-    <string name="month_februar">February</string>
-    <string name="month_mearz">March</string>
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
     <string name="month_april">April</string>
-    <string name="month_mai">May</string>
-    <string name="month_juni">June</string>
-    <string name="month_juli">July</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
     <string name="month_august">August</string>
     <string name="month_september">September</string>
-    <string name="month_oktober">October</string>
+    <string name="month_october">October</string>
     <string name="month_november">November</string>
-    <string name="month_dezember">December</string>
+    <string name="month_december">December</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="addEntryMenu_titleField">Title</string>

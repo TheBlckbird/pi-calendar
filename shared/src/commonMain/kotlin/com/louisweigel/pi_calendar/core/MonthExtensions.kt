@@ -6,15 +6,15 @@ import org.jetbrains.compose.resources.StringResource
 import pi_calendar_kmp.shared.generated.resources.Res
 import pi_calendar_kmp.shared.generated.resources.month_april
 import pi_calendar_kmp.shared.generated.resources.month_august
-import pi_calendar_kmp.shared.generated.resources.month_dezember
-import pi_calendar_kmp.shared.generated.resources.month_februar
-import pi_calendar_kmp.shared.generated.resources.month_januar
-import pi_calendar_kmp.shared.generated.resources.month_juli
-import pi_calendar_kmp.shared.generated.resources.month_juni
-import pi_calendar_kmp.shared.generated.resources.month_mai
-import pi_calendar_kmp.shared.generated.resources.month_mearz
+import pi_calendar_kmp.shared.generated.resources.month_december
+import pi_calendar_kmp.shared.generated.resources.month_february
+import pi_calendar_kmp.shared.generated.resources.month_january
+import pi_calendar_kmp.shared.generated.resources.month_july
+import pi_calendar_kmp.shared.generated.resources.month_june
+import pi_calendar_kmp.shared.generated.resources.month_may
+import pi_calendar_kmp.shared.generated.resources.month_march
 import pi_calendar_kmp.shared.generated.resources.month_november
-import pi_calendar_kmp.shared.generated.resources.month_oktober
+import pi_calendar_kmp.shared.generated.resources.month_october
 import pi_calendar_kmp.shared.generated.resources.month_september
 
 /**
@@ -22,18 +22,18 @@ import pi_calendar_kmp.shared.generated.resources.month_september
  */
 fun Month.getTranslationKey(): StringResource {
     return when (this) {
-        Month.JANUARY -> Res.string.month_januar
-        Month.FEBRUARY -> Res.string.month_februar
-        Month.MARCH -> Res.string.month_mearz
+        Month.JANUARY -> Res.string.month_january
+        Month.FEBRUARY -> Res.string.month_february
+        Month.MARCH -> Res.string.month_march
         Month.APRIL -> Res.string.month_april
-        Month.MAY -> Res.string.month_mai
-        Month.JUNE -> Res.string.month_juni
-        Month.JULY -> Res.string.month_juli
+        Month.MAY -> Res.string.month_may
+        Month.JUNE -> Res.string.month_june
+        Month.JULY -> Res.string.month_july
         Month.AUGUST -> Res.string.month_august
         Month.SEPTEMBER -> Res.string.month_september
-        Month.OCTOBER -> Res.string.month_oktober
+        Month.OCTOBER -> Res.string.month_october
         Month.NOVEMBER -> Res.string.month_november
-        Month.DECEMBER -> Res.string.month_dezember
+        Month.DECEMBER -> Res.string.month_december
     }
 }
 
