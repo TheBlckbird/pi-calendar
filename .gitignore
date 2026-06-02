@@ -1,6 +1,7 @@
 *.iml
 .kotlin
 .gradle
+/androidApp/release/
 **/build/
 xcuserdata
 !src/**/build/

@@ -52,7 +52,7 @@
     <string name="calendarManager_calendarDeletionDescription">Mit dem Löschen dieses Kalenders werden auch alle zugehörigen Termine gelöscht</string>
     <string name="delete">Löschen</string>
     <string name="calendarManager_needName">Kein Name vergeben</string>
-    <string name="calendarManager_needNameDescription">Fülle das \"Name\"-Feld aus, um einen Namen für den Kalender zu vergeben</string>
+    <string name="calendarManager_needNameDescription">Fülle das "Name"-Feld aus, um einen Namen für den Kalender zu vergeben</string>
     <string name="calendarManager">Kalender bearbeiten</string>
     <string name="done">Fertig</string>
     <string name="color_purple">Lila</string>

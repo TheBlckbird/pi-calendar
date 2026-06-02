@@ -51,7 +51,7 @@
     <string name="calendarManager_calendarDeletionDescription">Deleting this calendar will delete all its events with it</string>
     <string name="delete">Delete</string>
     <string name="calendarManager_needName">No name given</string>
-    <string name="calendarManager_needNameDescription">Fill out the \"Name\" field to specify a name for the calendar</string>
+    <string name="calendarManager_needNameDescription">Fill out the "Name" field to specify a name for the calendar</string>
     <string name="calendarManager">Edit Calendars</string>
     <string name="done">Done</string>
     <string name="color_purple">Purple</string>
