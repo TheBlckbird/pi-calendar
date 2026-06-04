@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.Converters
-import com.louisweigel.pi_calendar.ui.screens.MonthSelection
+import kotlinx.datetime.YearMonth
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -47,7 +47,7 @@ class Event(
         return date in startDate..<endDate
     }
 
-    override fun isInMonth(monthSelection: MonthSelection): Boolean {
+    override fun isInMonth(monthSelection: YearMonth): Boolean {
         val untilDate = until.toLocalDateTime(TimeZone.currentSystemDefault())
 
         return super.isInMonth(monthSelection)

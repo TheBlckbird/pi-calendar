@@ -1,98 +1,28 @@
 package com.louisweigel.pi_calendar.ui.screens
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.louisweigel.pi_calendar.core.getNext
-import com.louisweigel.pi_calendar.core.getPrevious
 import com.louisweigel.pi_calendar.core.getTranslationKey
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
+import kotlinx.datetime.YearMonth
 import org.jetbrains.compose.resources.stringResource
-import kotlin.time.Clock
-
-data class MonthSelection(val month: Month, val year: Int) {
-    /**
-     * Computes the next month/year combination and returns it
-     */
-    fun getNext(): MonthSelection {
-        val nextMonth = this.month.getNext()
-        var newYear = this.year
-
-        if (nextMonth == Month.JANUARY) {
-            newYear += 1
-        }
-
-        return MonthSelection(nextMonth, newYear)
-    }
-
-    /**
-     * Computes the previous month/year combination and returns it
-     */
-    fun getPrevious(): MonthSelection {
-        val previousMonth = this.month.getPrevious()
-        var newYear = this.year
-
-        if (previousMonth == Month.DECEMBER) {
-            newYear -= 1
-        }
-
-        return MonthSelection(previousMonth, newYear)
-    }
-
-    @Composable
-    fun toTitle(): String {
-        val yearNow = Clock.System.todayIn(TimeZone.currentSystemDefault()).year
-
-        val yearPart = if (year != yearNow) {
-            " $year"
-        } else {
-            ""
-        }
-
-        return stringResource(month.getTranslationKey()) + yearPart
-    }
-
-    companion object {
-        /**
-         * Returns the current month and year.
-         *
-         * A clock can be passed for testing, but this argument should usually be ignored
-         */
-        fun getToday(clock: Clock = Clock.System): MonthSelection {
-            val today = clock.todayIn(TimeZone.currentSystemDefault())
-
-            val month = today.month
-            val year = today.year
-            return MonthSelection(month, year)
-        }
-    }
-}
 
 @Composable
 fun MonthSelectionScreen(
-    currentSelection: MonthSelection,
-    onSelectionChanged: (MonthSelection) -> Unit,
+    currentSelection: YearMonth,
+    onSelectionChanged: (YearMonth) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -121,7 +51,7 @@ fun MonthSelectionScreen(
 
                 Button(
                     onClick = {
-                        onSelectionChanged(MonthSelection(currentSelection.month, year))
+                        onSelectionChanged(YearMonth(year, currentSelection.month))
                     },
                     modifier = Modifier
                         .heightIn(min = 32.dp)
@@ -200,7 +130,7 @@ fun MonthSelectionScreen(
 
                 Button(
                     {
-                        onSelectionChanged(MonthSelection(month, currentSelection.year))
+                        onSelectionChanged(YearMonth(currentSelection.year, month))
                     },
                     modifier = Modifier
                         .height(40.dp)

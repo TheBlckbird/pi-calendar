@@ -17,7 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
-import com.louisweigel.pi_calendar.ui.screens.MonthSelection
+import kotlinx.datetime.YearMonth
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.scan
 import kotlinx.datetime.LocalDate
@@ -33,7 +33,7 @@ import pi_calendar_kmp.shared.generated.resources.calendarScreen_wednesday
 
 @Composable
 fun CalendarGrid(
-    currentMonthYear: MonthSelection,
+    currentMonthYear: YearMonth,
     onMonthChange: (Boolean) -> Unit,
     calendarEntries: List<Pair<Calendar, CalendarEntry>>,
     onClick: (LocalDate) -> Unit,

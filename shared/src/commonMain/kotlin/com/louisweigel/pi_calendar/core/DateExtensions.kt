@@ -1,8 +1,14 @@
 package com.louisweigel.pi_calendar.core
 
+import androidx.compose.runtime.Composable
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.YearMonth
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import pi_calendar_kmp.shared.generated.resources.Res
 import pi_calendar_kmp.shared.generated.resources.month_april
 import pi_calendar_kmp.shared.generated.resources.month_august
@@ -16,6 +22,7 @@ import pi_calendar_kmp.shared.generated.resources.month_march
 import pi_calendar_kmp.shared.generated.resources.month_november
 import pi_calendar_kmp.shared.generated.resources.month_october
 import pi_calendar_kmp.shared.generated.resources.month_september
+import kotlin.time.Clock
 
 /**
  * Get the translation key for this month in order to display it in the UI
@@ -57,48 +64,24 @@ fun Month.toIndex(): Int {
     }
 }
 
-/**
- * Get the previous month
- *
- * Wraps around from January to December
- */
-fun Month.getPrevious(): Month {
-    return when (this) {
-        Month.JANUARY -> Month.DECEMBER
-        Month.FEBRUARY -> Month.JANUARY
-        Month.MARCH -> Month.FEBRUARY
-        Month.APRIL -> Month.MARCH
-        Month.MAY -> Month.APRIL
-        Month.JUNE -> Month.MAY
-        Month.JULY -> Month.JUNE
-        Month.AUGUST -> Month.JULY
-        Month.SEPTEMBER -> Month.AUGUST
-        Month.OCTOBER -> Month.SEPTEMBER
-        Month.NOVEMBER -> Month.OCTOBER
-        Month.DECEMBER -> Month.NOVEMBER
-    }
-}
-
-/**
- * Get the next month
- *
- * Wraps back around after December
- */
-fun Month.getNext(): Month {
-    return when (this) {
-        Month.JANUARY -> Month.FEBRUARY
-        Month.FEBRUARY -> Month.MARCH
-        Month.MARCH -> Month.APRIL
-        Month.APRIL -> Month.MAY
-        Month.MAY -> Month.JUNE
-        Month.JUNE -> Month.JULY
-        Month.JULY -> Month.AUGUST
-        Month.AUGUST -> Month.SEPTEMBER
-        Month.SEPTEMBER -> Month.OCTOBER
-        Month.OCTOBER -> Month.NOVEMBER
-        Month.NOVEMBER -> Month.DECEMBER
-        Month.DECEMBER -> Month.JANUARY
-    }
-}
-
 fun LocalDate.isLeapYear(): Boolean = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+
+fun YearMonth.Companion.now(): YearMonth {
+    val current = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+
+    return YearMonth(current.year, current.month)
+}
+
+@Composable
+fun YearMonth.toTitle(): String {
+    val yearNow = Clock.System.todayIn(TimeZone.currentSystemDefault()).year
+
+    val yearPart = if (year != yearNow) {
+        " $year"
+    } else {
+        ""
+    }
+
+    return stringResource(month.getTranslationKey()) + yearPart
+}

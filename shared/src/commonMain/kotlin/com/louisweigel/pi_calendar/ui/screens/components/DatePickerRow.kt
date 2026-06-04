@@ -8,6 +8,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.louisweigel.pi_calendar.core.getTranslationKey
+import kotlinx.datetime.Month
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DateTimeComponents
 import kotlinx.datetime.format.DayOfWeekNames
@@ -68,20 +70,9 @@ fun DatePickerRow(
             )
         )
         val monthNames = MonthNames(
-            listOf(
-                stringResource(Res.string.month_january),
-                stringResource(Res.string.month_february),
-                stringResource(Res.string.month_march),
-                stringResource(Res.string.month_april),
-                stringResource(Res.string.month_may),
-                stringResource(Res.string.month_june),
-                stringResource(Res.string.month_july),
-                stringResource(Res.string.month_august),
-                stringResource(Res.string.month_september),
-                stringResource(Res.string.month_october),
-                stringResource(Res.string.month_november),
-                stringResource(Res.string.month_december),
-            )
+            Month.entries.map { month ->
+                stringResource(month.getTranslationKey())
+            }
         )
 
         val format = DateTimeComponents.Format {
