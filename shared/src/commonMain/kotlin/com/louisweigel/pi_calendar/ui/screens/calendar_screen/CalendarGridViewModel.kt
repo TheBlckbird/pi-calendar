@@ -9,7 +9,7 @@ import com.louisweigel.pi_calendar.core.calendarentry.Birthday
 import com.louisweigel.pi_calendar.core.calendarentry.CalendarEntry
 import com.louisweigel.pi_calendar.core.calendarentry.Reminder
 import com.louisweigel.pi_calendar.core.toIndex
-import com.louisweigel.pi_calendar.ui.screens.MonthSelection
+import kotlinx.datetime.YearMonth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -17,6 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minusMonth
+import kotlinx.datetime.plusMonth
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.yearMonth
 import org.jetbrains.compose.resources.DrawableResource
@@ -37,18 +39,18 @@ class CalendarGridViewModel : ViewModel() {
     /**
      * Calculate the data for the 42 days in the calendar grid
      *
-     * @param[currentMonthYear] The current month selection
+     * @param[currentYearMonth] The current month selection
      * @param[calendarEntries] A list of all calendar entries
      * (This can and should be reduced to just the calendar entries in this month and the one before and after this)
      */
     fun calculateForMonth(
-        currentMonthYear: MonthSelection,
+        currentYearMonth: YearMonth,
         calendarEntries: List<Pair<Calendar, CalendarEntry>>
     ) {
         // Run it in a background coroutine in order to avoid lagging the UI thread
         viewModelScope.launch {
             _daysData.update {
-                val firstDayOfWeek = getFirstDayOfWeek(currentMonthYear)
+                val firstDayOfWeek = getFirstDayOfWeek(currentYearMonth)
                 // Get the amount of days before the first day in the month
                 val daysBeforeFirst = when (firstDayOfWeek) {
                     DayOfWeek.MONDAY -> 0
@@ -59,7 +61,7 @@ class CalendarGridViewModel : ViewModel() {
                     DayOfWeek.SATURDAY -> 5
                     DayOfWeek.SUNDAY -> 6
                 }
-                val monthLength = getMonthLength(currentMonthYear)
+                val monthLength = getMonthLength(currentYearMonth)
 
                 List(42) { index ->
                     val day = index - daysBeforeFirst + 1
@@ -71,7 +73,7 @@ class CalendarGridViewModel : ViewModel() {
                     // Compute the date of the day
                     var date: LocalDate
                     if (isLastMonth) {
-                        val previousMonthYear = currentMonthYear.getPrevious()
+                        val previousMonthYear = currentYearMonth.minusMonth()
                         val previousMonthLength =
                             getMonthLength(previousMonthYear)
 
@@ -83,7 +85,7 @@ class CalendarGridViewModel : ViewModel() {
                             day
                         )
                     } else if (isNextMonth) {
-                        val nextMonthYear = currentMonthYear.getNext()
+                        val nextMonthYear = currentYearMonth.plusMonth()
                         val day = index - monthLength - daysBeforeFirst + 1
                         date =
                             LocalDate(
@@ -93,7 +95,7 @@ class CalendarGridViewModel : ViewModel() {
                             )
                     } else {
                         date =
-                            LocalDate(currentMonthYear.year, currentMonthYear.month.toIndex(), day)
+                            LocalDate(currentYearMonth.year, currentYearMonth.month.toIndex(), day)
                     }
 
                     val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
@@ -186,7 +188,7 @@ data class CalendarEntryState(
 /**
  * Returns which day the first day of the month is (Monday-Sunday)
  */
-private fun getFirstDayOfWeek(month: MonthSelection): DayOfWeek {
+private fun getFirstDayOfWeek(month: YearMonth): DayOfWeek {
     val date = LocalDate(month.year, month.month.toIndex(), 1)
     return date.dayOfWeek
 }
@@ -196,7 +198,7 @@ private fun getFirstDayOfWeek(month: MonthSelection): DayOfWeek {
  *
  * Does take leap years into account
  */
-private fun getMonthLength(month: MonthSelection): Int {
+private fun getMonthLength(month: YearMonth): Int {
     val date = LocalDate(month.year, month.month.toIndex(), 1)
     return date.yearMonth.numberOfDays
 }

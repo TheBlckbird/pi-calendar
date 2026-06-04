@@ -2,7 +2,7 @@ package com.louisweigel.pi_calendar.core.calendarentry
 
 import androidx.compose.runtime.Composable
 import androidx.room.Ignore
-import com.louisweigel.pi_calendar.ui.screens.MonthSelection
+import kotlinx.datetime.YearMonth
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -40,7 +40,7 @@ sealed class CalendarEntry(
     /**
      * Checks whether this entry is in the given month and year
      */
-    open fun isInMonth(monthSelection: MonthSelection): Boolean {
+    open fun isInMonth(monthSelection: YearMonth): Boolean {
         val localDate = dateToLocalDate()
         return localDate.year == monthSelection.year && localDate.month == monthSelection.month
     }

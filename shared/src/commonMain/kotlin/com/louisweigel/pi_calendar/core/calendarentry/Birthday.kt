@@ -9,7 +9,7 @@ import androidx.room.TypeConverters
 import com.louisweigel.pi_calendar.core.Calendar
 import com.louisweigel.pi_calendar.core.db.Converters
 import com.louisweigel.pi_calendar.core.isLeapYear
-import com.louisweigel.pi_calendar.ui.screens.MonthSelection
+import kotlinx.datetime.YearMonth
 import com.louisweigel.pi_calendar.utils.toGenitive
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
@@ -59,7 +59,7 @@ class Birthday(
                 && date.year >= localDateOfBirth.year
     }
 
-    override fun isInMonth(monthSelection: MonthSelection): Boolean {
+    override fun isInMonth(monthSelection: YearMonth): Boolean {
         val localDateOfBirth = dateToLocalDate()
         return localDateOfBirth.month == monthSelection.month
     }

@@ -1,6 +1,5 @@
 package com.louisweigel.pi_calendar.ui.screens.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,7 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.unit.dp
-import com.louisweigel.pi_calendar.ui.screens.MonthSelection
+import com.louisweigel.pi_calendar.core.toTitle
+import kotlinx.datetime.YearMonth
 import pi_calendar_kmp.shared.generated.resources.Res
 import pi_calendar_kmp.shared.generated.resources.arrow_drop_down_24px
 import pi_calendar_kmp.shared.generated.resources.menu_24px
@@ -27,7 +27,7 @@ import pi_calendar_kmp.shared.generated.resources.today_24px
 fun TopBar(
     onDrawerOpen: () -> Unit,
     onMonthSelectionOpen: () -> Unit,
-    selectedMonth: MonthSelection,
+    selectedYearMonth: YearMonth,
     onTodayClicked: () -> Unit,
 ) {
     TopAppBar(
@@ -56,7 +56,7 @@ fun TopBar(
                 )
             ) {
                 Text(
-                    selectedMonth.toTitle(),
+                    selectedYearMonth.toTitle(),
                     style = MaterialTheme.typography.headlineSmall,
                 )
                 Icon(

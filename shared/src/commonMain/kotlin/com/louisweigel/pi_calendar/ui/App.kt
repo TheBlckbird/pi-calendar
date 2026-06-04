@@ -52,7 +52,7 @@ fun App(
             ) {
                 composable<CalendarRoute> {
                     CalendarScreen(
-                        uiState.lastMonthSelection,
+                        uiState.lastYearMonth,
                         { viewModel.setMonthSelection(it) },
                         {
                             navController.navigate(CalendarManager)
