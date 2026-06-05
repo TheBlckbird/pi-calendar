@@ -1,4 +1,4 @@
-rootProject.name = "pi-calendar-kmp"
+rootProject.name = "pi-calendar"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -28,5 +28,7 @@ dependencyResolutionManagement {
     }
 }
 
-include(":androidApp")
-include(":shared")
+include(":app:androidApp")
+include(":app:shared")
+include(":core")
+include(":server")
