@@ -115,7 +115,7 @@ fun NewReminderSheet(
                 date,
                 reminderCalendar.uuid,
                 isDone,
-                editReminder?.uuid ?: Uuid.random(),
+                editReminder?.uuid ?: Uuid.generateV7(),
             ),
         )
     }

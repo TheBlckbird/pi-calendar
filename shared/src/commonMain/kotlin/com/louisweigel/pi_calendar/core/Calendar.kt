@@ -64,7 +64,7 @@ data class Calendar(
      * _Currently unused_
      */
     val ownerUuid: Uuid? = null,
-    @PrimaryKey val uuid: Uuid = Uuid.random(),
+    @PrimaryKey val uuid: Uuid = Uuid.generateV7(),
 ) {
     companion object {
         const val DEFAULT_EVENTS_CALENDAR_NAME = "Mein Kalender"

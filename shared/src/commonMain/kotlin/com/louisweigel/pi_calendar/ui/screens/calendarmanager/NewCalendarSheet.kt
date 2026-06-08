@@ -71,7 +71,7 @@ fun NewCalendarSheet(
                     name,
                     description,
                     selectedColor,
-                    uuid = editCalendar?.uuid ?: Uuid.random()
+                    uuid = editCalendar?.uuid ?: Uuid.generateV7()
                 )
             )
         }
