@@ -38,7 +38,7 @@ class Event(
      */
     val isAllDay: Boolean,
     override val calendarUuid: Uuid,
-    @PrimaryKey override val uuid: Uuid = Uuid.random(),
+    @PrimaryKey override val uuid: Uuid = Uuid.generateV7(),
 ) : CalendarEntry(uuid, title, description, date, calendarUuid) {
 
     override fun includesDate(date: LocalDate): Boolean {

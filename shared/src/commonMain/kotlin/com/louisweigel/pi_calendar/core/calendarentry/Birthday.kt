@@ -42,7 +42,7 @@ class Birthday(
     override val description: String,
     override val date: Instant,
     override val calendarUuid: Uuid,
-    @PrimaryKey override val uuid: Uuid = Uuid.random(),
+    @PrimaryKey override val uuid: Uuid = Uuid.generateV7(),
 ) : CalendarEntry(uuid, title, description, date, calendarUuid) {
 
     override fun includesDate(date: LocalDate): Boolean {

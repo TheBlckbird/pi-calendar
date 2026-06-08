@@ -32,5 +32,5 @@ class Reminder(
     override val calendarUuid: Uuid,
     @ColumnInfo(defaultValue = "0")
     val isDone: Boolean,
-    @PrimaryKey override val uuid: Uuid = Uuid.random(),
+    @PrimaryKey override val uuid: Uuid = Uuid.generateV7(),
 ) : CalendarEntry(uuid, title, description, date, calendarUuid)

@@ -12,5 +12,5 @@ import kotlin.uuid.Uuid
 data class Person(
     val name: String,
 ) {
-    @PrimaryKey var uuid: Uuid = Uuid.random()
+    @PrimaryKey var uuid: Uuid = Uuid.generateV7()
 }

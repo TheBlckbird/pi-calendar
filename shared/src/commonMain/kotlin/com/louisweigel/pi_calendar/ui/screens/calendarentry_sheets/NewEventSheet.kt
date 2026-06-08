@@ -201,7 +201,7 @@ fun NewEventSheet(
                     dateUntil,
                     isAllDay,
                     selectedCalendar.uuid,
-                    editEvent?.uuid ?: Uuid.random(),
+                    editEvent?.uuid ?: Uuid.generateV7(),
                 )
             )
         }

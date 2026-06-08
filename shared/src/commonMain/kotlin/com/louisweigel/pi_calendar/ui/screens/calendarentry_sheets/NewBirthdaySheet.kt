@@ -90,7 +90,7 @@ fun NewBirthdaySheet(
                 description,
                 date,
                 birthdayCalendar.uuid,
-                editBirthday?.uuid ?: Uuid.random(),
+                editBirthday?.uuid ?: Uuid.generateV7(),
             ),
         )
     }
